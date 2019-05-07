@@ -1,11 +1,27 @@
 Package: treeAGG2
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Tree Signal Aggregation
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R: person("Ruizhu", "Huang", email = "ruizhuRH@gmail.com",
+           role = c("aut", "cre"), comment = c(ORCID = "0000-0003-3285-1945"))
+Description: The arrangement of hypotheses in a hierarchical structure appears 
+    in many research fields and often indicates different resolutions at which 
+    data can be viewed. On which resolution level should the signal be 
+    intepreted has arisen researchers' interest. A flexible method to select 
+    resolution level, instead of cutting the tree structure at arbitary levels,
+    is desired. Our package treeAGG, which uses minP algorithm, is a such tool. 
+    It does a bottom-up search for the optimal level of a tree to interpret 
+    signal by combining with current available tools, such as edgeR or DESeq2.
+License: GPL (>=2)
 Encoding: UTF-8
 LazyData: true
+Depends: R(>= 3.6.0), TreeSummarizedExperiment
+biocViews: tree
+Imports:
+    edgeR,
+    methods,
+    SummarizedExperiment
+Suggests:
+    ggtree,
+    ape
+RoxygenNote: 6.1.1
