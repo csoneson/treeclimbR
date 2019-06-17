@@ -11,8 +11,9 @@
 #' @param tree a phylo object to provide the hierarchical structure of nodes.
 #' @param filter a logical expression indicating elements or rows to keep:
 #'   missing values are taken as false.
-#' @param scoreName the name of the score column. The search is based on the
+#' @param scoreCol the name of the score column. The search is based on the
 #'   score value.
+#' @param nodeCol the name of the column that stores the node number.
 #' @param searchMax a logical value, TRUE or FALSE. If TRUE, search for nodes
 #'   that has higher score value than its descendants; otherwise, search for
 #'   nodes that has lower score value than its descendants.
@@ -55,15 +56,22 @@
 #' tse <- aggData(x = lse, onRow = TRUE)
 #'
 #' out <- runEdgeR(tse = tse, onRow = TRUE)
-#' #'
+#' 
 #' final <- searchLevel(tree = rowTree(tse),
 #'                      scoreData = data.frame(out),
-#'                      filter = nodeNum > 10,
-#'                      scoreName = "PValue",
+#'                      filter =  FDR > 0.05,
+#'                      scoreCol = "PValue",
+#'                      nodeCol = "nodeNum",
 #'                      searchMax = FALSE,
-#'                      parentPrior = TRUE, message = FALSE)
+#'                      parentPrior = TRUE, 
+#'                      message = FALSE)
+#'                      
+#' # No node is kept because there is no difference between two groups
+#' final$nodeNum[final$keep]
+#' 
 
-searchLevel <- function(tree, scoreData, filter, scoreName,
+searchLevel <- function(tree, scoreData, filter, scoreCol,
+                        nodeCol,
                         searchMax, parentPrior = TRUE,
                         message = FALSE) {
 
@@ -108,6 +116,7 @@ searchLevel <- function(tree, scoreData, filter, scoreName,
         r <- r & !is.na(r)
     }
     scoreData$keep[r] <- FALSE
+    scoreData$keep[is.na(scoreData[, scoreCol])] <- FALSE
     if (message) {
         message(sum(!scoreData$keep), " nodes are filtered out...")
     }
@@ -148,16 +157,15 @@ searchLevel <- function(tree, scoreData, filter, scoreName,
     }
 
     for (i in seq_along(descI)) {
-
         node.i <- nodeI[i]
         desc.i <- descI[[i]]
 
-        row.p <- match(node.i, scoreData$nodeNum)
-        row.d <- match(desc.i, scoreData$nodeNum)
+        row.p <- match(node.i, scoreData[, nodeCol])
+        row.d <- match(desc.i, scoreData[, nodeCol])
 
         # extract the values on the parent and on the children
-        score.p <- scoreData[row.p, scoreName]
-        score.d <- scoreData[row.d, scoreName]
+        score.p <- scoreData[row.p, scoreCol]
+        score.d <- scoreData[row.d, scoreCol]
 
         if (searchMax) {
             score.p[is.na(score.p)] <- -Inf
