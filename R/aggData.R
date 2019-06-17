@@ -70,6 +70,11 @@ aggData <- function(x, onRow = TRUE, FUN = sum,
         linkD <- colLinks(x)
         treeD <- colTree(x)
     }
+    
+    if (is.null(treeD)) {
+        stop("Tree is not available")
+    }
+    
     isTip <- all(linkD$isLeaf)
     if (!isTip) {
         stop("x should include data only on the leaf level.")
@@ -87,11 +92,22 @@ aggData <- function(x, onRow = TRUE, FUN = sum,
     level <- printNode(tree = treeD, type = "all")$nodeNum
 
     if (onRow) {
-        out <- aggValue(x = x, rowLevel = level)
+        out <- aggValue(x = x, rowLevel = level, 
+                        FUN = FUN, message = message)
+        
+        outF <- BiocGenerics:::replaceSlots(out, 
+                                           metadata = metadata(x))
     } else {
-        out <- aggValue(x = x, colLevel = level)
+        out <- aggValue(x = x, colLevel = level, 
+                        FUN = FUN, message = message)
+        outF <- BiocGenerics:::replaceSlots(out, 
+                                           metadata = metadata(x))
     }
 
-    return(out)
+    return(outF)
 
 }
+
+
+
+
