@@ -43,7 +43,7 @@
 #' @param prior.count average prior count to be added to observation to shrink
 #'   the estimated log-fold-changes towards zero. See \code{prior.count} in
 #'   \code{\link[edgeR]{glmFit}}
-#' @param use.assays A numeric vector. It specifies which matrix-like elements
+#' @param assayNum A numeric vector. It specifies which matrix-like elements
 #'   in assays will be used to do analysis. If NULL, the first one is used.
 #' @param adjust.method A character string stating the method used to adjust
 #'   p-values for multiple testing, passed on to \code{\link[stats]{p.adjust}}.
@@ -66,7 +66,7 @@
 #' \item{colData}{NULL}
 #' \item{metadata}{
 #'    \itemize{
-#'    \item \code{use.assays} which elements in the \code{assays} have been
+#'    \item \code{assayNum} which elements in the \code{assays} have been
 #'    used to run differential abundance analysis.
 #'    \item \code{design} the design matrix as input.
 #'    \item \code{contrast} the contrast vector as input.
@@ -100,7 +100,7 @@
 runEdgeR <- function(tse, onRow = TRUE, design = NULL, contrast = NULL,
                      normalize = TRUE, method = "TMM",
                      adjust.method = "BH", prior.count = 0.125,
-                     use.assays = NULL) {
+                     assayNum = NULL) {
 
     # The input data should be a TreeSummarizedExperiment object
     # It should includes only data on the leaf nodes
@@ -109,15 +109,15 @@ runEdgeR <- function(tse, onRow = TRUE, design = NULL, contrast = NULL,
     }
 
     # If not specified, the first table in the assays is used
-    if (is.null(use.assays)) {
-        use.assays <- 1
+    if (is.null(assayNum)) {
+        assayNum <- 1
     }
 
 
     # analysis step
     if (onRow) {
         # the count table
-        count <- assays(tse)[[use.assays]]
+        count <- assays(tse)[[assayNum]]
 
         # extract link data
         ld <- rowLinks(tse)
@@ -130,7 +130,7 @@ runEdgeR <- function(tse, onRow = TRUE, design = NULL, contrast = NULL,
 
     } else {
         # the count table
-        count <- t(assays(tse)[[use.assays]])
+        count <- t(assays(tse)[[assayNum]])
 
         # extract link data
         ld <- colLinks(tse)
