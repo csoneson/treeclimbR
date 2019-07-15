@@ -97,9 +97,11 @@
 #'
 #'
 #'
-runEdgeR <- function(tse, onRow = TRUE, design = NULL, contrast = NULL,
+runEdgeR <- function(tse, onRow = TRUE, design = NULL, 
+                     contrast = NULL,
                      normalize = TRUE, method = "TMM",
-                     adjust.method = "BH", prior.count = 0.125,
+                     adjust.method = "BH", 
+                     prior.count = 0.125,
                      assayNum = NULL) {
 
     # The input data should be a TreeSummarizedExperiment object
@@ -121,7 +123,11 @@ runEdgeR <- function(tse, onRow = TRUE, design = NULL, contrast = NULL,
 
         # extract link data
         ld <- rowLinks(tse)
-
+        
+        # add rownames
+        rownames(ld) <- rownames(count) <- ld$nodeLab_alias
+        
+        
         # create design matrix
         if (is.null(design)) {
             design <- .designMatrix(data = colData(tse))
@@ -142,16 +148,16 @@ runEdgeR <- function(tse, onRow = TRUE, design = NULL, contrast = NULL,
 
     }
 
-    libSize <- apply(count[ld$isLeaf, ], 2, sum)
     # create the DGEList
+    libSize <- apply(count[ld$isLeaf, ], 2, sum)
     y <- DGEList(count, remove.zeros = FALSE)
     y$samples$lib.size <- libSize
-
+    
+    
     # do normalisation
     if (normalize) {
         y <- calcNormFactors(y, method = method)
     }
-
 
     # estimate dispersion
     y <- estimateDisp(y, design = design)
