@@ -6,7 +6,7 @@
 \usage{
 runEdgeR(tse, onRow = TRUE, design = NULL, contrast = NULL,
   normalize = TRUE, method = "TMM", adjust.method = "BH",
-  prior.count = 0.125, use.assays = NULL)
+  prior.count = 0.125, assayNum = NULL)
 }
 \arguments{
 \item{tse}{A TreeSummarizedExperiment object.}
@@ -41,7 +41,7 @@ It could be "bonferroni", "holm", "hochberg", "hommel", "BH", or "BY".}
 the estimated log-fold-changes towards zero. See \code{prior.count} in
 \code{\link[edgeR]{glmFit}}}
 
-\item{use.assays}{A numeric vector. It specifies which matrix-like elements
+\item{assayNum}{A numeric vector. It specifies which matrix-like elements
 in assays will be used to do analysis. If NULL, the first one is used.}
 }
 \value{
@@ -55,7 +55,7 @@ of the \code{rowData}. More details or example could be found in the vignette
 \item{colData}{NULL}
 \item{metadata}{
    \itemize{
-   \item \code{use.assays} which elements in the \code{assays} have been
+   \item \code{assayNum} which elements in the \code{assays} have been
    used to run differential abundance analysis.
    \item \code{design} the design matrix as input.
    \item \code{contrast} the contrast vector as input.
