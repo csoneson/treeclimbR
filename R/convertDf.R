@@ -116,22 +116,18 @@ convertDf <- function(tse, onRow = TRUE,
     # prepare data in the right form to run logistic model or logistic mixed
     # effects model
     df <- data.frame(count, check.names = FALSE) %>%
-        mutate(node = ld$nodeNum) %>%
-        mutate(level = ld$levelNum) %>%
+        mutate(node = ld$from_nodeNum) %>%
+        mutate(level = ld$nodeNum) %>%
         mutate(isLeaf = ld$isLeaf) %>%
         gather(sample, value, colnames(count), factor_key = FALSE) %>%
         mutate_if(is.factor, as.character)
-    if (is.null(df$level)) {
+    if (is.null(df$node)) {
         df <- df %>%
-            mutate(level = node) 
+            mutate(node = level) 
     }
     
-    
-    sampInf <- spd[match(df$sample, spd[[addC]]), 
-                   setdiff(colnames(spd), addC), drop = FALSE]
-    rownames(sampInf) <- rownames(df) 
-    dff <- cbind(df, sampInf)
-        
+    dff <- df %>%
+        left_join(spd, by = c("sample" = addC))
     
     return(dff)
 }
