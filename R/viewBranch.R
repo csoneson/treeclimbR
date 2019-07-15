@@ -29,6 +29,8 @@
 #' @param group_color A named vector provide the color for \code{group_leaf}.
 #' @param zoom_scale A numeric vector. The zoom scale for \code{zoom_node}.
 #'   Please refer to \code{scale} in \code{ggtree::scaleClade}
+#' @param branch.length "none"
+#' @param layout "rectangular".
 #' @param rel_widths The widths of three plots. Please refer to
 #'   \code{rel_widths} of \code{\link[cowplot]{plot_grid}}.
 #' @param labels The labels of three plots. Please refer to \code{labels} of
@@ -82,6 +84,8 @@ viewBranch <- function(tree,
                        group_color,
                        nrow = nrow,
                        rel_widths = c(0.5, 2, 3),
+                       branch.length = "none",
+                       layout = "rectangular",
 #                       rel_widths, 
                        ...) {
     
@@ -154,7 +158,7 @@ viewBranch <- function(tree,
     }
     
     # ===================================================================
-    p0 <- ggtree(tree, branch.length = "none") 
+    p0 <- ggtree(tree, branch.length = branch.length, layout = layout) 
     
     # scale branches
     if (!missing(zoom_node)) {
@@ -204,15 +208,25 @@ viewBranch <- function(tree,
     
     # add texts
     if (!missing(ann_column)) {
+        
         for (i in seq_along(ann_column)) {
-           plist <- lapply(plist, FUN = function(x) {
-               xx <- x + geom_text2(aes_string(label = ann_column[i]),
-                                    hjust = ann_hjust[i],
-                                    vjust = ann_vjust[i],
-                                    color = ann_color[i],
-                                    size = ann_size[i])
-               return(xx)
-           })
+            if (is.null(plist)) {
+                p0 <- p0 + geom_text2(aes_string(label = ann_column[i]),
+                                      hjust = ann_hjust[i],
+                                      vjust = ann_vjust[i],
+                                      color = ann_color[i],
+                                      size = ann_size[i])
+            } else {
+                plist <- lapply(plist, FUN = function(x) {
+                    xx <- x + geom_text2(aes_string(label = ann_column[i]),
+                                         hjust = ann_hjust[i],
+                                         vjust = ann_vjust[i],
+                                         color = ann_color[i],
+                                         size = ann_size[i])
+                    return(xx)
+                })  
+            }
+           
         }
     }
    
