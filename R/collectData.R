@@ -42,24 +42,41 @@
 #' 
 #' 
 
-collectData <- function(x, onRow = TRUE, message = FALSE) {
+collectData <- function(x, rowLevel = NULL, colLevel = NULL,
+                        message = FALSE) {
     
     # The input data should be on the leaf level
-    if (onRow) {
+    if (!is.null(rowLevel)) {
+        
         linkD <- rowLinks(x)
         treeD <- rowTree(x)
-        level <- printNode(tree = treeD, type = "all")$nodeNum
+        if (is.character(rowLevel)) {
+            level <- transNode(tree = treeD, node = rowLevel)  
+        } else {
+            level <- rowLevel
+        }
+        
+        # aggregation
+        out <- aggValue(x = x, rowLevel = level, 
+                        FUN = function(x){x}, 
+                        message = message)
+        
     } else {
         linkD <- colLinks(x)
         treeD <- colTree(x)
-        level <- printNode(tree = treeD, type = "all")$nodeNum
+        if (is.character(colLevel)) {
+            level <- transNode(tree = treeD, node = colLevel)  
+        } else {
+            level <- colLevel
+        }
+        # aggregation
+        out <- aggValue(x = x, colLevel = level, 
+                        FUN = function(x){x}, 
+                        message = message)
+        
     }
     
-    # aggregation
-    out <- aggData(x = x, onRow = onRow, 
-                   FUN = function(x){x}, message = message)
-    
-    # The descendants of each level (actually node)
+    # The descendants of specified level
     desd <- findOS(tree = treeD, node = level, only.leaf = TRUE, 
                    self.include = TRUE)
     
@@ -67,26 +84,42 @@ collectData <- function(x, onRow = TRUE, message = FALSE) {
     # data is from
     infLeaf <- !level %in% treeD$edge[, 1]
     linkLevel <- lapply(seq_along(level), FUN = function(i) {
-        ii <- match(desd[[i]], linkD$nodeNum)
+        
+        #ii <- match(desd[[i]], linkD$nodeNum)
+        ii <- lapply(desd[[i]], FUN = function(x) {
+            which(linkD$nodeNum == x)
+        })
+        ii <- unlist(ii)
         link.i <- linkD[ii, ]
-        linkX <- LinkDataFrame(nodeLab = link.i$nodeLab,
-                               nodeLab_alias = link.i$nodeLab_alias,
-                               nodeNum = link.i$nodeNum, 
+        # linkX <- LinkDataFrame(nodeLab = link.i$nodeLab,
+        #                        nodeLab_alias = link.i$nodeLab_alias,
+        #                        nodeNum = link.i$nodeNum, 
+        #                        isLeaf = rep(infLeaf[i], nrow(link.i)), 
+        #                        levelNum = rep(level[i], nrow(link.i)), 
+        #                        levelLab = transNode(tree = treeD,
+        #                                             node = level[i], 
+        #                                             use.alias = FALSE),
+        #                        levelLab_alias = transNode(tree = treeD, 
+        #                                                   node = level[i], 
+        #                                                   use.alias = TRUE))
+        linkX <- LinkDataFrame(nodeLab = transNode(tree = treeD,
+                                                   node = level[i], 
+                                                   use.alias = FALSE),
+                               nodeNum = rep(level[i], nrow(link.i)),
                                isLeaf = rep(infLeaf[i], nrow(link.i)), 
-                               levelNum = rep(level[i], nrow(link.i)), 
-                               levelLab = transNode(tree = treeD,
-                                                    node = level[i], 
-                                                    use.alias = FALSE),
-                               levelLab_alias = transNode(tree = treeD, 
+                               nodeLab_alias = transNode(tree = treeD, 
                                                           node = level[i], 
-                                                          use.alias = TRUE))
+                                                          use.alias = TRUE),
+                               from_nodeLab = link.i$nodeLab,
+                               from_labAlias = link.i$nodeLab_alias,
+                               from_nodeNum = link.i$nodeNum)
         return(linkX)
     })
     
     linkND <- do.call(rbind, linkLevel)
     
     
-    if (onRow) {
+    if (!is.null(rowLevel)) {
         outF <- BiocGenerics:::replaceSlots(out, 
                                             metadata = metadata(x),
                                             rowLinks = linkND)
