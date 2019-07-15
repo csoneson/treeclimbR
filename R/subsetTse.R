@@ -17,9 +17,15 @@
 #' @param update_colTree A logical value, TRUE or FALSE. If TRUE, the column
 #'   tree is updated correspondingly.
 #' @param trim_internal_rowTree A logical value, TRUE or FALSE. If TRUE,
-#'   internal nodes with only one direct child node is removed from the
+#'   internal nodes with chldren removed are dropped from the
 #'   \code{rowTree}.
 #' @param trim_internal_colTree A logical value, TRUE or FALSE. If TRUE,
+#'   internal nodes with chldren removed are dropped from the
+#'   \code{colTree}.
+#' @param collapse_signles_rowTree A logical value, TRUE or FALSE. If TRUE,
+#'   internal nodes with only one direct child node is removed from the
+#'   \code{rowTree}.
+#' @param collapse_signles_colTree A logical value, TRUE or FALSE. If TRUE,
 #'   internal nodes with only one direct child node is removed from the
 #'   \code{colTree}.
 #' @import TreeSummarizedExperiment
@@ -58,6 +64,8 @@ subsetTse <- function(x,
                      update_colTree = FALSE,
                      trim_internal_rowTree = TRUE,
                      trim_internal_colTree = TRUE,
+                     collapse_singles_rowTree = FALSE,
+                     collapse_singles_colTree = FALSE,
                      message = FALSE) {
     # ==================== check inputs ==========================
     # The input data should be a TreeSummarizedExperiment object
@@ -117,9 +125,11 @@ subsetTse <- function(x,
         # track <- pruneTree(tree = track, rmLeaf = rnode,
         #                    mergeSingle = merge_rowTree)
         track <- drop.tip(phy = track, tip = rnode, 
-                          trim.internal = trim_internal_rowTree)
+                          trim.internal = trim_internal_rowTree,
+                          collapse.singles = collapse_singles_rowTree)
         treeR <- drop.tip(phy = treeR, tip = rnode, 
-                          trim.internal = trim_internal_rowTree)
+                          trim.internal = trim_internal_rowTree,
+                          collapse.singles = collapse_singles_rowTree)
         
         }
         
@@ -160,9 +170,11 @@ subsetTse <- function(x,
         
         if (length(rnode)) {
             track <- drop.tip(phy = track, tip = rnode, 
-                              trim.internal = trim_internal_colTree)
+                              trim.internal = trim_internal_colTree,
+                              collapse.singles = collapse_singles_colTree)
             treeC <- drop.tip(phy = treeC, tip = rnode, 
-                              trim.internal = trim_internal_colTree)
+                              trim.internal = trim_internal_colTree,
+                              collapse.singles = collapse_singles_colTree)
             
         }
         
