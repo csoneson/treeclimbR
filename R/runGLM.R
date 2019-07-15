@@ -159,11 +159,11 @@
 # }
 
 runGLM <- function(tse, onRow = TRUE, confounder = NULL, 
-                    assayNum = NULL, respY = "group",
-                    lmeTip = FALSE, lmeInNode = TRUE,
-                    familyTip = "binomial", 
-                    familyInNode = "binomial",
-                    message = TRUE) {
+                   assayNum = NULL, respY = "group",
+                   lmeTip = FALSE, lmeInNode = TRUE,
+                   familyTip = "binomial", 
+                   familyInNode = "binomial",
+                   message = TRUE) {
     if (message) {
         message("Preparing data... ")}
     
