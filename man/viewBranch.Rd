@@ -8,8 +8,8 @@ viewBranch(tree, ann_data, ann_column, ann_color, ann_hjust = c(0.2,
   0.2), ann_vjust = c(0.6, -0.5), ann_size, hlight_node, hlight_alpha,
   hlight_fill, point_node, point_color = "cyan", point_size = 3,
   view_node, zoom_node, zoom_scale, group_leaf, group_color, nrow = nrow,
-  rel_widths = c(0.5, 2, 3), branch.length = "none",
-  layout = "rectangular", ...)
+  rel_widths = c(0.5, 2, 3), branch_length = "none",
+  layout = "rectangular", edge_size = 1, ...)
 }
 \arguments{
 \item{tree}{A phylo object}
@@ -56,9 +56,14 @@ in \code{ggtree::groupOTU}}
 \item{rel_widths}{The widths of three plots. Please refer to
 \code{rel_widths} of \code{\link[cowplot]{plot_grid}}.}
 
-\item{branch.length}{"none"}
+\item{branch_length}{Please refer to the argument \code{branch.length} of
+\code{\link[ggtree]{ggtree}}. The default is "none".}
 
-\item{layout}{"rectangular".}
+\item{layout}{Please refer to the argument \code{layout} of
+\code{\link[ggtree]{ggtree}}. The default is "rectangular".}
+
+\item{edge_size}{Please refer to the argument \code{size} of
+\code{\link[ggtree]{ggtree}}. The default is 1.}
 
 \item{...}{More arguments accepted by \code{\link[cowplot]{plot_grid}}.}
 

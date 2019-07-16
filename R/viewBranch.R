@@ -29,8 +29,12 @@
 #' @param group_color A named vector provide the color for \code{group_leaf}.
 #' @param zoom_scale A numeric vector. The zoom scale for \code{zoom_node}.
 #'   Please refer to \code{scale} in \code{ggtree::scaleClade}
-#' @param branch.length "none"
-#' @param layout "rectangular".
+#' @param branch_length Please refer to the argument \code{branch.length} of
+#'   \code{\link[ggtree]{ggtree}}. The default is "none".
+#' @param layout Please refer to the argument \code{layout} of
+#'   \code{\link[ggtree]{ggtree}}. The default is "rectangular".
+#' @param edge_size Please refer to the argument \code{size} of
+#'   \code{\link[ggtree]{ggtree}}. The default is 1.
 #' @param rel_widths The widths of three plots. Please refer to
 #'   \code{rel_widths} of \code{\link[cowplot]{plot_grid}}.
 #' @param labels The labels of three plots. Please refer to \code{labels} of
@@ -84,8 +88,9 @@ viewBranch <- function(tree,
                        group_color,
                        nrow = nrow,
                        rel_widths = c(0.5, 2, 3),
-                       branch.length = "none",
+                       branch_length = "none",
                        layout = "rectangular",
+                       edge_size = 1,
 #                       rel_widths, 
                        ...) {
     
@@ -158,7 +163,8 @@ viewBranch <- function(tree,
     }
     
     # ===================================================================
-    p0 <- ggtree(tree, branch.length = branch.length, layout = layout) 
+    p0 <- ggtree(tree, branch.length = branch_length, layout = layout,
+                 size = edge_size) 
     
     # scale branches
     if (!missing(zoom_node)) {
