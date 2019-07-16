@@ -37,13 +37,17 @@
 #'                                 rowData = rowD)
 #' 
 #' # collect data for each node
-#' tse <- collectData(x = lse)
+#' level <- printNode(tree = exTree, type = "all")$nodeNum
+#' tse <- collectData(x = lse, rowLevel = level)
 #' 
 #' 
 #' 
 
 collectData <- function(x, rowLevel = NULL, colLevel = NULL,
                         message = FALSE) {
+    if (is.null(rowLevel) & is.null(colLevel)) {
+        stop("Either rowLevel or colLevel should be specified.")
+    }
     
     # The input data should be on the leaf level
     if (!is.null(rowLevel)) {
