@@ -33,6 +33,7 @@ node level.
 }
 \examples{
 library(ggtree)
+library(TreeSummarizedExperiment)
 data("tinyTree")
 ggtree(tinyTree) + 
    geom_text2(aes(label = node)) + 
@@ -46,7 +47,7 @@ fdr1 <- fdr(tree = tinyTree, truth = c(16, 13),
             found = c(17, 14), only.leaf = TRUE)
  # fdr at the node level
 fdr2 <- fdr(tree = tinyTree, truth = c(16, 13),
-            found = c(15, 14), only.leaf = FALSE)
+            found = c("Node_15", "Node_14"), only.leaf = FALSE)
 
 
 }

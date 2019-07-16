@@ -33,6 +33,7 @@ leaf or node level.
 }
 \examples{
 library(ggtree)
+library(TreeSummarizedExperiment)
 data("tinyTree")
 ggtree(tinyTree) + 
    geom_text2(aes(label = node)) + 
