@@ -22,6 +22,7 @@
 #' @author Ruizhu Huang
 #' @examples
 #' library(ggtree)
+#' library(TreeSummarizedExperiment)
 #' data("tinyTree")
 #' ggtree(tinyTree) + 
 #'    geom_text2(aes(label = node)) + 
@@ -35,7 +36,7 @@
 #'             found = c(17, 14), only.leaf = TRUE)
 #'  # fdr at the node level
 #' fdr2 <- fdr(tree = tinyTree, truth = c(16, 13),
-#'             found = c(15, 14), only.leaf = FALSE)
+#'             found = c("Node_15", "Node_14"), only.leaf = FALSE)
 #'
 #'
 
@@ -48,11 +49,11 @@ fdr <- function(tree, truth, found,
     }
     
     if (is.character(truth)) {
-        truth <- transNode(tree = tree, input = truth,
+        truth <- transNode(tree = tree, node = truth,
                            message = FALSE)
     }
     if (is.character(found)) {
-        found <- transNode(tree = tree, input = found,
+        found <- transNode(tree = tree, node = found,
                            message = FALSE)
     }
     
