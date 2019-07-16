@@ -42,7 +42,8 @@
 #'                tree = exTree,
 #'                minTip.A = 3, maxTip.A = 6,
 #'                nSam = nSam, scenario = "S1")
-#' tse <- collectData(x = lse, onRow = TRUE)
+#' level <- printNode(tree = exTree, type = "all")$nodeNum
+#' tse <- collectData(x = lse, rowLevel = level)
 #' 
 #' out <- runGLM(tse = tse, onRow = TRUE)
 #' 
