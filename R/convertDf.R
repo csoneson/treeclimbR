@@ -15,7 +15,7 @@
 #' 
 #' @importFrom SummarizedExperiment assays
 #' @import TreeSummarizedExperiment
-#' @importFrom dplyr mutate "%>%" mutate_if
+#' @importFrom dplyr mutate "%>%" mutate_if left_join
 #' @importFrom tidyr gather
 #' 
 #' @export
