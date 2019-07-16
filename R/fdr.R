@@ -109,8 +109,8 @@ fdr <- function(tree, truth, found,
     }
     
     # ================= without discovery =======================
-    if (is.null(found)) {
-        c(fd = 0,  disc = 0)
+    if (is.null(found) | length(found) == 0) {
+        c(fd = 0,  disc = 1)
     } else {
         
         # =================   with discovery  =======================

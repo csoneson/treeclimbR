@@ -109,8 +109,8 @@ tpr <- function(tree, truth, found,
     }
     
     # ================= without diff ===========================
-    if (is.null(truth)) {
-        c(tp = 0, pos = 0)
+    if (is.null(truth) | length(truth) == 0) {
+        c(tp = 1, pos = 1)
     } else {
         # ================= with diff ===========================
         nodeT <- findOS(tree = tree, node = truth,
