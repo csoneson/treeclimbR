@@ -44,7 +44,8 @@ lse <- TreeSummarizedExperiment(assays = list(toyTable),
                                 rowData = rowD)
 
 # collect data for each node
-tse <- collectData(x = lse)
+level <- printNode(tree = exTree, type = "all")$nodeNum
+tse <- collectData(x = lse, rowLevel = level)
 
 
 
