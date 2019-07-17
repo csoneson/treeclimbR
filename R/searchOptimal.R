@@ -20,6 +20,7 @@
 #'   
 #' @importFrom utils flush.console
 #' @importFrom methods is
+#' @importFrom stats p.adjust
 #' @importFrom dplyr mutate "%>%"
 #' @export
 #' @return a list

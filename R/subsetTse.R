@@ -31,6 +31,7 @@
 #' @import TreeSummarizedExperiment
 #' @importFrom ape drop.tip
 #' @importFrom methods as
+#' @importFrom S4Vectors DataFrame
 #' @export
 #' @return A TreeSummarizedExperiment object
 #' @author Ruizhu Huang
