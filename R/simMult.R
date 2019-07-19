@@ -167,9 +167,16 @@ simMult <- function(pr, libSize, tree, scenario = "S1",
     p.c1 <- pr
     p.c2 <- pr * beta[names(p.c1)]
     resList <- lapply(seq_len(n), FUN = function(j) {
-        
-        Mp.c1 <- rmultinom(n = nSam[1], size = libSize, prob = p.c1)
-        Mp.c2 <- rmultinom(n = nSam[2], size = libSize, prob = p.c2)
+        Mp.c1 <- lapply(seq_len(nSam[1]), FUN = function(x) {
+            lib <- sample(x = libSize, size = 1)
+            rmultinom(n = 1, size = lib, prob = p.c1)
+            })
+        Mp.c1 <- do.call(cbind, Mp.c1)
+        Mp.c2 <- lapply(seq_len(nSam[2]), FUN = function(x) {
+            lib <- sample(x = libSize, size = 1)
+            rmultinom(n = 1, size = lib, prob = p.c1)})
+        Mp.c2 <- do.call(cbind, Mp.c2)
+        # Mp.c2 <- rmultinom(n = nSam[2], size = libSize, prob = p.c2)
         Mp <- cbind(Mp.c1, Mp.c2)
         rownames(Mp) <- names(pr)
         colnames(Mp) <- c(paste0("C1_", seq_len(nSam[1])), 

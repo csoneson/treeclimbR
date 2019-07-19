@@ -47,7 +47,9 @@
 #'   different conditions
 #' @param mu,size The parameters of the Negative Binomial distribution. (see mu
 #'   and size in \code{\link[stats:NegBinomial]{rnbinom}}). Parameters used to
-#'   generate the library size for each simulated sample.
+#'   generate the library size for each simulated sample. If \code{size} is not
+#'   specified then the library size is sampled randomly with replacement from
+#'   the \code{mu}.
 #' @param n A numeric value to specify how many count tables would be generated
 #'   with the same settings. Default is one and one count table would be
 #'   obtained at the end. If above one, the output is a list of matrices (count
@@ -145,7 +147,7 @@ simData <- function(tree = NULL, data = NULL,
                     minPr.A = 0, maxPr.A = 1,
                     ratio = 2, adjB = NULL,
                     pct = 0.6, nSam = c(50, 50),
-                    mu = 10000, size = 50,
+                    mu = 10000, size = NULL,
                     n = 1, FUN = sum, message = FALSE){
     
     # -------------------------------------------------------------------------
@@ -871,7 +873,11 @@ simData <- function(tree = NULL, data = NULL,
         rownames(Mp.c1) <- paste("C1_", seq_len(n1), sep = "")
         colnames(Mp.c1) <- names(p.c1)
         Mobs.c1 <- Mp.c1
-        nSeq1 <- rnbinom(n = n1, mu = mu, size = size)
+        if (length(mu) & !length(size) ) {
+            nSeq1 <- sample(x = mu, size = n1, replace = TRUE)
+        } else {
+            nSeq1 <- rnbinom(n = n1, mu = mu, size = size)
+        }
         for (i in seq_len(n1)) {
             Mp.c1[i, ] <- rdirichlet(1, g.c1)[1, ]
             Mobs.c1[i, ] <- rmultinom(1, nSeq1[i], prob = Mp.c1[i, ])[, 1]
@@ -884,7 +890,12 @@ simData <- function(tree = NULL, data = NULL,
         rownames(Mp.c2) <- paste("C2_", seq_len(n2), sep = "")
         colnames(Mp.c2) <- names(p.c2)
         Mobs.c2 <- Mp.c2
-        nSeq2 <- rnbinom(n = n2, mu = mu, size = size)
+        if (length(mu) & !length(size) ) {
+            nSeq2 <- sample(x = mu, size = n2, replace = TRUE)
+        } else {
+            nSeq2 <- rnbinom(n = n2, mu = mu, size = size)
+        }
+        
         for (i in seq_len(n2)) {
             Mp.c2[i, ] <- rdirichlet(1, g.c2)[1, ]
             Mobs.c2[i, ] <- rmultinom(1, nSeq2[i], prob = Mp.c2[i, ])[, 1]
