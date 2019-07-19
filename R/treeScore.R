@@ -117,6 +117,9 @@ treeScore <- function(tree, score_data, node_column,
         })
         
         row.i <- match(node.i, tempData[, node_column])
+        if (any(is.na(row.i))) {
+            warnings("score_data doesn't provide all nodes required.")
+        }
         tempData[row.i, new_score] <- unlist(score.i)
         
     }
