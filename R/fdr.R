@@ -116,7 +116,7 @@ fdr <- function(tree, truth, found,
         # =================   with discovery  =======================
         nodeF <- findOS(tree = tree, node = found,
                         only.leaf = only.leaf, self.include = TRUE)
-        nodeF <- unlist(nodeF)
+        nodeF <- unique(unlist(nodeF))
         
         # if no diff
         if (is.null(truth)) {
@@ -125,7 +125,7 @@ fdr <- function(tree, truth, found,
            # if has diff
            nodeT <- findOS(tree = tree, node = truth,
                            only.leaf = only.leaf, self.include = TRUE)
-           nodeT <- unlist(nodeT)
+           nodeT <- unique(unlist(nodeT))
            # false discovery & discovery
            fd <- setdiff(nodeF, nodeT)
            c(fd = length(fd), disc = length(nodeF))

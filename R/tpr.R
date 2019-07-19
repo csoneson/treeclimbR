@@ -115,7 +115,7 @@ tpr <- function(tree, truth, found,
         # ================= with diff ===========================
         nodeT <- findOS(tree = tree, node = truth,
                         only.leaf = only.leaf, self.include = TRUE)
-        nodeT <- unlist(nodeT)
+        nodeT <- unique(unlist(nodeT))
         
         # no discovery
         if (is.null(found)) {
@@ -124,8 +124,9 @@ tpr <- function(tree, truth, found,
             # found 
             nodeF <- findOS(tree = tree, node = found,
                             only.leaf = only.leaf, self.include = TRUE)
+            nodeF <- unique(unlist(nodeF))
             # true positive & positive
-            TP <- intersect(nodeT, unlist(nodeF))
+            TP <- intersect(nodeT, nodeF)
             c(tp = length(TP), pos = length(nodeT))
         }
     }
