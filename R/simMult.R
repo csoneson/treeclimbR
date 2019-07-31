@@ -174,7 +174,7 @@ simMult <- function(pr, libSize, tree, scenario = "S1",
         Mp.c1 <- do.call(cbind, Mp.c1)
         Mp.c2 <- lapply(seq_len(nSam[2]), FUN = function(x) {
             lib <- sample(x = libSize, size = 1)
-            rmultinom(n = 1, size = lib, prob = p.c1)})
+            rmultinom(n = 1, size = lib, prob = p.c2)})
         Mp.c2 <- do.call(cbind, Mp.c2)
         # Mp.c2 <- rmultinom(n = nSam[2], size = libSize, prob = p.c2)
         Mp <- cbind(Mp.c1, Mp.c2)
