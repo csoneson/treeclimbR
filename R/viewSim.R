@@ -3,11 +3,11 @@
 #' \code{viewSim} is to visualize the output from the function \code{simData}.
 #'
 #' @param obj The output from \code{simData}
-#' @param zoomScale A positive numeric value. If it is above one, branches with
+#' @param zoom_scale A positive numeric value. If it is above one, branches with
 #'   fold change equal to one (non-signal branch) will be zoomed in; If below
 #'   one, they will be shrinked. Default is 2
-#' @param legend.position The legend position. see \code{\link[ggplot2]{theme}}
-#' @param addLeafLab TRUE or FALSE with fold change above or below 1 will be
+#' @param legend_position The legend position. see \code{\link[ggplot2]{theme}}
+#' @param show_leaf TRUE or FALSE with fold change above or below 1 will be
 #'   labelled.
 #' @param ... Additional arguments that are accepted by
 #'   \code{\link[ggtree]{ggtree}}.
@@ -35,8 +35,8 @@
 #'
 #'
 #'
-viewSim <- function(obj, zoomScale = 2, legend.position = "left", 
-                    addLeafLab = FALSE, ...){
+viewSim <- function(obj, zoom_scale = 2, legend_position = "left", 
+                    show_leaf = FALSE, ref_value = 1, ...){
     
     md <- metadata(obj)
     # tree
@@ -56,8 +56,8 @@ viewSim <- function(obj, zoomScale = 2, legend.position = "left",
     fc <- md$FC 
     
     # leaves that change abundance
-    high <- names(fc)[fc > 1]
-    low <- names(fc)[fc < 1]
+    high <- names(fc)[fc > ref_value]
+    low <- names(fc)[fc < ref_value]
     cls <- list(increase = high, decrease = low)
     
     # figure
@@ -67,19 +67,19 @@ viewSim <- function(obj, zoomScale = 2, legend.position = "left",
                                       decrease = "blue", "0" = "grey"),
                            labels = c(increase = "increase", 
                                       decease = "decrease", "0" = "other")) +
-        theme(legend.position = legend.position,
+        theme(legend.position = legend_position,
               legend.background = element_rect(fill="transparent")) +
         guides(color = guide_legend(title = sc))
     
-    p2 <- scaleClade(p1, node = branch[1], scale = zoomScale)
-    p3 <- scaleClade(p2, node = branch[2], scale = zoomScale)
-    if (addLeafLab) {
+    p2 <- scaleClade(p1, node = branch[1], scale = zoom_scale)
+    p3 <- scaleClade(p2, node = branch[2], scale = zoom_scale)
+    if (show_leaf) {
       p3 <- p3 + geom_tiplab(aes(label = label))
     }
     
     fc_data <- data.frame(node = transNode(tree = tree, node = names(fc)),
                           fc = fc)
-    fc_data <- fc_data[fc_data$fc != 1, ]
+    fc_data <- fc_data[fc_data$fc != ref_value, ]
     if (sc == "S2") {
         p3 <- p3 %<+% fc_data + geom_point2(aes(size = fc), alpha = 0.3)
     }  
