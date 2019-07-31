@@ -92,20 +92,31 @@ searchOptimal <- function(tree, score_data, node_column,
         
         # score value: transformed p value
         si <- 1 - dat_i[[p_column]]
-        si[dat_i[p_column] < t] <- 1
+        si[!dat_i[p_column] > t] <- 1
         si <- ifelse(dat_i[[sign_column]] > 0 , si, -si)
         dat_i[score_column] <- si
         
         # calculate node scores
-        dat_iu <- treeScore(tree = tree,
+        # dat_iu <- treeScore(tree = tree,
+        #                     score_data = dat_i,
+        #                     node_column = node_column,
+        #                     score_column = score_column,
+        #                     new_score = "wScore")
+        dat_iu <- scoreTree(tree = tree,
                             score_data = dat_i,
                             node_column = node_column,
                             score_column = score_column,
                             new_score = "wScore")
-        score_mat[, i] <- round(dat_iu[["wScore"]], 2)
-        dat_iu <- dat_iu %>%
-            mutate(wScore = round(abs(wScore), 2))
         
+        # the old version
+        # score_mat[, i] <- round(dat_iu[["wScore"]], 2)
+        # dat_iu <- dat_iu %>%
+        #     mutate(wScore = round(abs(wScore), 2))
+        
+        # try this new version
+        score_mat[, i] <- dat_iu[["wScore"]]
+        dat_iu <- dat_iu %>%
+            mutate(wScore = abs(wScore))
         
         # search the level using node scores
         out <- getLevel(tree = tree, 
