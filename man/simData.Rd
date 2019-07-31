@@ -8,7 +8,7 @@ simData(tree = NULL, data = NULL, obj = NULL, scenario = "S1",
   from.A = NULL, from.B = NULL, minTip.A = 0, maxTip.A = Inf,
   minTip.B = 0, maxTip.B = Inf, minPr.A = 0, maxPr.A = 1,
   ratio = 2, adjB = NULL, pct = 0.6, nSam = c(50, 50),
-  mu = 10000, size = 50, n = 1, FUN = sum, message = FALSE)
+  mu = 10000, size = NULL, n = 1, FUN = sum, message = FALSE)
 }
 \arguments{
 \item{tree}{A phylo object. Only use when \code{obj} is NULL.}
@@ -68,7 +68,9 @@ different conditions}
 
 \item{mu, size}{The parameters of the Negative Binomial distribution. (see mu
 and size in \code{\link[stats:NegBinomial]{rnbinom}}). Parameters used to
-generate the library size for each simulated sample.}
+generate the library size for each simulated sample. If \code{size} is not
+specified then the library size is sampled randomly with replacement from
+the \code{mu}.}
 
 \item{n}{A numeric value to specify how many count tables would be generated
 with the same settings. Default is one and one count table would be

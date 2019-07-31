@@ -4,22 +4,21 @@
 \alias{scoreTree}
 \title{Generate score accounting for the family effect}
 \usage{
-scoreTree(tree, scoreData, nodeCol, scoreCol, FUN)
+scoreTree(tree, score_data, node_column, score_column, new_score)
 }
 \arguments{
 \item{tree}{A phylo object}
 
-\item{scoreData}{A data frame that includes at least two columns. One column
+\item{score_data}{A data frame that includes at least two columns. One column
 stores the number of the node, and the other stores the original score of
 the corresponding node.}
 
-\item{nodeCol}{The name of the column that stores the number of the node.}
+\item{node_column}{The name of the column that stores the number of the node.}
 
-\item{scoreCol}{The name of the column that stores the original score of the
+\item{score_column}{The name of the column that stores the original score of the
 node.}
 
-\item{FUN}{A function used to generate the score at each internal node, e.g.
-sum.}
+\item{new_score}{The name of the column to store the new generated score.}
 }
 \description{
 \code{scoreTree} takes the tree structure into account when calculating the
@@ -44,10 +43,10 @@ exScore <- data.frame(nodeNum = 1:19, score = (1:19)/10)
 
 # update the score based on the family provided by the tree
 newScore <- scoreTree(tree = tinyTree, 
-                      scoreData = exScore,
-                      nodeCol = "nodeNum", 
-                      scoreCol = "score",
-                      FUN = mean)
+                      score_data = exScore,
+                      node_column = "nodeNum", 
+                      score_column = "score",
+                      new_score = "treeScore")
 
 # visualize the result
 df <- newScore \%>\% 
