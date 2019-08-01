@@ -1,5 +1,5 @@
 # treeAGG2
-The version in branch : dynamicThreshold is the right one.
+The version in branch **dynamicThreshold** is the right one.
 
 * To benchmark treeFDR, please find the code [here](https://gist.github.com/fionarhuang/628cd8b413441f69b303742085a83024). 
 
