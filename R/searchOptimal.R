@@ -151,7 +151,7 @@ searchOptimal <- function(tree, score_data, node_column,
         nleaf[i] <- length(leaf)
         
         # the average branch size
-        brSize[i] <- 0.5*limit_rej*(length(leaf)/length(nodeRej) - 1)
+        brSize[i] <- 2*limit_rej*(length(leaf)/length(nodeRej) - 1)
     }
     
     
@@ -169,7 +169,7 @@ searchOptimal <- function(tree, score_data, node_column,
     isValid <- brSize >= limit_rej & threshold <= brSize
     if (any(isValid)){
     dts <- dt %>%
-        filter(T <= r & r > limit_rej) %>%
+        filter(T <= r & r >= limit_rej) %>%
         filter(nleaf == max(nleaf)) %>%
         filter(nlevel == min(nlevel))
     best_t <- dts$T[1]
