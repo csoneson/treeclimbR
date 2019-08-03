@@ -174,11 +174,33 @@ searchOptimal <- function(tree, score_data, node_column,
         filter(nlevel == min(nlevel))
     best_t <- dts$T[1]
     best_i <- which(threshold == best_t)
+    
+    # the selected optimal level 
+    opt_l <- score_data[[node_column]][level_mat[, best_i]]
+    opt_p <- score_data[[p_column]][level_mat[, best_i]]
+    opt_adjp <- p.adjust(p = opt_p, method = method)
+    
+    # assign adusted p value of a tested parent to its descendants
+    opt_dl <- findOS(tree = tree, node = opt_l,
+                     only.leaf = FALSE, self.include = TRUE)
+    adjp_dl <- rep(NA, nrow(score_data))
+    for (i in seq_along(opt_l)) {
+        ii <- which(score_data[[node_column]] %in% opt_dl[[i]])
+        adjp_dl[ii] <- opt_adjp[i]
+    }
+    
+    # the optimal level: rejection
+    opt_rl <- score_data[[node_column]][result_mat[, best_i]]
+    opt_rdl <- findOS(tree = tree, node = opt_rl,
+                      only.leaf = FALSE, self.include = TRUE)
+    opt_rdl <- unlist(opt_rdl)
+    opt_rej <- score_data[[node_column]] %in% opt_rdl
     out <- cbind.data.frame(score_data[[node_column]], 
                             score_data[[p_column]],
                             score_data[[sign_column]],
-                            result_mat[, best_i])
-    colnames(out) <- c(node_column, p_column, sign_column, "reject")
+                            adjp_dl,
+                            opt_rej)
+    colnames(out) <- c(node_column, p_column, sign_column, "adj.p", "reject")
     
     } else {
        outNode <- setdiff(tree$edge[, 2], tree$edge[, 1])
@@ -186,13 +208,16 @@ searchOptimal <- function(tree, score_data, node_column,
        selDat <- score_data[score_data[[node_column]] %in% outNode, ]
        pv <- selDat[[p_column]]
        adp <- p.adjust(p = pv, method = method)
+       adp_v <- rep(NA, nrow(score_data))
+       adp_v[score_data[[node_column]] %in% outNod] <- adp
        rejNode <- selDat[[node_column]][adp <= limit_rej]
        
        out <- cbind.data.frame(score_data[[node_column]], 
                                score_data[[p_column]],
                                score_data[[sign_column]],
+                               adp_v,
                                score_data[[node_column]] %in% rejNode)
-       colnames(out) <- c(node_column, p_column, sign_column, "reject")
+       colnames(out) <- c(node_column, p_column, sign_column, "adj.p" ,"reject")
        
        best_t <- NULL
     }
