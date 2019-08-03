@@ -196,12 +196,15 @@ searchOptimal <- function(tree, score_data, node_column,
                       only.leaf = FALSE, self.include = TRUE)
     opt_rdl <- unlist(opt_rdl)
     opt_rej <- score_data[[node_column]] %in% opt_rdl
+    exact_rej <- score_data[[node_column]] %in% opt_rl
     out <- cbind.data.frame(score_data[[node_column]], 
                             score_data[[p_column]],
                             score_data[[sign_column]],
                             adjp_dl,
-                            opt_rej)
-    colnames(out) <- c(node_column, p_column, sign_column, "adj.p", "reject")
+                            opt_rej,
+                            exact_rej)
+    colnames(out) <- c(node_column, p_column, sign_column, 
+                       "adj.p", "reject", "signal.node")
     
     } else {
        outNode <- setdiff(tree$edge[, 2], tree$edge[, 1])
@@ -217,8 +220,10 @@ searchOptimal <- function(tree, score_data, node_column,
                                score_data[[p_column]],
                                score_data[[sign_column]],
                                adp_v,
+                               score_data[[node_column]] %in% rejNode,
                                score_data[[node_column]] %in% rejNode)
-       colnames(out) <- c(node_column, p_column, sign_column, "adj.p" ,"reject")
+       colnames(out) <- c(node_column, p_column, sign_column, "adj.p" ,
+                          "reject", "signal.node")
        
        best_t <- NULL
     }
