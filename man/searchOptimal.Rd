@@ -5,8 +5,8 @@
 \title{search and output results at the optimal level}
 \usage{
 searchOptimal(tree, score_data, node_column, p_column, sign_column,
-  threshold, score_column = "treeP", method = "BH", limit_rej = 0.05,
-  message = FALSE)
+  threshold, score_column = "S", method = "BH", limit_rej = 0.05,
+  output_all = TRUE, message = FALSE)
 }
 \arguments{
 \item{tree}{A phylo object.}
@@ -29,6 +29,9 @@ different threshold values that the search is performed at.}
 \item{method}{The multiple testing correction method. Please refer to the
 argument \code{method} in \code{\link[stats]{p.adjust}}}
 
+\item{output_all}{A logical value, TRUE or FALSE. Default is TRUE. If TRUE,
+intermediate results are saved.}
+
 \item{message}{A logical value, TRUE or FALSE. Default is FALSE. If TRUE, the
 message about running process is printed out.}
 }
@@ -49,7 +52,7 @@ hypotheses and output the result.
 \examples{
 library(TreeSummarizedExperiment)
 data(tinyTree)
-set.seed(1)
+set.seed(2)
 df <- data.frame(node = 1:19, pvalue = runif(19), 
                  foldChange = sample(c(1, -1), 19,
                   replace = TRUE))
@@ -57,7 +60,7 @@ df <- data.frame(node = 1:19, pvalue = runif(19),
 out <- searchOptimal(tree = tinyTree, score_data = df,
                      node_column = "node", p_column = "pvalue",
                      sign_column = "foldChange",
-                      threshold = seq(0, 1, 0.1))
+                     threshold = seq(0, 1, 0.1))
                       
 }
 \author{

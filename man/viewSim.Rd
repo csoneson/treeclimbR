@@ -4,19 +4,19 @@
 \alias{viewSim}
 \title{visualize simulated scenario}
 \usage{
-viewSim(obj, zoomScale = 2, legend.position = "left",
-  addLeafLab = FALSE, ...)
+viewSim(obj, zoom_scale = 2, legend_position = "left",
+  show_leaf = FALSE, ref_value = 1, ...)
 }
 \arguments{
 \item{obj}{The output from \code{simData}}
 
-\item{zoomScale}{A positive numeric value. If it is above one, branches with
+\item{zoom_scale}{A positive numeric value. If it is above one, branches with
 fold change equal to one (non-signal branch) will be zoomed in; If below
 one, they will be shrinked. Default is 2}
 
-\item{legend.position}{The legend position. see \code{\link[ggplot2]{theme}}}
+\item{legend_position}{The legend position. see \code{\link[ggplot2]{theme}}}
 
-\item{addLeafLab}{TRUE or FALSE with fold change above or below 1 will be
+\item{show_leaf}{TRUE or FALSE with fold change above or below 1 will be
 labelled.}
 
 \item{...}{Additional arguments that are accepted by
