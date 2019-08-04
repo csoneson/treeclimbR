@@ -95,7 +95,8 @@ scoreTree <- function(tree, score_data, node_column,
             rr.i <- match(desd.i, tempData[, node_column])
             temp.i <- tempData[rr.i, new_score]
             temp.i <- cbind(temp.i[!is.na(temp.i)])
-            auc <- apply(temp.i, 2, FUN = mean)
+            auc <- apply(temp.i, 2, FUN = function(x) {
+                mean(x, na.rm = TRUE)})
             return(auc)
         })
         # aucSE.i <- lapply(node.i, FUN = function(x){

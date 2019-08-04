@@ -6,7 +6,8 @@
 \usage{
 runEdgeR(tse, onRow = TRUE, design = NULL, contrast = NULL,
   normalize = TRUE, method = "TMM", adjust.method = "BH",
-  prior.count = 0.125, assayNum = NULL)
+  prior.count = 0.125, assayNum = NULL, filter = FALSE,
+  group_column = "group")
 }
 \arguments{
 \item{tse}{A TreeSummarizedExperiment object.}

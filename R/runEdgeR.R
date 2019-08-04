@@ -102,7 +102,9 @@ runEdgeR <- function(tse, onRow = TRUE, design = NULL,
                      normalize = TRUE, method = "TMM",
                      adjust.method = "BH", 
                      prior.count = 0.125,
-                     assayNum = NULL) {
+                     assayNum = NULL, 
+                     filter = FALSE,
+                     group_column = "group") {
 
     # The input data should be a TreeSummarizedExperiment object
     # It should includes only data on the leaf nodes
@@ -133,7 +135,8 @@ runEdgeR <- function(tse, onRow = TRUE, design = NULL,
             design <- .designMatrix(data = colData(tse))
         }
 
-
+        # the sample size in the smaller group
+        sz <- min(table(colData(tse)$group))
     } else {
         # the count table
         count <- t(assays(tse)[[assayNum]])
@@ -146,10 +149,22 @@ runEdgeR <- function(tse, onRow = TRUE, design = NULL,
             design <- .designMatrix(data = rowData(tse))
         }
 
+        # the sample size in the smaller group
+        sz <- min(table(rowData(tse)$group))
     }
 
     # create the DGEList
     libSize <- apply(count[ld$isLeaf, ], 2, sum)
+    # if filter = TRUE, entities, which have the number of samples with zero value
+    # above the number of samples in the smaller group, are filtered out.
+    if (filter) {
+        isZ <- apply(count, 1, function(x) {
+            sum(x > 0) < sz
+        })
+        rowF <- rownames(count)[isZ]
+        count <- count[!isZ, ]
+        
+    }
     y <- DGEList(count, remove.zeros = FALSE)
     y$samples$lib.size <- libSize
     
@@ -171,8 +186,17 @@ runEdgeR <- function(tse, onRow = TRUE, design = NULL,
                    sort.by = "none")$table
     tt2 <- tt1[rownames(count), ]
 
+    if (filter) {
+        if (sum(isZ)) {
+            tt2c <- tt2[rep(1, sum(isZ)), ]
+            rownames(tt2c) <- rowF
+            tt2c[] <- NA
+            tt2 <- rbind(tt2, tt2c)    
+        }
+        
+    }
     # cbind with the link data
-    tt3 <- cbind(ld, tt2)
+    tt3 <- cbind(ld, tt2[rownames(ld), ])
 
     return(tt3)
 }
