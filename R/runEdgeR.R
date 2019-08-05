@@ -136,7 +136,7 @@ runEdgeR <- function(tse, onRow = TRUE, design = NULL,
         }
 
         # the sample size in the smaller group
-        sz <- min(table(colData(tse)[[column_group]]))
+        sz <- min(table(colData(tse)[[group_column]]))
     } else {
         # the count table
         count <- t(assays(tse)[[assayNum]])
@@ -150,7 +150,7 @@ runEdgeR <- function(tse, onRow = TRUE, design = NULL,
         }
 
         # the sample size in the smaller group
-        sz <- min(table(rowData(tse)[[column_group]]))
+        sz <- min(table(rowData(tse)[[group_column]]))
     }
 
     # create the DGEList
