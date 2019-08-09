@@ -107,7 +107,12 @@ searchOptimal <- function(tree, score_data, node_column,
         dat_i[score_column] <- s
         
         # U: transform S to U
-        dat_iu <- scoreTree(tree = tree,
+        # dat_iu <- scoreTree(tree = tree,
+        #                     score_data = dat_i,
+        #                     node_column = node_column,
+        #                     score_column = score_column,
+        #                     new_score = "U")
+        dat_iu <- treeScore(tree = tree,
                             score_data = dat_i,
                             node_column = node_column,
                             score_column = score_column,
