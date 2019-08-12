@@ -748,22 +748,46 @@ simData <- function(tree = NULL, data = NULL,
         propA <- sum(pars[tip.A])
         propB <- sum(pars[tip.B])
         
+        # make sure the ratio is above zero
+        if (propB < propA) {
+            rA <- 1-propB/propA
+            rB <- 0
+        } else {
+            rA <- 0
+            rB <- 1-propA/propB
+        }
+        
         # swap proportions on two branches and randomly assign a fold change
         # value to the the leaves on a branch (log fold change in the same
         # branch should have the same sign)
-        a1 <- runif(length(tip.A))
-        #sa <- sum(a1 * propA)
+        
+        # a1 <- runif(length(tip.A))
+        # sa <- sum(a1*pars[tip.A])
+        # a2 <- (propB - propA)/sa
+        # a3 <- a1 * a2 + 1
+        # beta[tip.A] <- a3
+        # 
+        # b1 <- runif(length(tip.B), probA/probB, 1)
+        # sb <- sum(b1 * pars[tip.B])
+        # b2 <- (propA - propB)/sb
+        # b3 <- b1 * b2 + 1
+        # 
+        
+        a1 <- runif(length(tip.A), rA, 1)
         sa <- sum(a1*pars[tip.A])
         a2 <- (propB - propA)/sa
         a3 <- a1 * a2 + 1
         beta[tip.A] <- a3
         
-        # b1 <- runif(length(tip.B))
-        # sb <- sum(b1 * pars[tip.B])
-        # #b2 <- (propA - propB)/sb
-        # b2 <- (propB - propA)/sb
-        # b3 <- b1 * b2 + 1
-        b3 <- propA/propB
+        # b1 <- propB/propA
+        # b2 <- runif(length(tip.B), 1 - b1)
+        # b3 <- b1 + b2
+        
+        # b3 <- propA/propB
+        b1 <- runif(length(tip.B), rB, 1)
+        sb <- sum(b1 * pars[tip.B])
+        b2 <- (propA - propB)/sb
+        b3 <- b1 * b2 + 1
         beta[tip.B] <- b3
     }
     
