@@ -4,20 +4,22 @@
 \alias{viewBranch}
 \title{view tree and its two zoomed branches}
 \usage{
-viewBranch(tree, ann_data, ann_column, ann_color, ann_hjust = c(0.2,
-  0.2), ann_vjust = c(0.6, -0.5), ann_size, hlight_node, hlight_alpha,
-  hlight_fill, point_node, point_color = "cyan", point_size = 3,
-  view_node, zoom_node, zoom_scale, group_leaf, group_color, nrow = nrow,
-  rel_widths = c(0.5, 2, 3), branch_length = "none",
+viewBranch(tree, ann_data = NULL, ann_column = NULL,
+  ann_color = "black", ann_hjust = c(0.2, 0.2), ann_vjust = c(0.6,
+  -0.5), ann_size = 1, hlight_node = NULL, hlight_alpha = 0.5,
+  hlight_fill = "blue", point_node = NULL, point_color = "cyan",
+  point_size = 3, view_node = NULL, zoom_node = NULL,
+  zoom_scale = 2, group_leaf = NULL, group_color = "orange",
+  nrow = nrow, rel_widths = c(0.5, 2, 3), branch_length = "none",
   layout = "rectangular", edge_size = 1, ...)
 }
 \arguments{
 \item{tree}{A phylo object}
 
-\item{ann_data}{A data frame. It includes at least two columns,
-\code{node} and other columns. The \code{node} provides the node
-number. Other columns could be named freely and provide values to
-annotate nodes in the selected branches.}
+\item{ann_data}{A data frame to annotate nodes on the tree. Default is NULL,
+otherwise, it should include at least two columns: one column about nodes
+and named as \code{node} and the other column about the annotation value
+and could be named freely.}
 
 \item{ann_column}{A character vector to specify columns in \code{ann_data}
 that provide values to annotate nodes.}
@@ -48,10 +50,12 @@ refer to \code{node} in \code{ggtree::scaleClade}}
 \item{zoom_scale}{A numeric vector. The zoom scale for \code{zoom_node}.
 Please refer to \code{scale} in \code{ggtree::scaleClade}}
 
-\item{group_leaf}{A named list of leaf node number. Please refer to \code{node}
-in \code{ggtree::groupOTU}}
+\item{group_leaf}{A named list of leaf node number. Please refer to
+\code{node} in \code{ggtree::groupOTU}}
 
-\item{group_color}{A named vector provide the color for \code{group_leaf}.}
+\item{group_color}{A named vector provide the color for \code{group_leaf}.
+The names should match with the name in \code{group_leaf} and one extra
+with name "0". Please see the example.}
 
 \item{rel_widths}{The widths of three plots. Please refer to
 \code{rel_widths} of \code{\link[cowplot]{plot_grid}}.}
@@ -84,15 +88,15 @@ df <- data.frame(node = printNode(tinyTree, type = "all")$nodeNum,
                  score1 = round(runif(19), 2),
                  score2 = round(runif(19), 2))   
                  
-grp <- list(A = 1:5, B = 6:10)                  
+grp <- list(A = 1:3, B = 7:8)                  
 viewBranch(tree = tinyTree, ann_data = df,
            ann_column = c("node", "score2"),
            ann_color = c("blue", "red"),
            ann_hjust = c(0.2, 0.2),
            ann_vjust = c(0.6, -0.5),
-           ann_size = c(3, 3), hlight_fill = c("orange", "blue"),
+           ann_size = c(3, 3), 
            view_node = c(16, 14), nrow = 1,
            zoom_node = c(16), zoom_scale = 10, 
            group_leaf = grp,
-           group_color = c(A ="grey", B = "orange"))
+           group_color = c(A ="orange", B = "blue", "0" = "grey"))
 }

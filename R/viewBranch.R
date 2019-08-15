@@ -3,10 +3,10 @@
 #' \code{viewBranch} shows a full tree and two zommed branches
 #' 
 #' @param tree A phylo object
-#' @param ann_data A data frame. It includes at least two columns,
-#'   \code{node} and other columns. The \code{node} provides the node
-#'   number. Other columns could be named freely and provide values to
-#'   annotate nodes in the selected branches.
+#' @param ann_data A data frame to annotate nodes on the tree. Default is NULL,
+#'   otherwise, it should include at least two columns: one column about nodes
+#'   and named as \code{node} and the other column about the annotation value
+#'   and could be named freely.
 #' @param ann_column A character vector to specify columns in \code{ann_data}
 #'   that provide values to annotate nodes.
 #' @param ann_color A character vector to specify the colors to be used for the
@@ -24,9 +24,11 @@
 #' @param view_node A vector of node number. Branches to be shown in subplots.
 #' @param zoom_node A vector of node number. Branches to be zoomed in. Please
 #'   refer to \code{node} in \code{ggtree::scaleClade}
-#' @param group_leaf A named list of leaf node number. Please refer to \code{node}
-#'   in \code{ggtree::groupOTU}
+#' @param group_leaf A named list of leaf node number. Please refer to
+#'   \code{node} in \code{ggtree::groupOTU}
 #' @param group_color A named vector provide the color for \code{group_leaf}.
+#'   The names should match with the name in \code{group_leaf} and one extra
+#'   with name "0". Please see the example.
 #' @param zoom_scale A numeric vector. The zoom scale for \code{zoom_node}.
 #'   Please refer to \code{scale} in \code{ggtree::scaleClade}
 #' @param branch_length Please refer to the argument \code{branch.length} of
@@ -55,48 +57,49 @@
 #'                  score1 = round(runif(19), 2),
 #'                  score2 = round(runif(19), 2))   
 #'                  
-#' grp <- list(A = 1:5, B = 6:10)                  
+#' grp <- list(A = 1:3, B = 7:8)                  
 #' viewBranch(tree = tinyTree, ann_data = df,
 #'            ann_column = c("node", "score2"),
 #'            ann_color = c("blue", "red"),
 #'            ann_hjust = c(0.2, 0.2),
 #'            ann_vjust = c(0.6, -0.5),
-#'            ann_size = c(3, 3), hlight_fill = c("orange", "blue"),
+#'            ann_size = c(3, 3), 
 #'            view_node = c(16, 14), nrow = 1,
 #'            zoom_node = c(16), zoom_scale = 10, 
 #'            group_leaf = grp,
-#'            group_color = c(A ="grey", B = "orange"))
+#'            group_color = c(A ="orange", B = "blue", "0" = "grey"))
+
 viewBranch <- function(tree, 
-                       ann_data,
-                       ann_column, 
-                       ann_color, 
+                       ann_data = NULL,
+                       ann_column = NULL, 
+                       ann_color = "black", 
                        ann_hjust= c(0.2, .2), 
                        ann_vjust = c(.6, -0.5),
                        # ann_hjust, 
                        # ann_vjust,
-                       ann_size, 
-                       hlight_node, 
-                       hlight_alpha,
-                       hlight_fill,
-                       point_node,
+                       ann_size = 1, 
+                       hlight_node = NULL, 
+                       hlight_alpha = 0.5,
+                       hlight_fill = "blue",
+                       point_node = NULL,
                        point_color = "cyan",
                        point_size = 3,
-                       view_node, 
-                       zoom_node,
-                       zoom_scale,
-                       group_leaf,
-                       group_color,
+                       view_node = NULL, 
+                       zoom_node = NULL,
+                       zoom_scale = 2,
+                       group_leaf = NULL,
+                       group_color = "orange",
                        nrow = nrow,
                        rel_widths = c(0.5, 2, 3),
                        branch_length = "none",
                        layout = "rectangular",
                        edge_size = 1,
-#                       rel_widths, 
+                       #                       rel_widths, 
                        ...) {
     
     # ================= check inputs  =================
     # text annotation
-    if (!missing(ann_column)) {
+    if (!is.null(ann_column)) {
         lcn <- length(ann_column)
         lcl <- length(ann_color)
         lhs <- length(ann_size)
@@ -118,7 +121,7 @@ viewBranch <- function(tree,
     }
     
     ## highlight
-    if (!missing(hlight_node)) {
+    if (!is.null(hlight_node)) {
         hn <- length(hlight_node)
         hc <- length(hlight_fill)
         if (hn != hc) {
@@ -131,7 +134,7 @@ viewBranch <- function(tree,
     }
     
     # zoom in
-    if (!missing(zoom_node)) {
+    if (!is.null(zoom_node)) {
         zn <- length(zoom_node)
         zs <- length(zoom_scale)
         if (zn != zs) {
@@ -144,15 +147,18 @@ viewBranch <- function(tree,
     }
     
     # points
-    if (!missing(point_node)) {
+    if (!is.null(point_node)) {
         pn <- length(point_node)
         cn <- length(point_color)
-        if (cn != 1) {
-            if (cn != pn) {
-                stop()
+        if (pn != cn) {
+            if (cn == 1) {
+                point_color <- rep(point_color, length(point_node))
+            } else {
+                stop("point_node has different length to point_color.")
             }
-            point_color <- point_color[order(point_node)]
+            
         } 
+        point_color <- point_color[order(point_node)]
         # if (cn != pn) {
         #     if (cn == 1) {
         #         point_color <- rep(point_color, pn)
@@ -167,53 +173,53 @@ viewBranch <- function(tree,
                  size = edge_size) 
     
     # scale branches
-    if (!missing(zoom_node)) {
+    if (!is.null(zoom_node)) {
         for (i in seq_along(zoom_node)) {
             p0 <- scaleClade(p0, zoom_node[i], scale = zoom_scale[i])
         }
     }
     
     # group the branches
-    if (!missing(group_leaf)) {
-       p0 <- groupOTU(p0, group_leaf, "grp") + aes(color = grp) +
-           scale_color_manual(values = group_color)
+    if (!is.null(group_leaf)) {
+        p0 <- groupOTU(p0, group_leaf, "grp") + aes(color = grp) +
+            scale_color_manual(values = group_color)
     }
     
     # add annotate data
-    if (!missing(ann_data)) {
+    if (!is.null(ann_data)) {
         p0 <- p0 %<+% ann_data 
-        }
+    }
     
     # hilight branches
-    if (!missing(hlight_node)) {
+    if (!is.null(hlight_node)) {
         for (i in seq_along(hlight_node)) {
             p0 <- p0 +
                 geom_hilight(node = hlight_node[i], 
                              alpha = hlight_alpha,
                              fill = hlight_fill[i])
         }
-     }
-      
+    }
+    
     # # add points
-    if (!missing(point_node)) {
+    if (!is.null(point_node)) {
         
         p0 <- p0 +
             geom_point2(aes(subset = (node %in% point_node)),
                         color = point_color, size = point_size)
-       }
+    }
     # view branches
-    if (!missing(view_node)) {
+    if (!is.null(view_node)) {
         plist <- vector("list", length(view_node))
         for (i in seq_along(view_node)) {
             plist[[i]] <- viewClade(p0, node = view_node[i])
-
+            
         }
     } else {
         plist <- NULL
     }
     
     # add texts
-    if (!missing(ann_column)) {
+    if (!is.null(ann_column)) {
         
         for (i in seq_along(ann_column)) {
             if (is.null(plist)) {
@@ -232,17 +238,17 @@ viewBranch <- function(tree,
                     return(xx)
                 })  
             }
-           
+            
         }
     }
-   
+    
     outlist <- c(list(p0), plist)
     if (missing(view_node)) {
         p <- outlist[[1]]
     } else {
         p <- plot_grid(plotlist = outlist, nrow = 1,
                        rel_widths = rel_widths, ...)
-
+        
     }
     p
 }
