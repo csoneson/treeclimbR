@@ -36,21 +36,34 @@
 #' @author Ruizhu Huang
 #' @examples 
 #' library(TreeSummarizedExperiment)
+#' library(ggtree)
+#' 
 #' data(tinyTree)
+#' ggtree(tinyTree, branch.length = "none") +
+#'    geom_text2(aes(label = node)) +
+#'    geom_hilight(node = 13, fill = "blue", alpha = 0.5) +
+#'    geom_hilight(node = 18, fill = "orange", alpha = 0.5)
 #' set.seed(2)
-#' df <- data.frame(node = 1:19, pvalue = runif(19), 
-#'                  foldChange = sample(c(1, -1), 19,
-#'                   replace = TRUE))
+#' pv <- runif(19, 0, 1)
+#' pv[c(1:5, 13, 14, 18)] <- runif(8, 0, 0.001)
+#' 
+#' fc <- sample(c(-1, 1), 19, replace = TRUE)
+#' fc[c(1:3, 13, 14)] <- 1
+#' fc[c(4, 5, 18)] <- -1
+#' df <- data.frame(node = 1:19, 
+#'                  pvalue = pv, 
+#'                  foldChange = fc)
 #'                  
 #' out <- searchOptimal(tree = tinyTree, score_data = df,
 #'                      node_column = "node", p_column = "pvalue",
 #'                      sign_column = "foldChange",
-#'                      threshold = seq(0, 1, 0.1))
+#'                      threshold = seq(0, 1, 0.1),
+#'                      limit_rej = 0.05)
 #'                       
 
 searchOptimal <- function(tree, score_data, node_column,
                           p_column, sign_column, threshold,
-                          score_column = "S",
+                          score_column = "U",
                           method = "BH", limit_rej = 0.05,
                           output_all = TRUE, message = FALSE) {
     # ======================= check inputs ===============================
@@ -66,7 +79,10 @@ searchOptimal <- function(tree, score_data, node_column,
         stop("More than one score is detected for a same node")
     }
     
-    
+    if (any(threshold < limit_rej)) {
+        warnings("threshold values below limit_rej are removed")
+        threshold <- threshold[threshold >= limit_rej]
+    }
     # matrix to store score (S), level, and result
     mm <- matrix(NA, nrow = nrow(score_data), 
                  ncol = length(threshold))
@@ -132,7 +148,7 @@ searchOptimal <- function(tree, score_data, node_column,
         lev <- getLevel(tree = tree, 
                         score_data = dat_iu,
                         score_column = "absU", 
-                        node_column = "node",
+                        node_column = node_column,
                         get_max = TRUE, 
                         parent_first = TRUE)
         level_mat[, i] <- lev$keep
