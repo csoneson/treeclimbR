@@ -143,27 +143,55 @@ simMult <- function(pr, libSize, tree, scenario = "S1",
     # select branches
     data = list(pi = pr, theta = NULL)
     
-    if (!is.null(from.A) && !is.null(from.B)) {
-        pk <- .infLoc(tree = tree, data = data,
-                      from.A = from.A, from.B = from.B)
+    leaf <- unique(setdiff(tree$edge[, 2], tree$edge[, 1]))
+    leaf <- sort(leaf)
+    if (message) {
+        message("prepare branches ...")
+    }
+    if (scenario == "S0") {
+        
+        if (message) {
+            message("calculate the fold change ...")
+        }
+        
+        beta <- rep(1, length(leaf))
+        names(beta) <- transNode(tree = tree, node = leaf, use.alias = FALSE)
+        pk <- NULL
     } else {
-        pk <- .pickLoc(tree = tree, data = data, 
-             from.A  = from.A, minTip.A = minTip.A,
-             maxTip.A = maxTip.A, minTip.B = minTip.B,
-             maxTip.B = maxTip.B, minPr.A = minPr.A,
-             maxPr.A = maxPr.A, ratio = ratio)
+       # scenario S1, S2, S3
+        if (!is.null(from.A) && !is.null(from.B)) {
+            pk <- .infLoc(tree = tree, data = data,
+                          from.A = from.A, from.B = from.B)
+        } else {
+            pk <- .pickLoc(tree = tree, data = data, 
+                           from.A  = from.A, minTip.A = minTip.A,
+                           maxTip.A = maxTip.A, minTip.B = minTip.B,
+                           maxTip.B = maxTip.B, minPr.A = minPr.A,
+                           maxPr.A = maxPr.A, ratio = ratio)
+        }
+        
+        if (message) {
+            message("calculate the fold change ...")
+        }
+        # generate the fold change
+        beta <- .doFC(tree = tree, data = data,
+                      scenario = scenario,
+                      branchA = pk$A,
+                      branchB = pk$B,
+                      ratio = pk$`ratio`,
+                      adjB = adjB, pct = pct) 
     }
     
-    # generate the fold change
-    beta <- .doFC(tree = tree, data = data,
-                  scenario = scenario,
-                  branchA = pk$A,
-                  branchB = pk$B,
-                  ratio = pk$`ratio`,
-                  adjB = adjB, pct = pct)
+    
     
     
     # generate counts
+    if (message) {
+        message("generate counts ...")
+    }
+    if (!all.equal(names(pr), tree$tip.label)) {
+        stop("pr should be named with the tip labels of the tree.")
+    }
     p.c1 <- pr
     p.c2 <- pr * beta[names(p.c1)]
     resList <- lapply(seq_len(n), FUN = function(j) {
@@ -190,6 +218,9 @@ simMult <- function(pr, libSize, tree, scenario = "S1",
     }
     
     # output as a TreeSummarizedExperiment object
+    if (message) {
+        message("output the TreeSummarizedExperiment object ...")
+    }
     if(is.list(count)) {
         grpDat <- data.frame(group = substr(colnames(count[[1]]), 1, 2))
         lse <- TreeSummarizedExperiment(assays = count,
