@@ -30,7 +30,8 @@ Imports:
     dplyr,
     lme4, 
     tidyr,
-    ape
+    ape,
+    diffcyt
 Suggests:
     ape,
     knitr,

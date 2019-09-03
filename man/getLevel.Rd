@@ -66,8 +66,8 @@ lse <- TreeSummarizedExperiment(assays = list(count),
                                 rowData = rowInf,
                                 colData = colInf,
                                 rowTree = tinyTree)
-
-tse <- aggData(x = lse, onRow = TRUE)
+nodes <- showNode(tree = tinyTree, only.leaf = FALSE)
+tse <- aggValue(x = lse, rowLevel = nodes)
 
 out <- runEdgeR(tse = tse, onRow = TRUE)
 
