@@ -141,7 +141,9 @@ getLevel <- function(tree, score_data, drop, score_column,
     }
     
     treeData <- printNode(tree = tree, type = "all")
-    nodeI <- treeData$nodeNum[!treeData$isLeaf & score_data$keep]
+    nodeKeep <- score_data[[node_column]][score_data$keep]
+    nodeIn <- treeData$nodeNum[!treeData$isLeaf]
+    nodeI <- intersect(nodeKeep, nodeIn)
     if (message) {
         message("searching the descendant nodes of the candidate nodes... ")
     }
