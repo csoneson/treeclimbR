@@ -72,8 +72,8 @@ getCand <- function(tree, threshold = NULL,
         threshold <- seq(0, 1, by = 0.05)
     }
     # a list to store levels under different thresholds
-    level_list <- vector("list", length(threshold))
-    names(level_list) <- paste0("level_", threshold)
+    level_list <- vector("list", length(threshold) + 1)
+    names(level_list) <- c(paste0("level_", threshold), "level_leaf")
     
     dat_U <- score_data
     for (i in seq_along(threshold)) {
@@ -123,7 +123,13 @@ getCand <- function(tree, threshold = NULL,
         level_list[[i]] <- lev[[node_column]][lev$keep]
 
     }
-    out <- list(candidate_list = level_list, score_data = dat_U)
-   return(out)
+    
+    # the leaf level
+    leaf <- showNode(tree = tree, only.leaf = TRUE)
+    level_list$level_leaf <- leaf
+    
+    out <- list(candidate_list = level_list,
+                score_data = dat_U)
+    return(out)
 
 }

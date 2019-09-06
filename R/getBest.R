@@ -67,7 +67,8 @@
 #'                   node_column = "node", 
 #'                   p_column = "pvalue", 
 #'                   sign_column = "foldChange")
-#' cc <- getBest(tree = tinyTree, levels = ll$candidate_list, 
+#' cc <- getBest(tree = tinyTree, 
+#'               levels = ll$candidate_list, 
 #'               score_data = df,
 #'               node_column = "node", 
 #'               p_column = "pvalue", 
@@ -93,14 +94,18 @@ getBest <- function(tree, levels,
         stop("More than one score is detected for a same node")
     }
 
+    # ---------------- info about the agg level ---------------------------
+    # candidates in the aggregated level
     # a data frame: T, br_size, candidate, method, limit_rej, level_name
-    t <- as.numeric(gsub(pattern = "level_", replacement = "",
-                         x = names(levels)))
+    t <- gsub(pattern = "level_", replacement = "", x = names(levels))
+    t[t == "leaf"] <- NA
+    t <- as.numeric(t)
+    
     level_info <- data.frame(T = t, r = NA, is_valid = FALSE,
-                             method = method, limit_rej = limit_rej,
-                             level_name = names(levels),
-                             rej_leaf = NA, rej_node = NA)
-
+                           method = method, limit_rej = limit_rej,
+                           level_name = names(levels),
+                           rej_leaf = NA, rej_node = NA)
+    
     for (i in seq_along(t)) {
         # message
         if (message) {
@@ -130,26 +135,28 @@ getBest <- function(tree, levels,
         
         r_i <- 2*limit_rej*(length(leaf_r)/max(c(length(node_r)-1, 1)))
         level_info$r[i] <- r_i
-        level_info$is_valid[i] <- r_i >= limit_rej & t[i] <= r_i
+        
+        # the leaf is always valid; 
+        # the aggregated level should be in a specific range to be valid
+        if (is.na(t[i]) & name_i == "level_leaf") {
+            level_info$is_valid[i] <- TRUE
+        } else {
+            level_info$is_valid[i] <- r_i >= limit_rej & t[i] <= r_i
+        }
+        
     }
     
     # candidates: levels that fullfil the requirement to control FDR on the leaf
     # level when multiple hypothesis correction is performed on it
-    isV <- level_info$is_valid
-    if (all(!isV)) {
-        level_c <- showNode(tree = tree, only.leaf = TRUE)
-        level_b <- level_c
-    } else {
-        level_c <- levels
-        isB <- level_info %>%
-            filter(t <= r & r >= limit_rej) %>%
-            filter(rej_leaf == max(rej_leaf)) %>%
-            filter(rej_node == min(rej_node)) %>%
-            select(level_name) %>% 
-            unlist() %>%
-            as.character()
-        level_b <- levels[[isB[1]]]
-    }
+    level_c <- levels
+    isB <- level_info %>%
+        filter(is_valid) %>%
+        filter(rej_leaf == max(rej_leaf)) %>%
+        filter(rej_node == min(rej_node)) %>%
+        select(level_name) %>% 
+        unlist() %>%
+        as.character()
+    level_b <- levels[[isB[1]]]
     
     # output the results on the best level
     sel_b <- score_data[[node_column]] %in% level_b
@@ -172,7 +179,8 @@ getBest <- function(tree, levels,
     colnames(outB) <- c(node_column, p_column, sign_column, 
                         "adj.p", "signal.node", "n_leaf")
     out <- list(candidate_best = level_b, output = outB,
-                candidate_list = level_c,  level_info = level_info, 
+                candidate_list = level_c,  
+                level_info = level_info, 
                 FDR = limit_rej, method = method)
     return(out)
 
