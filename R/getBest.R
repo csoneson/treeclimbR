@@ -124,7 +124,7 @@ getBest <- function(tree, levels,
         
         rej <- adp <= limit_rej
         node_s <- score_data[[node_column]][sel_i]
-        node_r <- node_s[rej]
+        node_r <- node_s[rej %in% TRUE]
         
         leaf_r <- findOS(tree = tree, node = node_r, 
                          only.leaf = TRUE, self.include = TRUE)
