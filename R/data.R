@@ -6,3 +6,10 @@
 #' 
 #'
 "saliva"
+
+#' throat data
+#' 
+#'
+#' 
+#'
+"throat"
