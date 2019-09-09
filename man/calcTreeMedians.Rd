@@ -2,12 +2,11 @@
 % Please edit documentation in R/diffcyt_calcTreeMedians.R
 \name{calcTreeMedians}
 \alias{calcTreeMedians}
-\title{Calculate cluster medians on the tree structure
-\code{calcTreeMedians} calculates cluster medians (median expression for each
-cluster-sample-marker combination). This is a tree
-version of \code{\link[diffcyt]{calcMedians}}. The clusters
-used in \code{\link[diffcyt]} are clusters on the leaf level of the tree
-here. More details about the data could be found in
+\title{Calculate cluster medians on the tree structure \code{calcTreeMedians}
+calculates cluster medians (median expression for each cluster-sample-marker
+combination). This is a tree version of \code{\link[diffcyt]{calcMedians}}.
+The clusters used in \code{\link[diffcyt]{calcMedians}} are clusters on the
+leaf level of the tree here. More details about the data could be found in
 \code{\link[diffcyt]{calcMedians}}.}
 \usage{
 calcTreeMedians(d_se, tree)
@@ -53,12 +52,11 @@ A TreeSummarizedExperiment object.  Calculate median marker
 A TreeSummarizedExperiment object
 }
 \description{
-Calculate cluster medians on the tree structure
-\code{calcTreeMedians} calculates cluster medians (median expression for each
-cluster-sample-marker combination). This is a tree
-version of \code{\link[diffcyt]{calcMedians}}. The clusters
-used in \code{\link[diffcyt]} are clusters on the leaf level of the tree
-here. More details about the data could be found in
+Calculate cluster medians on the tree structure \code{calcTreeMedians}
+calculates cluster medians (median expression for each cluster-sample-marker
+combination). This is a tree version of \code{\link[diffcyt]{calcMedians}}.
+The clusters used in \code{\link[diffcyt]{calcMedians}} are clusters on the
+leaf level of the tree here. More details about the data could be found in
 \code{\link[diffcyt]{calcMedians}}.
 }
 \examples{

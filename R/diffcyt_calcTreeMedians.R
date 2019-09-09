@@ -1,9 +1,8 @@
-#' Calculate cluster medians on the tree structure
-#' \code{calcTreeMedians} calculates cluster medians (median expression for each
-#' cluster-sample-marker combination). This is a tree
-#' version of \code{\link[diffcyt]{calcMedians}}. The clusters
-#' used in \code{\link[diffcyt]} are clusters on the leaf level of the tree
-#' here. More details about the data could be found in
+#' Calculate cluster medians on the tree structure \code{calcTreeMedians}
+#' calculates cluster medians (median expression for each cluster-sample-marker
+#' combination). This is a tree version of \code{\link[diffcyt]{calcMedians}}.
+#' The clusters used in \code{\link[diffcyt]{calcMedians}} are clusters on the
+#' leaf level of the tree here. More details about the data could be found in
 #' \code{\link[diffcyt]{calcMedians}}.
 #' 
 #' @param d_se Data object from previous steps, in

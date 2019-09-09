@@ -22,10 +22,9 @@ A TreeSummarizedExperiment object, where clusters in rows, samples in
 \description{
 \code{calcTreeCounts} calculates number of cells per cluster-sample
 combination (referred to as cluster cell 'counts', 'abundances', or
-'frequencies'). This is a tree
-version of \code{\link[diffcyt]{calcCounts}}. The clusters
-used in \code{\link[diffcyt]} are clusters on the leaf level of the tree
-here. More details about the data could be found in
+'frequencies'). This is a tree version of \code{\link[diffcyt]{calcCounts}}.
+The clusters used in \code{\link[diffcyt]{calcCounts}} are clusters on the
+leaf level of the tree here. More details about the data could be found in
 \code{\link[diffcyt]{calcCounts}}.
 }
 \examples{

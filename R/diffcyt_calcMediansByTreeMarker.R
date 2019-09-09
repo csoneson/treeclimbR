@@ -3,8 +3,8 @@
 #' \code{calcMediansByTreeMarker} calculates medians for each cluster-marker
 #' combination. A cluster is represented by a node on the tree. This is a tree
 #' version of \code{\link[diffcyt]{calcMediansByClusterMarker}}. The clusters
-#' used in \code{\link[diffcyt]} are clusters on the leaf level of the tree
-#' here. More details about the data could be found in
+#' used in \code{\link[diffcyt]{calcMediansByClusterMarker}} are clusters on the
+#' leaf level of the tree here. More details about the data could be found in
 #' \code{\link[diffcyt]{calcMediansByClusterMarker}}.
 #' 
 #' 
