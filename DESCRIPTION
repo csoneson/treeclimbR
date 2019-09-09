@@ -31,8 +31,7 @@ Imports:
     lme4, 
     tidyr,
     ape,
-    diffcyt,
-    GUniFrac
+    diffcyt
 Suggests:
     ape,
     knitr,
