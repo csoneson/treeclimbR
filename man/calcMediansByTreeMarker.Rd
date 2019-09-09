@@ -30,6 +30,7 @@ here. More details about the data could be found in
 \examples{
 # For a complete workflow example demonstrating each step in the 'diffcyt' pipeline, 
 # see the package vignette.
+library(diffcyt)
 
 # Function to create random data (one sample)
 d_random <- function(n = 20000, mean = 0, sd = 1, ncol = 20, cofactor = 5) {
