@@ -1,6 +1,10 @@
 #' Calculate cluster medians on the tree structure
 #' \code{calcTreeMedians} calculates cluster medians (median expression for each
-#' cluster-sample-marker combination)
+#' cluster-sample-marker combination). This is a tree
+#' version of \code{\link[diffcyt]{calcMedians}}. The clusters
+#' used in \code{\link[diffcyt]} are clusters on the leaf level of the tree
+#' here. More details about the data could be found in
+#' \code{\link[diffcyt]{calcMedians}}.
 #' 
 #' @param d_se Data object from previous steps, in
 #'   \code{\link[TreeSummarizedExperiment]{TreeSummarizedExperiment}} format,
@@ -38,6 +42,8 @@
 #'   \code{assays}.
 #' @import TreeSummarizedExperiment
 #' @importFrom dplyr select distinct
+#' @importFrom methods is
+#' @importFrom stats median
 #' @export
 #' @return A TreeSummarizedExperiment object
 #' @examples 
@@ -92,6 +98,16 @@
 #' d_medians_tree <- calcTreeMedians(d_se = d_se, tree = tr)
 
 calcTreeMedians <- function(d_se, tree) {
+    
+    if (!("cluster_id" %in% (colnames(rowData(d_se))))) {
+        stop("Data object does not contain cluster labels. 
+             Run 'diffcyt::generateClusters' to generate cluster labels.")
+    }
+    
+    if (!is(tree, "phylo")) {
+        stop("tree is not a phylo object.
+             Run 'buildTree(d_se)' to generate the tree")
+    }
     
     ## create the tse object
     rlab <- as.character(rowData(d_se)$cluster_id)

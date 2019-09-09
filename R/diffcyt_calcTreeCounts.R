@@ -2,7 +2,12 @@
 #' 
 #' \code{calcTreeCounts} calculates number of cells per cluster-sample
 #' combination (referred to as cluster cell 'counts', 'abundances', or
-#' 'frequencies'). Here, a cluster is a node on a tree.
+#' 'frequencies'). This is a tree
+#' version of \code{\link[diffcyt]{calcCounts}}. The clusters
+#' used in \code{\link[diffcyt]} are clusters on the leaf level of the tree
+#' here. More details about the data could be found in
+#' \code{\link[diffcyt]{calcCounts}}.
+#' 
 #' 
 #' @param d_se Data object from previous steps, in
 #'   \code{\link[TreeSummarizedExperiment]{TreeSummarizedExperiment}} format,
@@ -13,7 +18,7 @@
 #' 
 #' @importFrom dplyr mutate
 #' @import TreeSummarizedExperiment
-#' 
+#' @importFrom methods is 
 #' @export
 #' @author Ruizhu Huang
 #' @return A TreeSummarizedExperiment object, where clusters in rows, samples in
@@ -69,6 +74,16 @@
 #' d_medians_tree <- calcTreeCounts(d_se = d_se, tree = tr)
 
 calcTreeCounts <- function(d_se, tree) {
+    
+    if (!("cluster_id" %in% (colnames(rowData(d_se))))) {
+        stop("Data object does not contain cluster labels. 
+             Run 'diffcyt::generateClusters' to generate cluster labels.")
+    }
+    
+    if (!is(tree, "phylo")) {
+        stop("tree is not a phylo object.
+             Run 'buildTree(d_se)' to generate the tree")
+    }
     
     # counts on the leaf level
     d_counts <- calcCounts(d_se)
