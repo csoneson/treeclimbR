@@ -90,7 +90,7 @@ calcTreeCounts <- function(d_se, tree) {
     lab <- rowLinks(counts_all)$nodeLab
     rowData(counts_all) <- rowData(counts_all) %>%
         data.frame() %>%
-        mutate(cluster_id = factor(lab)) %>%
+        mutate(cluster_id = factor(lab, levels = lab)) %>%
         mutate(n_cells = apply(assays(counts_all)[[1]], 1, sum))
     rownames(counts_all) <- lab
 

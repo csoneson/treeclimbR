@@ -134,7 +134,7 @@ calcTreeMedians <- function(d_se, tree) {
     names(lcm) <- colnames(d_lse)
     
     # rowdata
-    rd <- cbind.data.frame(cluster_id = factor(labs))
+    rd <- cbind.data.frame(cluster_id = factor(labs, levels = labs))
     
     # column data
     cd <- rowData(d_se) %>%
