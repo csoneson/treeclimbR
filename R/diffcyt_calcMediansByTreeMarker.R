@@ -13,6 +13,7 @@
 #'   containing cluster labels as a column in the row meta-data (from
 #'   \code{\link[diffcyt]{generateClusters}}). Column meta-data is assumed to contain a
 #'   factor \code{marker_class}.
+#' @param tree A phylo object from \code{\link{buildTree}}
 #' 
 #' 
 #' @return a \code{\link[TreeSummarizedExperiment]{TreeSummarizedExperiment}}
