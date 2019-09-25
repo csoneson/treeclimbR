@@ -159,140 +159,140 @@
 # }
 
 
-aggDS <- function(d_sce, tree, 
-                  assay = "counts", 
-                  sample_id = "sample_id",
-                  group_id = "group_id",
-                  cluster_id = "cluster_id",
-                  FUN = sum, message = FALSE) {
-    
-    if (message) {
-        message("Preparing ...") }
-    
-    # cell information
-    cell_info <- colData(d_sce)[, c(sample_id, group_id, cluster_id)]
-    colnames(cell_info) <- c("sample_id", "group_id", "cluster_id")
-    cell_info$node <- transNode(tree = tree, 
-                                node = as.character(cell_info$cluster_id))
-    
-    
-    if (message) {
-        message("Splitting data by sample_id ...") }
-    
-    # a list: each element is a sample
-    #         cells in rows, genes + cell_info in columns
-    asy <- assays(d_sce)[[assay]]
-    dat <- cbind(cell_info, t(asy))
-    dat_list <- split(x = dat, f = dat$sample_id)
-    
-    # a list: each element is a sample
-    #         nodes (or clusters) in rows, nodeNum + genes in columns
-    if (message) {
-        message("Generating data on nodes of the tree for each sample...") }
-    
-    node <- showNode(tree = tree, only.leaf = FALSE, use.alias = TRUE)
-    desd_list <- findOS(tree = tree, node = node, 
-                        only.leaf = TRUE, self.include = TRUE)
-    
-    
-    
-    dat_list2 <- lapply(seq_along(dat_list), FUN = function(i, ff) {
-        x <- dat_list[[i]]
-        ays_i <- x[, !colnames(x) %in% c(sample_id, group_id, cluster_id)]
-        lab_i <- as.character(x$cluster_id)
-        lse_i <- TreeSummarizedExperiment(assays = list(counts = ays_i),
-                                          rowTree = tree, rowNodeLab = lab_i)
-        tse_i <- aggValue(x = lse_i, rowLevel = node, FUN = ff)
-        out_i <- assays(tse_i)[[1]]
-        out_ci <- cbind(out_i,
-                        node = rowLinks(tse_i)$nodeNum)
-        
-        rownames(out_ci) <- rep(names(dat_list)[i], nrow(out_ci))
-        
-        if (message) {
-            message(i, " out of ", length(dat_list),
-                    " samples finished", "\r", appendLF = FALSE)
-            flush.console()
-        }
-        return(out_ci)
-        
-        
-        
-    }, ff = FUN)
-    # system.time({
-    #     dat_test <- bind_rows(dat_list2)
-    # })
-    dat_2 <- do.call(rbind, dat_list2)
-    
-    # the row indicator for each node
-    # a list: each element is data at a node
-    #         genes in rows, samples in columns
-    ri <- lapply(node, 
-                 FUN = function(x) {
-                     dat_2[, "node"] ==x })
-    dat_list3 <- lapply(ri, FUN = function(x) {
-        xx <- dat_2[x, !colnames(dat_2) %in% "node"]
-        t(xx)
-    })
-    
-    
-    
-    
-    # sample information
-    if (message) {
-        message("Working on sample data ...") }
-    sample_info <- colData(d_sce)[, c(sample_id, group_id)] %>%
-        data.frame() %>%
-        distinct() %>%
-        mutate(group_id = factor(group_id)) %>%
-        column_to_rownames(sample_id)
-    sample_info <- sample_info[colnames(dat_list3[[1]]), ,drop = FALSE]
-    
-    # meta data:
-    if (message) {
-        message("Working on metadata ...") }
-    cell_n <- table(colData(d_sce)[[sample_id]])
-    experiment_info <- colData(d_sce)[, c(sample_id, group_id)] %>%
-        data.frame() %>%
-        distinct() %>%
-        mutate(n_cells = cell_n[sample_id])
-    
-    agg_pars <- list(assay = assay,
-                     by = c(cluster_id, sample_id),
-                     fun = sum,
-                     scale = FALSE)
-    
-    cell_tab <- table(colData(d_sce)[[cluster_id]],
-                      colData(d_sce)[[sample_id]])
-    rn <- transNode(tree = tree,
-                    node = rownames(cell_tab))
-    
-    
-    desd <- findOS(tree = tree, node = node,
-                   only.leaf = TRUE, self.include = TRUE)
-    cell_tab <- as.matrix(cell_tab)
-    clus_tab <- lapply(desd, FUN = function(x) {
-        ii <- match(x, rn)
-        xi <- cell_tab[ii, , drop = FALSE]
-        apply(xi, 2, sum)
-        
-    })
-    clus_tab <- do.call(rbind, clus_tab)
-    rownames(clus_tab) <- names(node)
-    
-    meta <- list(experiment_info = experiment_info,
-                 agg_pars = agg_pars,
-                 n_cells = clus_tab )
-    # output
-    if (message) {
-        message("Output data ...") }
-    sce <- SingleCellExperiment(assays = dat_list3,
-                                colData = sample_info,
-                                metadata = meta)
-    return(sce)
-    
-    
-}
+# aggDS <- function(d_sce, tree, 
+#                   assay = "counts", 
+#                   sample_id = "sample_id",
+#                   group_id = "group_id",
+#                   cluster_id = "cluster_id",
+#                   FUN = sum, message = FALSE) {
+#     
+#     if (message) {
+#         message("Preparing ...") }
+#     
+#     # cell information
+#     cell_info <- colData(d_sce)[, c(sample_id, group_id, cluster_id)]
+#     colnames(cell_info) <- c("sample_id", "group_id", "cluster_id")
+#     cell_info$node <- transNode(tree = tree, 
+#                                 node = as.character(cell_info$cluster_id))
+#     
+#     
+#     if (message) {
+#         message("Splitting data by sample_id ...") }
+#     
+#     # a list: each element is a sample
+#     #         cells in rows, genes + cell_info in columns
+#     asy <- assays(d_sce)[[assay]]
+#     dat <- cbind(cell_info, t(asy))
+#     dat_list <- split(x = dat, f = dat$sample_id)
+#     
+#     # a list: each element is a sample
+#     #         nodes (or clusters) in rows, nodeNum + genes in columns
+#     if (message) {
+#         message("Generating data on nodes of the tree for each sample...") }
+#     
+#     node <- showNode(tree = tree, only.leaf = FALSE, use.alias = TRUE)
+#     desd_list <- findOS(tree = tree, node = node, 
+#                         only.leaf = TRUE, self.include = TRUE)
+#     
+#     
+#     
+#     dat_list2 <- lapply(seq_along(dat_list), FUN = function(i, ff) {
+#         x <- dat_list[[i]]
+#         ays_i <- x[, !colnames(x) %in% c(sample_id, group_id, cluster_id)]
+#         lab_i <- as.character(x$cluster_id)
+#         lse_i <- TreeSummarizedExperiment(assays = list(counts = ays_i),
+#                                           rowTree = tree, rowNodeLab = lab_i)
+#         tse_i <- aggValue(x = lse_i, rowLevel = node, FUN = ff)
+#         out_i <- assays(tse_i)[[1]]
+#         out_ci <- cbind(out_i,
+#                         node = rowLinks(tse_i)$nodeNum)
+#         
+#         rownames(out_ci) <- rep(names(dat_list)[i], nrow(out_ci))
+#         
+#         if (message) {
+#             message(i, " out of ", length(dat_list),
+#                     " samples finished", "\r", appendLF = FALSE)
+#             flush.console()
+#         }
+#         return(out_ci)
+#         
+#         
+#         
+#     }, ff = FUN)
+#     # system.time({
+#     #     dat_test <- bind_rows(dat_list2)
+#     # })
+#     dat_2 <- do.call(rbind, dat_list2)
+#     
+#     # the row indicator for each node
+#     # a list: each element is data at a node
+#     #         genes in rows, samples in columns
+#     ri <- lapply(node, 
+#                  FUN = function(x) {
+#                      dat_2[, "node"] ==x })
+#     dat_list3 <- lapply(ri, FUN = function(x) {
+#         xx <- dat_2[x, !colnames(dat_2) %in% "node"]
+#         t(xx)
+#     })
+#     
+#     
+#     
+#     
+#     # sample information
+#     if (message) {
+#         message("Working on sample data ...") }
+#     sample_info <- colData(d_sce)[, c(sample_id, group_id)] %>%
+#         data.frame() %>%
+#         distinct() %>%
+#         mutate(group_id = factor(group_id)) %>%
+#         column_to_rownames(sample_id)
+#     sample_info <- sample_info[colnames(dat_list3[[1]]), ,drop = FALSE]
+#     
+#     # meta data:
+#     if (message) {
+#         message("Working on metadata ...") }
+#     cell_n <- table(colData(d_sce)[[sample_id]])
+#     experiment_info <- colData(d_sce)[, c(sample_id, group_id)] %>%
+#         data.frame() %>%
+#         distinct() %>%
+#         mutate(n_cells = cell_n[sample_id])
+#     
+#     agg_pars <- list(assay = assay,
+#                      by = c(cluster_id, sample_id),
+#                      fun = sum,
+#                      scale = FALSE)
+#     
+#     cell_tab <- table(colData(d_sce)[[cluster_id]],
+#                       colData(d_sce)[[sample_id]])
+#     rn <- transNode(tree = tree,
+#                     node = rownames(cell_tab))
+#     
+#     
+#     desd <- findOS(tree = tree, node = node,
+#                    only.leaf = TRUE, self.include = TRUE)
+#     cell_tab <- as.matrix(cell_tab)
+#     clus_tab <- lapply(desd, FUN = function(x) {
+#         ii <- match(x, rn)
+#         xi <- cell_tab[ii, , drop = FALSE]
+#         apply(xi, 2, sum)
+#         
+#     })
+#     clus_tab <- do.call(rbind, clus_tab)
+#     rownames(clus_tab) <- names(node)
+#     
+#     meta <- list(experiment_info = experiment_info,
+#                  agg_pars = agg_pars,
+#                  n_cells = clus_tab )
+#     # output
+#     if (message) {
+#         message("Output data ...") }
+#     sce <- SingleCellExperiment(assays = dat_list3,
+#                                 colData = sample_info,
+#                                 metadata = meta)
+#     return(sce)
+#     
+#     
+# }
 
 
 
