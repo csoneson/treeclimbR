@@ -29,6 +29,8 @@
 #'   It could be "bonferroni", "holm", "hochberg", "hommel", "BH", or "BY".
 #' @param min_sample A numeric value. The minimum number of samples with
 #'   non-zero value.
+#' @param min_cell A numeric value. The minimun number of cells in a node-sample
+#'   required to consider the sample for differential testing
 #' @param group_column The name of column that stores group information for
 #'   samples.
 #' @param message A logic value. If TRUE, the running process is printed out.
@@ -88,7 +90,8 @@ dsSC <- function(d_sce, tree,
                  method = "TMM",
                  adjust_method = "BH", 
                  prior_count = 0.125,
-                 min_sample = NULL,
+                 min_sample = 4,
+                 min_cell = 5,
                  group_column = "group",
                  message = FALSE) {
     
@@ -377,3 +380,36 @@ dsSC <- function(d_sce, tree,
     return(design)
 }
 
+
+.check_cell <- function(d_sce, group_column = "group") {
+    ## check how many nodes have sufficient data
+    # group information
+    gr <- colData(d_sce)[[group_column]]
+    ugr <- unique(gr)
+    gr_list <- lapply(ugr, FUN = function(x) {
+        gr == x })
+    names(gr_list) <- ugr
+    
+    # the number of cells
+    n_cells <- metadata(d_sce)$n_cells
+    # check whether the number of cells are sufficient
+    info <- apply(n_cells, 1,
+                  FUN = function(x) {
+                      x >= min_cell })
+    
+    info_gr <- lapply(gr_list, FUN = function(x) {
+        xx <- info[x, ]
+        apply(xx, 2, sum) >= min_sample
+    })
+    info_gr <- do.call(rbind, info_gr)
+    info_gr <- apply(info_gr, 2, any)
+    
+    pass_node <- names(info_gr)[info_gr]
+    fail_node <- names(info_gr)[!info_gr]
+    fail_pr <- sum(!info_gr)/length(info_gr)
+    
+    if (fail_pr > 0.5) {
+        warning(length(fail_node), " out of ", length(info_gr), " don't have sufficient cells and ")
+    }
+    message(length(fail_node), " nodes without sufficient data." )
+}
