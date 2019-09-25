@@ -30,8 +30,61 @@
 #' reso <- 1:2
 #' 
 
+# prepareData <- function(d_seurat, reso, seed, 
+#                         npcs = 30, dims = 1:9) {
+#     
+#     # run PCA
+#     d_seurat <- RunPCA(d_seurat, npcs = npcs, verbose = FALSE)
+#     
+#     # find neighbours
+#     d_seurat <- FindNeighbors(d_seurat, reduction = "pca", 
+#                               dims = dims, verbose = FALSE)
+#     # clustering
+#     for (r in reso) {
+#         d_seurat <- FindClusters(d_seurat, resolution = r,
+#                                  random.seed = seed, verbose = FALSE)
+#     }
+#     
+#     
+#     
+#     # the cell information
+#     cell_info <- d_seurat@meta.data
+#     colnames(cell_info) <- gsub(
+#         pattern = "integrated_snn_res.",
+#         replacement = "res_", 
+#         colnames(cell_info))
+#     
+#     # the highly variable gene (HVG)
+#     hvg <- d_seurat@assays$integrated@var.features
+#     
+#     # the normalized and scaled data of HVG
+#     hvg_s <- d_seurat@assays$integrated@scale.data
+#     
+#     # original counts for HVG
+#     hvg_o <- d_seurat@assays$RNA@counts[hvg, ]
+#     
+#     
+#     tse <- TreeSummarizedExperiment(
+#         assays = list(counts = hvg_o, scale.data = hvg_s),
+#         colData = cell_info)
+#     
+#     
+#     # counts of all genes
+#     # g_o <- d_seurat@assays$RNA@counts
+#     # g_s <- d_seurat@assays$RNA@scale.data
+#     # output sce
+#     
+#     
+#     # tse <- TreeSummarizedExperiment(
+#     #     assays = list(counts = g_o),
+#     #     colData = cell_info, 
+#     #     metadata = list(hvg = hvg, hvg_scaleData = hvg_s, hvg_counts = hvg_o))
+#     return(tse)
+#     
+# }
+
 prepareData <- function(d_seurat, reso, seed, 
-                        npcs = 30, dims = 1:9) {
+                         npcs = 30, dims = 1:9) {
     
     # run PCA
     d_seurat <- RunPCA(d_seurat, npcs = npcs, verbose = FALSE)
@@ -64,21 +117,20 @@ prepareData <- function(d_seurat, reso, seed,
     hvg_o <- d_seurat@assays$RNA@counts[hvg, ]
     
     
-    tse <- TreeSummarizedExperiment(
-        assays = list(counts = hvg_o, scale.data = hvg_s),
-        colData = cell_info)
+    # tse <- TreeSummarizedExperiment(
+    #     assays = list(counts = hvg_o, scale.data = hvg_s),
+    #     colData = cell_info)
     
     
     # counts of all genes
-    # g_o <- d_seurat@assays$RNA@counts
-    # g_s <- d_seurat@assays$RNA@scale.data
+    g_o <- d_seurat@assays$RNA@counts
+    #g_s <- d_seurat@assays$RNA@scale.data
+    
     # output sce
-    
-    
-    # tse <- TreeSummarizedExperiment(
-    #     assays = list(counts = g_o),
-    #     colData = cell_info, 
-    #     metadata = list(hvg = hvg, hvg_scaleData = hvg_s, hvg_counts = hvg_o))
+    tse <- TreeSummarizedExperiment(
+        assays = list(counts = g_o),
+        colData = cell_info,
+        metadata = list(hvg = hvg, hvg_scaleData = hvg_s, hvg_counts = hvg_o))
     return(tse)
     
 }
