@@ -28,7 +28,7 @@ Imports:
     ComplexHeatmap,
     cowplot,
     dplyr,
-    lme4, 
+    tibble,
     tidyr,
     ape,
     diffcyt

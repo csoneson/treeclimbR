@@ -203,40 +203,4 @@ runEdgeR <- function(tse, onRow = TRUE, design = NULL,
 
 
 
-#' Create design matrix
-#'
-#' \code{.designMatrix} creates a design matrix by expanding factors to a set of
-#' dummay variables and epanding interactions similarly.
-#'
-#'
-#' \code{.designMatrix} creates a design matrix using the data extracted from
-#' \code{data}. \code{cols} specifies the columns to extract.
-#' \code{.designMatrix} is built on \code{\link[stats]{model.matrix}} with
-#' \code{contrasts.arg = NULL}.
-#'
-#' @param data A \code{data.frame} or \code{DataFrame}.
-#' @param cols A numeric vector. Specify columns to include in the design of
-#' model matrix. Default is to include all columns.
-#'
-#' @importFrom stats model.matrix as.formula
-#' @keywords internal
-#' @return a matrix.
 
-.designMatrix <- function(data, cols = NULL) {
-
-    stopifnot(class(data) %in% c("data.frame", "DataFrame"))
-
-    # if cols is null, use all columns.
-    if (is.null(cols)) {
-        cols <- seq_len(ncol(data))
-    }
-
-    # create design matrix
-    terms <- colnames(data)[cols]
-
-    formula <- as.formula(paste("~", paste(terms, collapse = " + ")))
-
-    design <- model.matrix(formula, data = data)
-
-    return(design)
-}

@@ -11,7 +11,7 @@
 #'   \code{\link[diffcyt]{generateClusters}}). Column meta-data is assumed to
 #'   contain a factor marker_class.
 #' @param tree A phylo object from \code{\link{buildTree}}
-#' 
+#' @param message A logic value, TRUE or FALSE
 #' @return A TreeSummarizedExperiment object.  Calculate median marker
 #'   expression for each cluster (each node of the tree) and sample (i.e.
 #'   medians for each cluster-sample-marker combination).
@@ -96,7 +96,7 @@
 #' # calculate medians on nodes of a tree
 #' d_medians_tree <- calcTreeMedians(d_se = d_se, tree = tr)
 
-calcTreeMedians <- function(d_se, tree) {
+calcTreeMedians <- function(d_se, tree, message = FALSE) {
     
     if (!("cluster_id" %in% (colnames(rowData(d_se))))) {
         stop("Data object does not contain cluster labels. 
@@ -130,7 +130,7 @@ calcTreeMedians <- function(d_se, tree) {
         ax <- aggValue(x = xx, rowLevel = nodes, 
                        FUN = function(x){
                            median(x, na.rm = TRUE)
-                       })
+                       }, message = message)
         
         # counts
         cx <- assays(ax)[[1]]

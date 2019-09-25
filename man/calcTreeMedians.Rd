@@ -9,7 +9,7 @@ The clusters used in \code{\link[diffcyt]{calcMedians}} are clusters on the
 leaf level of the tree here. More details about the data could be found in
 \code{\link[diffcyt]{calcMedians}}.}
 \usage{
-calcTreeMedians(d_se, tree)
+calcTreeMedians(d_se, tree, message = FALSE)
 }
 \arguments{
 \item{d_se}{Data object from previous steps, in
@@ -19,6 +19,8 @@ containing cluster labels as a column in the row meta-data (from
 contain a factor marker_class.}
 
 \item{tree}{A phylo object from \code{\link{buildTree}}}
+
+\item{message}{A logic value, TRUE or FALSE}
 }
 \value{
 A TreeSummarizedExperiment object.  Calculate median marker
