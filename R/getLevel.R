@@ -117,17 +117,17 @@ getLevel <- function(tree, score_data, drop, score_column,
     score_data$keep[r] <- FALSE
     score_data$keep[is.na(score_data[, score_column])] <- FALSE
     if (message) {
-        message(sum(!score_data$keep), " nodes are ruled out...")
+        message(sum(!score_data$keep), " nodes are dropped...")
     }
     # # ------------ search nodes -----------------------------
-    # This works only on nodes that are not ruled out.
+    # This works only on nodes that are not dropped.
     # It compares the score on an internal node with those on the descendant
     # nodes.
     # 1. get_max = TRUE & parent_first = TRUE
-    #   An internal node is selected if its score is greater or equal to the max
+    #   An internal node is selected if its score is not lower than the max
     #   score of its descendants.
     # 2. get_max = TRUE & parent_first = FALSE
-    #   An internal node is selected if its score is greater than the max score
+    #   An internal node is selected if its score is above the max score
     #   of its descendants.
     # 3. get_max = FALSE & parent_first = TRUE
     #   An internal node is selected if its score is lower or equal to the min
@@ -159,37 +159,48 @@ getLevel <- function(tree, score_data, drop, score_column,
     
     for (i in seq_along(descI)) {
         node.i <- nodeI[i]
+        child.i <- findChild(tree = tree, node = node.i)
         desc.i <- descI[[i]]
         
         row.p <- match(node.i, score_data[, node_column])
+        row.c <- which(score_data[, node_column] %in% child.i)
         row.d <- match(desc.i, score_data[, node_column])
         
         # extract the values on the parent and on the children
         score.p <- score_data[row.p, score_column]
+        score.c <- score_data[row.c, score_column]
         score.d <- score_data[row.d, score_column]
         
-        if (get_max) {
-            score.p[is.na(score.p)] <- -Inf
-            score.d[is.na(score.d)] <- -Inf
-            if (parent_first) {
-                isKeep <- all(score.p >= score.d)
-            } else {
-                isKeep <- all(score.p > score.d)
-            }
-        } else {
-            score.p[is.na(score.p)] <- Inf
-            score.d[is.na(score.d)] <- Inf
-            if (parent_first) {
-                isKeep <- all(score.p <= score.d)
-            } else {
-                isKeep <- all(score.p < score.d)
-            }
-        }
-        
-        if (isKeep) {
-            score_data$keep[row.d] <- FALSE
-        } else {
+        # if any of the direct child nodes has NA score, don't take the parent
+        # node
+        if (any(is.na(score.c))) {
             score_data$keep[row.p] <- FALSE
+        } else {
+            # if the direct child nodes all have score values, do the following
+            # comparison
+            if (get_max) {
+                score.p[is.na(score.p)] <- -Inf
+                score.d[is.na(score.d)] <- -Inf
+                if (parent_first) {
+                    isKeep <- all(score.p >= score.d)
+                } else {
+                    isKeep <- all(score.p > score.d)
+                }
+            } else {
+                score.p[is.na(score.p)] <- Inf
+                score.d[is.na(score.d)] <- Inf
+                if (parent_first) {
+                    isKeep <- all(score.p <= score.d)
+                } else {
+                    isKeep <- all(score.p < score.d)
+                }
+            }
+            
+            if (isKeep) {
+                score_data$keep[row.d] <- FALSE
+            } else {
+                score_data$keep[row.p] <- FALSE
+            }
         }
         if (message) {
             setTxtProgressBar(pb, i)
