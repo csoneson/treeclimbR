@@ -47,41 +47,35 @@ score. The score value needs to be provided for each node of the tree.
 library(TreeSummarizedExperiment)
 library(ggtree)
 data("tinyTree")
-ggtree(tinyTree, size = 2) +
-geom_text2(aes(label = node), color = "darkblue",
+ggtree(tinyTree, size = 2, branch.length = "none") +
+    geom_text2(aes(label = node), color = "darkblue",
            hjust = -0.5, vjust = 0.7, size = 4) +
     geom_text2(aes(label = label), color = "darkorange",
-               hjust = -0.1, vjust = -0.7, size = 4)
-set.seed(1)
-count <- matrix(rnbinom(300,size=1,mu=10),nrow=10)
-colnames(count) <- paste(rep(LETTERS[1:3], each = 10),
-                         rep(1:10,3), sep = "_")
-rownames(count) <- tinyTree$tip.label
-count[1, ] <- 0
-rowInf <- DataFrame(var1 = sample(letters[1:3], 10, replace = TRUE),
-                    var2 = sample(c(TRUE, FALSE), 10, replace = TRUE))
-colInf <- DataFrame(gg = factor(sample(1:3, 30, replace = TRUE)),
-                    group = rep(LETTERS[1:3], each = 10))
-lse <- TreeSummarizedExperiment(assays = list(count),
-                                rowData = rowInf,
-                                colData = colInf,
-                                rowTree = tinyTree)
-nodes <- showNode(tree = tinyTree, only.leaf = FALSE)
-tse <- aggValue(x = lse, rowLevel = nodes)
+               hjust = -0.1, vjust = -0.7, size = 4) +
+    geom_hilight(13, fill = "blue", alpha = 0.4) +
+    geom_hilight(16, fill = "orange", alpha = 0.4)
 
-out <- runEdgeR(tse = tse, onRow = TRUE)
+# generate score for each node     
+pv <- rep(0.1, 19)
+pv[c(16, 13, 17)] <- 0.01
+pv[c(12, 15)] <- 0.99
 
-final <- getLevel(tree = rowTree(tse),
-                     score_data = data.frame(out),
-                     drop =  FDR > 0.05,
-                     score_column = "PValue",
-                     node_column = "nodeNum",
-                     get_max = FALSE,
-                     parent_first = TRUE, 
-                     message = FALSE)
-                     
+
+out <- data.frame(node = 1:19,
+                  pvalue = pv)
+
+# search nodes
+final <- getLevel(tree = tinyTree,
+                  score_data = out,
+                  drop =  pvalue > 0.05,
+                  score_column = "pvalue",
+                  node_column = "node",
+                  get_max = FALSE,
+                  parent_first = TRUE,
+                  message = FALSE)
+
 # No node is kept because there is no difference between two groups
-final$nodeNum[final$keep]
+final$node[final$keep]
 
 }
 \author{
