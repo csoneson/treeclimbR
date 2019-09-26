@@ -91,8 +91,8 @@ dsSC <- function(d_sce, tree,
                  adjust_method = "BH", 
                  prior_count = 0.125,
                  min_sample = 4,
-                 min_cell = 5,
-                 group_column = "group",
+                 min_cell = 4,
+                 group_column = "group_id",
                  message = FALSE) {
     
     # the alias of nodes
@@ -170,7 +170,7 @@ dsSC <- function(d_sce, tree,
     
     
     # Remove samples that don't have at least (min_cell) cells from a cluster.
-    islib <- metadata(d_sce)$n_cells[i, ] > min_cell
+    islib <- metadata(d_sce)$n_cells[assay_num, ] >= min_cell
     count <- count[, islib, drop = FALSE]
     
     
