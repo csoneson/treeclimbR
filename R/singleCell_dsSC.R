@@ -115,6 +115,7 @@ dsSC <- function(d_sce, tree,
                          prior_count = prior_count,
                          assay_num = i, 
                          min_sample = min_sample,
+                         min_cell = min_cell,
                          group_column = group_column)
         
         if (!is.null(res_i)) {
@@ -138,6 +139,8 @@ dsSC <- function(d_sce, tree,
     
 }
 
+#' @importFrom edgeR DGEList calcNormFactors estimateDisp glmQLFit glmQLFTest
+#'   topTags
 .runDS <- function(d_sce, 
                   feature_on_row = TRUE, 
                   design = NULL, 
@@ -146,7 +149,8 @@ dsSC <- function(d_sce, tree,
                   adjust_method = "BH", 
                   prior_count = 0.125,
                   assay_num = NULL, 
-                  min_sample = NULL,
+                  min_sample = 2,
+                  min_cell = 5,
                   group_column = "group_id") {
 
     # analysis step
@@ -156,39 +160,28 @@ dsSC <- function(d_sce, tree,
         
         # experiment_info
         experiment_info <- colData(d_sce)
-        
-        # the sample size in the smaller group
-        sz <- min(table(colData(d_sce)[[group_column]]))
     } else {
         # the count table
         count <- t(assays(d_sce)[[assay_num]])
         
         # experiment_info
         experiment_info <- rowData(d_sce)
-        
-        
-        # the sample size in the smaller group
-        sz <- min(table(rowData(d_sce)[[group_column]]))
     }
     
     
+    # Remove samples that don't have at least (min_cell) cells from a cluster.
+    islib <- metadata(d_sce)$n_cells[i, ] > min_cell
+    count <- count[, islib, drop = FALSE]
     
     
-    # if min_sample is null, entities that have non-zero value in samples more
-    # than the number of samples in the smaller group are kept; otherwise, the
-    # non-zero samples should be above the specified min_sample
-    if (!is.null(min_sample)) {
-        sz <- min_sample
-    } 
+    # Remove genes that don't have non-zero value in at least (min_sample)
+    # samples.
     isZ <- apply(count, 1, function(x) {
-        sum(x > 0) < sz
+        sum(x > 0) < min_sample
     })
     rowF <- rownames(count)[isZ]
     count <- count[!isZ, ]
     
-    # remove samples with library size equal to 0
-    islib <- apply(count, 2, sum) > 0
-    count <- count[, islib, drop = FALSE]
     
     # check whether there is data to run DS
     isGene <- nrow(count) > 0
