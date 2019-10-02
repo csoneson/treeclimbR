@@ -104,16 +104,16 @@ buildTree2 <- function(d_se,
                        dist_method = "euclidean",
                        hclust_method = "average") {
     
-    # scaled data on highly variable genes
-    data_HVG <- metadata(d_se)$hvg_scaleData
+    # data of type marker features
+    data_mk <- metadata(d_se)$data_type_marker
     
     # data_HVG <- metadata(d_se)$hvg_scaleData
     
     # cluster_id
     cluster_id <- colData(d_se)[[column_cluster]]
     
-    # median values of HVG on each cluster
-    med <- t(data_HVG) %>%
+    # median values of features on each cluster
+    med <- t(data_mk) %>%
         data.frame() %>%
         mutate(cluster_id = cluster_id) %>%
         group_by(cluster_id) %>%
