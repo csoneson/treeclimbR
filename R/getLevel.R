@@ -43,8 +43,10 @@
 #' 
 #' # generate score for each node     
 #' pv <- rep(0.1, 19)
+#' # pv[c(3, 13:14)] <- 0.01
+#' # pv[1:2] <- NA
 #' pv[c(16, 13, 17)] <- 0.01
-#' pv[c(12, 15)] <- 0.99
+#' 
 #' 
 #' 
 #' out <- data.frame(node = 1:19,
@@ -167,8 +169,9 @@ getLevel <- function(tree, score_data, drop, score_column,
         
         # if more than half of the direct child nodes has NA score, don't take
         # the parent node
-        na_pct <- sum(is.na(score.c))/length(score.c)
-        if (na_pct >= 0.5) {
+        na_c <- sum(is.na(score.c))/length(score.c)
+        na_d <- sum(is.na(score.d))/length(score.d)
+        if (na_c >= 0.5 & na_d != 1) {
             score_data$keep[row.p] <- FALSE
         } else {
             # if the direct child nodes all have score values, do the following

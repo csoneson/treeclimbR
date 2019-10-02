@@ -104,7 +104,7 @@ prepareData <- function(d_seurat, reso, seed,
     cell_info <- d_seurat@meta.data
     colnames(cell_info) <- gsub(
         pattern = "integrated_snn_res.",
-        replacement = "res_", 
+        replacement = "reso_", 
         colnames(cell_info))
     
     # the highly variable gene (HVG)

@@ -4,7 +4,8 @@
 #'
 #' @param tree A phylo object.
 #' @param threshold A sequence of values with the range between 0 and 1.
-#'   Thresholds used to search candidates.
+#'   Thresholds used to search candidates. The default is to use a sequence from
+#'   0 to 1 with step 0.05.
 #' @param score_data A data frame includes at least one column about the nodes,
 #'   one column about the p value (\code{p_column}) and one column about the
 #'   direction of change (\code{sign_column}).
