@@ -70,19 +70,18 @@ treeScore <- function(tree, score_data, node_column,
         warnings("The nodeNum should start from leaves with number 1.")
     }
     
-    
-    desd <- lapply(nodeI, FUN = function(x) {
-        xx <- findChild(tree = tree, node = x)
-        out <- c(x, xx)
-        return(out)
+    # a list: each element (a node and its children)
+    chl <- findChild(tree = tree, node = nodeI)
+    desd <- lapply(seq_along(nodeI), FUN = function(x) {
+        c(nodeI[x], chl[[x]])
     })
-    
     desdA <- c(as.list(tip), desd)
     
     # the number of descendant leaves for each node
     leafA <- findOS(tree = tree, node = nodeA, 
                     only.leaf = TRUE, self.include = TRUE)
-    leafDF <- data.frame(node = nodeA, num = unlist(lapply(leafA, length)))
+    leafDF <- data.frame(node = nodeA, 
+                         num = unlist(lapply(leafA, length)))
     leafA <- lapply(desdA, FUN = function(x) {
         leafDF$num[x]
     })
