@@ -187,6 +187,9 @@ viewBranch <- function(tree,
     
     # add annotate data
     if (!is.null(ann_data)) {
+        if (is.null(ann_data$node)) {
+            stop("Can't find the column 'node' in ann_data")
+        }
         p0 <- p0 %<+% ann_data 
     }
     
