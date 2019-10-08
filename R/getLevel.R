@@ -67,8 +67,8 @@
 #' 
 
 getLevel <- function(tree, score_data, drop, score_column,
-                     node_column, get_max, parent_first = TRUE,
-                     message = FALSE) {
+                      node_column, get_max, parent_first = TRUE,
+                      message = FALSE) {
     
     # ------------ check inputs -----------------------------
     if (!is(tree, "phylo")) {
@@ -111,10 +111,18 @@ getLevel <- function(tree, score_data, drop, score_column,
         r <- r & !is.na(r)
     }
     score_data$keep[r] <- FALSE
-    score_data$keep[is.na(score_data[, score_column])] <- FALSE
     if (message) {
         message(sum(!score_data$keep), " nodes are dropped...")
     }
+    
+    # drop nodes without available score
+    score_data$keep[is.na(score_data[, score_column])] <- FALSE
+    if (message) {
+        message(sum(is.na(score_data[, score_column])), 
+                " nodes with missing score are dropped...")
+    }
+    
+    
     # # ------------ search nodes -----------------------------
     # This works only on nodes that are not dropped.
     # It compares the score on an internal node with those on the descendant
@@ -136,15 +144,18 @@ getLevel <- function(tree, score_data, drop, score_column,
         message("searching candidate nodes... ")
     }
     
-    treeData <- printNode(tree = tree, type = "all")
     nodeKeep <- score_data[[node_column]][score_data$keep]
+    treeData <- printNode(tree = tree, type = "all")
     nodeIn <- treeData$nodeNum[!treeData$isLeaf]
     nodeI <- intersect(nodeKeep, nodeIn)
+    
     if (message) {
         message("searching the descendant nodes of the candidate nodes... ")
     }
+    
     descI <- findOS(tree = tree, node = nodeI, only.leaf = FALSE,
                     self.include = FALSE, use.alias = TRUE)
+    chlI <- findChild(tree = tree, node = nodeI)
     
     if (message) {
         message("comparing nodes ... ")
@@ -155,7 +166,7 @@ getLevel <- function(tree, score_data, drop, score_column,
     
     for (i in seq_along(descI)) {
         node.i <- nodeI[i]
-        child.i <- findChild(tree = tree, node = node.i)
+        child.i <- chlI[[i]]
         desc.i <- descI[[i]]
         
         row.p <- match(node.i, score_data[, node_column])
@@ -211,6 +222,6 @@ getLevel <- function(tree, score_data, drop, score_column,
     
     return(score_data)
     
-    }
+}
 
 
