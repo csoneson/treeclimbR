@@ -98,6 +98,9 @@ getCand <- function(tree, threshold = NULL,
         dat_i$S <- s
 
         # u: transform S to u
+        if (message) {
+            message("Calculating U at t = ", t, " ...")
+        }
         dat_iu <- treeScore(tree = tree,
                             score_data = dat_i,
                             node_column = node_column,
@@ -115,12 +118,16 @@ getCand <- function(tree, threshold = NULL,
        
         
         # get levels
+        if (message) {
+            message("Searching the candidate level at t = ", t, " ...")
+        }
         lev <- getLevel(tree = tree,
                         score_data = dat_iu,
                         score_column = "U",
                         node_column = node_column,
                         get_max = TRUE,
-                        parent_first = TRUE)
+                        parent_first = TRUE,
+                        message = FALSE)
         level_list[[i]] <- lev[[node_column]][lev$keep]
 
     }
