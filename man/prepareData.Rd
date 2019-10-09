@@ -4,12 +4,14 @@
 \alias{prepareData}
 \title{prepare data}
 \usage{
-prepareData(d_seurat, reso, seed, npcs = 30, dims = 1:9)
+prepareData(d_seurat, reso, seed, assay = "integrated", npcs = 30,
+  dims = 1:9)
 }
 \arguments{
 \item{d_seurat}{A \code{Seurat} object to provide data that is normalized,
-scaled and integrated from package \code{Seurat}. Meanwhile, the highly
-variable genes are selected.}
+scaled and integrated from package \code{Seurat}. Marker genes of cell
+types are selected as the integrated features and their scale data will be
+used in next steop to generate the tree.}
 
 \item{reso}{A numeric vector. It provides the resolutions that the clustering
 is generated at. Please refer to \code{resolution} from
@@ -17,6 +19,9 @@ is generated at. Please refer to \code{resolution} from
 
 \item{seed}{A numeric value. It provides a seed number. Please refer to
 \code{random.seed} from \code{\link[Seurat]{FindClusters}}.}
+
+\item{assay}{The name of assay that will be used to run
+\code{\link[Seurat]{runPCA}} and perform clustering.}
 
 \item{npcs}{Please refer to \code{npcs} from \code{\link[Seurat]{RunPCA}}.}
 
@@ -26,11 +31,13 @@ is generated at. Please refer to \code{resolution} from
 \description{
 \code{prepareData} is a wrapper function that includes functions
 \code{\link[Seurat]{RunPCA}}, \code{\link[Seurat]{FindNeighbours}}, and
-\code{\link[Seurat]{FindClusters}}. It
-clusters cells at specified resolutions, and outputs  a
-\code{\link[SingleCellExperiment]{SingleCellExperiment}} object. The output
-includes the data of highly variable genes(orignial \code{counts} and
-\code{scale.data} after integration) and the clustering results.
+\code{\link[Seurat]{FindClusters}}. It clusters cells at specified
+resolutions, and outputs  a
+\code{\link[SingleCellExperiment]{SingleCellExperiment}} object. In the
+output, the \code{assay} stores the original counts that was stored in the
+slot \code{d_seurat@assays$RNA@counts}. The cluster results is stored in the
+column with prefix \code{reso_} followed by the specified \code{reso}. The
+integrated data is stored in \code{metadata}
 }
 \examples{
 

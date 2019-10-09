@@ -11,7 +11,8 @@ getCand(tree, threshold = NULL, score_data, node_column, p_column,
 \item{tree}{A phylo object.}
 
 \item{threshold}{A sequence of values with the range between 0 and 1.
-Thresholds used to search candidates.}
+Thresholds used to search candidates. The default is to use a sequence from
+0 to 1 with step 0.05.}
 
 \item{score_data}{A data frame includes at least one column about the nodes,
 one column about the p value (\code{p_column}) and one column about the
@@ -57,7 +58,7 @@ df <- data.frame(node = 1:19,
                  pvalue = pv,
                  foldChange = fc)
 
-ll <- getCand(tree = tinyTree, score_data = df,
+ll <- getCand(tree = tinyTree, score_data = df1,
               node_column = "node", 
               p_column = "pvalue", 
               sign_column = "foldChange")

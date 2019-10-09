@@ -4,7 +4,7 @@
 \alias{findChild}
 \title{Find the children}
 \usage{
-findChild(tree, node = 11, use.alias = FALSE)
+findChild(tree, node, use.alias = FALSE)
 }
 \arguments{
 \item{tree}{A phylo object.}
@@ -37,7 +37,8 @@ geom_hilight(node = 17, fill = 'steelblue', alpha = 0.5) +
 geom_text2(aes(label = label), color = "darkorange",
            hjust = -0.1, vjust = -0.7)
 
-(tips <- findChild(tree = tinyTree, node = 17))
+(tips <- findChild(tree = tinyTree, 
+                   node = c(17, 12)))
 
 }
 \author{

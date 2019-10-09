@@ -11,10 +11,9 @@ getLevel(tree, score_data, drop, score_column, node_column, get_max,
 \item{tree}{a phylo object to provide the hierarchical structure of nodes.}
 
 \item{score_data}{a data frame to provide scores for all nodes of the tree.
-The data frame should have at least five columns, four of them naming
-\code{nodeLab}, \code{nodeLab_alias}, \code{nodeNum} and \code{isLeaf}.
-These four columns provide the information about nodes. The score column
-could be named freely.}
+The data frame should have at least 2 columns, one stores information about
+nodes (the node number) and the other stores score for each node. These
+columns could be named freely.}
 
 \item{drop}{a logical expression indicating elements or rows to keep:
 missing values are taken as false.}
@@ -57,8 +56,10 @@ ggtree(tinyTree, size = 2, branch.length = "none") +
 
 # generate score for each node     
 pv <- rep(0.1, 19)
+# pv[c(3, 13:14)] <- 0.01
+# pv[1:2] <- NA
 pv[c(16, 13, 17)] <- 0.01
-pv[c(12, 15)] <- 0.99
+
 
 
 out <- data.frame(node = 1:19,
