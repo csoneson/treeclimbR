@@ -115,11 +115,16 @@ treeScore <- function(tree, score_data, node_column,
             return(ot.i)
         })
         
-        row.i <- match(node.i, tempData[, node_column])
-        if (any(is.na(row.i))) {
-            warnings("score_data doesn't provide all nodes required.")
-        }
-        tempData[row.i, new_score] <- unlist(score.i)
+        # remove nodes without scores
+        na.i <- unlist(lapply(score.i, is.na))
+        score.ii <- score.i[!na.i]
+        node.ii <- node.i[!na.i]
+        
+        row.i <- match(node.ii, tempData[, node_column])
+        # if (any(is.na(row.i))) {
+        #     warnings("score_data doesn't provide all nodes required.")
+        # }
+        tempData[row.i, new_score] <- unlist(score.ii)
         
     }
     

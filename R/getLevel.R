@@ -4,10 +4,9 @@
 #' score. The score value needs to be provided for each node of the tree.
 #'
 #' @param score_data a data frame to provide scores for all nodes of the tree.
-#'   The data frame should have at least five columns, four of them naming
-#'   \code{nodeLab}, \code{nodeLab_alias}, \code{nodeNum} and \code{isLeaf}.
-#'   These four columns provide the information about nodes. The score column
-#'   could be named freely.
+#'   The data frame should have at least 2 columns, one stores information about
+#'   nodes (the node number) and the other stores score for each node. These
+#'   columns could be named freely.
 #' @param tree a phylo object to provide the hierarchical structure of nodes.
 #' @param drop a logical expression indicating elements or rows to keep:
 #'   missing values are taken as false.
@@ -170,7 +169,7 @@ getLevel <- function(tree, score_data, drop, score_column,
         desc.i <- descI[[i]]
         
         row.p <- match(node.i, score_data[, node_column])
-        row.c <- which(score_data[, node_column] %in% child.i)
+        row.c <- match(child.i, score_data[, node_column])
         row.d <- match(desc.i, score_data[, node_column])
         
         # extract the values on the parent and on the children
