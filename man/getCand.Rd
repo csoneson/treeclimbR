@@ -58,7 +58,7 @@ df <- data.frame(node = 1:19,
                  pvalue = pv,
                  foldChange = fc)
 
-ll <- getCand(tree = tinyTree, score_data = df1,
+ll <- getCand(tree = tinyTree, score_data = df,
               node_column = "node", 
               p_column = "pvalue", 
               sign_column = "foldChange")
