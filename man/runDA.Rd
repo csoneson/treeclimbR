@@ -5,9 +5,11 @@
 \title{Test for differential abundance using edgeR}
 \usage{
 runDA(tse, feature_on_row = TRUE, assay = NULL, option = c("glm",
-  "glmQL"), design = NULL, contrast = NULL, normalize = TRUE,
-  normalize_method = "TMM", adjust_method = "BH", min_sample = NULL,
-  min_count = NULL, group_column = "group", ...)
+  "glmQL"), design = NULL, contrast = NULL, filter_min_count = 10,
+  filter_min_total_count = 15, filter_large_n = 10,
+  filter_min_prop = 0.7, normalize = TRUE, normalize_method = "TMM",
+  adjust_method = "BH", group_column = "group",
+  design_terms = "group", ...)
 }
 \arguments{
 \item{tse}{A TreeSummarizedExperiment object.}
@@ -38,35 +40,34 @@ the linear model coefficients to be tested equal to zero. Its length
 must equal to the number of columns of design. If NULL, the last
 coefficient will be tested equal to zero.}
 
+\item{filter_min_count}{A numeric value. It's passed to \strong{min.count} of
+\code{\link[edgeR]{filterByExpr}}.}
+
+\item{filter_min_total_count}{A numeric value. It's passed to
+\strong{min.total.count} of \code{\link[edgeR]{filterByExpr}}.}
+
+\item{filter_large_n}{A numeric value. It's passed to \strong{large.n} of
+\code{\link[edgeR]{filterByExpr}}.}
+
+\item{filter_min_prop}{A numeric value. It's passed to \strong{min.prop} of
+\code{\link[edgeR]{filterByExpr}}.}
+
 \item{normalize}{A logical value, TRUE or FALSE. The default is TRUE.}
 
 \item{normalize_method}{Normalization method to be used. See
-\code{\link[edgeR]{calcNormFactors}} for more details.}
-
-\item{adjust_method}{A character string stating the method used to adjust
-p-values for multiple testing, passed on to \code{\link[stats]{p.adjust}}.
+\code{\link[edgeR]{calcNormFactors}} for more details.
 It could be "bonferroni", "holm", "hochberg", "hommel", "BH", or "BY". This
 is passed to \code{adjust.method} of \code{\link[edgeR]{topTags}}}
 
-\item{min_sample}{A numeric value to specify the minimum number of samples.
-If NULL (default), the number of samples in the smallest group is used.
-\code{min_count} and \code{min_sample} are combined to filter lowly
-expressed (abundant) entities.}
-
-\item{min_count}{A numeric value. The cutoff (on count-per-million) to
-specify lowly expressed (abundant) entities or features. If NULL (default),
-\code{10/L} is used. Here, L is the minimum library size in millions. More
-details about this setting could be found in the section "Filtering to
-remove low counts" of
-\link[https://f1000research.com/articles/5-1438/v2]{edgeR pipeline}.
-\code{min_count} and \code{min_sample} are combined to filter lowly
-expressed (abundant) entities. Features that have counts above
-\code{min_count} in at least \code{min_sample} are kept, and others are
-treated as lowly expressed (or lowly abundant) and filtered.}
+\item{group_column}{The column name of group}
 
 \item{...}{More arguments to pass to \code{\link[edgeR]{glmFit}}
 (\code{option = "glm"} or \code{\link[edgeR]{glmQLFit}} (\code{option =
 "glmQL"}).}
+
+\item{design_term}{The names of columns from \code{colData} (if samples in
+columns) that are used to generate design matrix. This is ignored if
+\strong{design} is provided.}
 }
 \value{
 a list includes \strong{edgeR_results}, \strong{tree}, and
