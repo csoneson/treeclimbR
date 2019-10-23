@@ -6,6 +6,8 @@
 #' @param zoom_scale A positive numeric value. If it is above one, branches with
 #'   fold change equal to one (non-signal branch) will be zoomed in; If below
 #'   one, they will be shrinked. Default is 2
+#' @param ref_value Default is 1. The fold change of the non-signal branch. (The
+#'   slot \code{FC} in \code{metadata} of \strong(obj))
 #' @param legend_position The legend position. see \code{\link[ggplot2]{theme}}
 #' @param show_leaf TRUE or FALSE with fold change above or below 1 will be
 #'   labelled.

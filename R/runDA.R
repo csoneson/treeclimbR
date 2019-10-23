@@ -55,7 +55,7 @@
 #'   It could be "bonferroni", "holm", "hochberg", "hommel", "BH", or "BY". This
 #'   is passed to \code{adjust.method} of \code{\link[edgeR]{topTags}}
 #' @param group_column The column name of group 
-#' @param design_term The names of columns from \code{colData} (if samples in
+#' @param design_terms The names of columns from \code{colData} (if samples in
 #'   columns) that are used to generate design matrix. This is ignored if
 #'   \strong{design} is provided.
 #' @param ... More arguments to pass to \code{\link[edgeR]{glmFit}}
@@ -113,7 +113,6 @@ runDA <- function(tse, feature_on_row = TRUE, assay = NULL,
                   filter_large_n = 10,
                   filter_min_prop = 0.7, 
                   normalize = TRUE, normalize_method = "TMM",
-                  adjust_method = "BH", 
                   group_column = "group", 
                   design_terms = "group", ...) {
     

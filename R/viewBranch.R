@@ -19,8 +19,13 @@
 #'   refer to \code{size} in \code{ggtree::geom_text2}
 #' @param hlight_node A vector of node number. The branch to be highlight.
 #'   Please refer to \code{node} in \code{ggtree::geom_hilight}
+#' @param hlight_fill A vector of colors to hilight branches.
+#'   Please refer to \code{fill} in \code{ggtree::geom_hilight}
 #' @param hlight_alpha A numeric value. Please refer to \code{alpha} in
 #'   \code{ggtree::geom_hilight}
+#' @param point_node A vector of node number to add points.
+#' @param point_color A vector of colors to color points.
+#' @param point_size A numeric value to specify the point size.
 #' @param view_node A vector of node number. Branches to be shown in subplots.
 #' @param zoom_node A vector of node number. Branches to be zoomed in. Please
 #'   refer to \code{node} in \code{ggtree::scaleClade}
@@ -39,8 +44,8 @@
 #'   \code{\link[ggtree]{ggtree}}. The default is 1.
 #' @param rel_widths The widths of three plots. Please refer to
 #'   \code{rel_widths} of \code{\link[cowplot]{plot_grid}}.
-#' @param labels The labels of three plots. Please refer to \code{labels} of
-#'   \code{\link[cowplot]{plot_grid}}
+#' @param nrow Please refer to
+#'   \code{nrow} of \code{\link[cowplot]{plot_grid}}.
 #' @param ... More arguments accepted by \code{\link[cowplot]{plot_grid}}.
 #' 
 #' @importFrom ggtree geom_hilight geom_text2 viewClade "%<+%" geom_point2

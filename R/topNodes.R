@@ -8,7 +8,7 @@
 #' @param adjust_method A character string specifying the method used to adjust
 #'   p-values for multiple testing. See \code{\link[stats]{p.adjust}} for
 #'   possible values.
-#' @param sort.by A character string specifying the sort method. Possibilities
+#' @param sort_by A character string specifying the sort method. Possibilities
 #'   are "PValue" for p-value, "logFC" for absolute log-fold change or "none"
 #'   for no sorting.
 #' @param p_value A numeric cutoff value for adjusted p-values. Only entities

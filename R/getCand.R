@@ -3,7 +3,7 @@
 #' \code{getCand} search candidates under different thresholds
 #'
 #' @param tree A phylo object.
-#' @param threshold A sequence of values with the range between 0 and 1.
+#' @param t A sequence of values with the range between 0 and 1.
 #'   Thresholds used to search candidates. The default is to use a sequence from
 #'   0 to 1 with step 0.05.
 #' @param score_data A data frame includes at least one column about the nodes,
