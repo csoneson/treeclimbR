@@ -31,7 +31,8 @@ Imports:
     tibble,
     tidyr,
     ape,
-    diffcyt
+    diffcyt,
+    data.table
 Suggests:
     ape,
     knitr,

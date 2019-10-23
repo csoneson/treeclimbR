@@ -4,13 +4,13 @@
 \alias{getCand}
 \title{search candidates under different thresholds}
 \usage{
-getCand(tree, threshold = NULL, score_data, node_column, p_column,
-  sign_column, message = FALSE)
+getCand(tree, t = NULL, score_data, node_column, p_column, sign_column,
+  message = FALSE)
 }
 \arguments{
 \item{tree}{A phylo object.}
 
-\item{threshold}{A sequence of values with the range between 0 and 1.
+\item{t}{A sequence of values with the range between 0 and 1.
 Thresholds used to search candidates. The default is to use a sequence from
 0 to 1 with step 0.05.}
 

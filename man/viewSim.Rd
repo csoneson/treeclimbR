@@ -19,6 +19,9 @@ one, they will be shrinked. Default is 2}
 \item{show_leaf}{TRUE or FALSE with fold change above or below 1 will be
 labelled.}
 
+\item{ref_value}{Default is 1. The fold change of the non-signal branch. (The
+slot \code{FC} in \code{metadata} of \strong(obj))}
+
 \item{...}{Additional arguments that are accepted by
 \code{\link[ggtree]{ggtree}}.}
 }

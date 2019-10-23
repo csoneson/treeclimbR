@@ -8,8 +8,7 @@ runDA(tse, feature_on_row = TRUE, assay = NULL, option = c("glm",
   "glmQL"), design = NULL, contrast = NULL, filter_min_count = 10,
   filter_min_total_count = 15, filter_large_n = 10,
   filter_min_prop = 0.7, normalize = TRUE, normalize_method = "TMM",
-  adjust_method = "BH", group_column = "group",
-  design_terms = "group", ...)
+  group_column = "group", design_terms = "group", ...)
 }
 \arguments{
 \item{tse}{A TreeSummarizedExperiment object.}
@@ -61,13 +60,13 @@ is passed to \code{adjust.method} of \code{\link[edgeR]{topTags}}}
 
 \item{group_column}{The column name of group}
 
+\item{design_terms}{The names of columns from \code{colData} (if samples in
+columns) that are used to generate design matrix. This is ignored if
+\strong{design} is provided.}
+
 \item{...}{More arguments to pass to \code{\link[edgeR]{glmFit}}
 (\code{option = "glm"} or \code{\link[edgeR]{glmQLFit}} (\code{option =
 "glmQL"}).}
-
-\item{design_term}{The names of columns from \code{colData} (if samples in
-columns) that are used to generate design matrix. This is ignored if
-\strong{design} is provided.}
 }
 \value{
 a list includes \strong{edgeR_results}, \strong{tree}, and

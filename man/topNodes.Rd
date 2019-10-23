@@ -16,12 +16,12 @@ topNodes(object, n = 10, adjust_method = "BH", sort_by = "PValue",
 p-values for multiple testing. See \code{\link[stats]{p.adjust}} for
 possible values.}
 
-\item{p_value}{A numeric cutoff value for adjusted p-values. Only entities
-with adjusted p-values equal or lower than specified are returned.}
-
-\item{sort.by}{A character string specifying the sort method. Possibilities
+\item{sort_by}{A character string specifying the sort method. Possibilities
 are "PValue" for p-value, "logFC" for absolute log-fold change or "none"
 for no sorting.}
+
+\item{p_value}{A numeric cutoff value for adjusted p-values. Only entities
+with adjusted p-values equal or lower than specified are returned.}
 }
 \value{
 A data frame. Columns including \strong{logFC}, \strong{logCPM},

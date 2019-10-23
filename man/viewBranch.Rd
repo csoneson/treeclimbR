@@ -42,6 +42,15 @@ Please refer to \code{node} in \code{ggtree::geom_hilight}}
 \item{hlight_alpha}{A numeric value. Please refer to \code{alpha} in
 \code{ggtree::geom_hilight}}
 
+\item{hlight_fill}{A vector of colors to hilight branches.
+Please refer to \code{fill} in \code{ggtree::geom_hilight}}
+
+\item{point_node}{A vector of node number to add points.}
+
+\item{point_color}{A vector of colors to color points.}
+
+\item{point_size}{A numeric value to specify the point size.}
+
 \item{view_node}{A vector of node number. Branches to be shown in subplots.}
 
 \item{zoom_node}{A vector of node number. Branches to be zoomed in. Please
@@ -57,6 +66,9 @@ Please refer to \code{scale} in \code{ggtree::scaleClade}}
 The names should match with the name in \code{group_leaf} and one extra
 with name "0". Please see the example.}
 
+\item{nrow}{Please refer to
+\code{nrow} of \code{\link[cowplot]{plot_grid}}.}
+
 \item{rel_widths}{The widths of three plots. Please refer to
 \code{rel_widths} of \code{\link[cowplot]{plot_grid}}.}
 
@@ -70,9 +82,6 @@ with name "0". Please see the example.}
 \code{\link[ggtree]{ggtree}}. The default is 1.}
 
 \item{...}{More arguments accepted by \code{\link[cowplot]{plot_grid}}.}
-
-\item{labels}{The labels of three plots. Please refer to \code{labels} of
-\code{\link[cowplot]{plot_grid}}}
 }
 \value{
 a figure
