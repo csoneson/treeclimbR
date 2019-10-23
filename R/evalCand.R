@@ -107,6 +107,7 @@ evalCand <- function(tree, type = c("DA", "DS"),
     type <- match.arg(type)
     if (type == "DA") {
         score_data <- list(score_data)
+        levels <- list(levels)
     }
     
     
