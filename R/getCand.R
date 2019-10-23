@@ -52,92 +52,66 @@
 #'               p_column = "pvalue", 
 #'               sign_column = "foldChange")
 
-getCand <- function(tree, threshold = NULL,
+getCand <- function(tree, t = NULL,
                     score_data, node_column,
                     p_column, sign_column,
                     message = FALSE) {
-
+    
     if (!is(tree, "phylo")) {
         stop("tree should be a phylo object.")
     }
-
-    if (anyDuplicated(score_data)) {
-        stop("Duplicated rows are detected in the score_data")
-    }
-
-    if (anyDuplicated(score_data[node_column])) {
-        stop("More than one score is detected for a same node")
-    }
-
-    if (is.null(threshold)) {
-        threshold <- seq(0, 1, by = 0.05)
-    }
-    # a list to store levels under different thresholds
-    level_list <- vector("list", length(threshold) + 1)
-    names(level_list) <- c(paste0("level_", threshold), "level_leaf")
     
-    dat_U <- score_data
-    for (i in seq_along(threshold)) {
-        # message
+    if (is.null(t)) {
+        t <- seq(0, 1, by = 0.05)
+    }
+    # a list to store levels under different ts
+    level_list <- vector("list", length(t) + 1)
+    names(level_list) <- c(t, "leaf")
+    
+    p_col <- score_data[[p_column]]
+    sign_col <- score_data[[sign_column]]
+    
+    for (i in seq_along(t)) {
         if (message) {
-            message("working on ", i , " out of ",
-                    length(threshold), "\r", appendLF = FALSE)
-            flush.console()
+            message("Calculating U at t = ", x, " ...")
         }
-
-        # the threshold
-        t <- threshold[i]
-
-        # the score data
-        dat_i <- score_data
-
-        # S: transform p value to S score
-        s <- 1 - dat_i[[p_column]]
-        s[!dat_i[p_column] > t] <- 1
-        s <- ifelse(dat_i[[sign_column]] > 0 , s, -s)
-        dat_i$S <- s
-
-        # u: transform S to u
-        if (message) {
-            message("Calculating U at t = ", t, " ...")
-        }
-        dat_iu <- treeScore(tree = tree,
-                            score_data = dat_i,
-                            node_column = node_column,
-                            score_column = "S",
-                            new_score = "u")
-
+        
+        # S
+        name_S <- paste0("S_", t[i])
+        score_data[[name_S]] <- ifelse(p_col > t[i], 1-p_col, 1) * sign(sign_col)
+        
+        # U
+        name_U <- paste0("U_", t[i])
+        score_data <- treeScore(tree = tree,
+                                score_data = score_data,
+                                node_column = node_column,
+                                score_column = name_S,
+                                new_score = name_U)
+        
         # U: transform u to U (U = abs(u))
-        dat_iu <- dat_iu %>%
-            mutate(U = abs(u))
-        U_i <- paste0("U_", t)
-        s_i <- paste0("s_", t)
-        dat_U[[U_i]] <- dat_iu$U
-        dat_U[[s_i]] <- dat_iu$S
-            
-       
+        score_data[[name_U]] <- abs(score_data[[name_U]])
         
         # get levels
         if (message) {
             message("Searching the candidate level at t = ", t, " ...")
         }
         lev <- getLevel(tree = tree,
-                        score_data = dat_iu,
-                        score_column = "U",
+                        score_data = score_data,
+                        score_column = name_U,
                         node_column = node_column,
                         get_max = TRUE,
                         parent_first = TRUE,
                         message = FALSE)
         level_list[[i]] <- lev[[node_column]][lev$keep]
-
+        
     }
     
     # the leaf level
     leaf <- showNode(tree = tree, only.leaf = TRUE)
-    level_list$level_leaf <- leaf
+    level_list$leaf <- leaf
     
     out <- list(candidate_list = level_list,
-                score_data = dat_U)
+                score_data = score_data)
     return(out)
-
+    
 }
