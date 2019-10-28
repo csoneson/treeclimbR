@@ -4,7 +4,7 @@
 #' performance
 #'
 #' @param tree A phylo object.
-#' @param type "DA" or "DS".
+#' @param type "single" or "multiple".
 #' @param levels A list of candidate levels that are selected by
 #'   \code{\link{getCand}}. If \code{type = "DA"}, elements in the list are
 #'   candidate levels, and are named by values of tuning parameter that are
@@ -84,13 +84,14 @@
 #'                node_column = "node",
 #'                p_column = "pvalue",
 #'                sign_column = "foldChange")
-#' cc <- evalCand(tree = tinyTree, levels = list(ll$candidate_list),
-#'          score_data = df, node_column = "node",
-#'          p_column = "pvalue", sign_column = "foldChange",
-#'          limit_rej = 0.05 )
+#' cc <- evalCand(tree = tinyTree, levels = ll$candidate_list,
+#'                score_data = df, node_column = "node",
+#'                p_column = "pvalue", sign_column = "foldChange",
+#'                limit_rej = 0.05 )
 #' cc$output
 
-evalCand <- function(tree, type = c("DA", "DS"),
+evalCand <- function(tree, 
+                     type = c("single", "multiple"),
                      levels = cand_list,
                      score_data = res_gene, 
                      node_column, p_column,
@@ -105,13 +106,13 @@ evalCand <- function(tree, type = c("DA", "DS"),
     }
     
     type <- match.arg(type)
-    if (type == "DA") {
+    if (type == "single") {
         score_data <- list(score_data)
         levels <- list(levels)
     }
     
     
-    if (type == "DS" & is.null(feature_column)) {
+    if (type == "multiple" & is.null(feature_column)) {
         warning("To distinct results from different features, 
                 feature_column is required")
     }
