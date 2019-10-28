@@ -20,8 +20,22 @@ biocViews: tree
 Imports:
     edgeR,
     methods,
-    SummarizedExperiment
-Suggests:
+    SummarizedExperiment,
+    S4Vectors,
+    dirmult,
     ggtree,
-    ape
+    ggplot2,
+    ComplexHeatmap,
+    cowplot,
+    dplyr,
+    tibble,
+    tidyr,
+    ape,
+    diffcyt,
+    data.table
+Suggests:
+    knitr,
+    rmarkdown,
+    ggrepel
 RoxygenNote: 6.1.1
+VignetteBuilder: knitr
