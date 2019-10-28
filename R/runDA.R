@@ -19,7 +19,7 @@
 #' normalization factor could be found from
 #' \code{\link[edgeR]{calcNormFactors}}.
 #' 
-#' @param tse A TreeSummarizedExperiment object.
+#' @param TSE A TreeSummarizedExperiment object.
 #' @param feature_on_row A logical value, TRUE or FALSE. If TRUE (default),
 #'   features or entities (e.g. genes, OTUs) are in rows of the \code{assays}
 #'   tables, and samples are in columns; otherwise, the other way around.
@@ -99,13 +99,13 @@
 #' tse <- aggValue(x = lse, rowLevel = nodes)
 #' 
 #' dd <- model.matrix( ~ group, data = colInf)
-#' out <- runDA(tse = tse, feature_on_row = TRUE,
+#' out <- runDA(TSE = tse, feature_on_row = TRUE,
 #'              assay = 1, option = "glmQL",
 #'              design = dd, contrast = NULL, 
 #'              normalize = TRUE, 
 #'              group_column = "group")
 
-runDA <- function(tse, feature_on_row = TRUE, assay = NULL,
+runDA <- function(TSE, feature_on_row = TRUE, assay = NULL,
                   option = c("glm", "glmQL"),
                   design = NULL, contrast = NULL, 
                   filter_min_count = 10, 
@@ -117,8 +117,8 @@ runDA <- function(tse, feature_on_row = TRUE, assay = NULL,
                   design_terms = "group", ...) {
     
     # require a TreeSummarizedExperiment object
-    if (!is(tse, "TreeSummarizedExperiment")) {
-        stop("tse should be a TreeSummarizedExperiment.")
+    if (!is(TSE, "TreeSummarizedExperiment")) {
+        stop("TSE should be a TreeSummarizedExperiment.")
     }
     
     # If not specified, the first assays is used
@@ -132,28 +132,28 @@ runDA <- function(tse, feature_on_row = TRUE, assay = NULL,
     # extract: count, sample information, node information
     if (feature_on_row) {
         # count
-        count <- assays(tse)[[assay]]
+        count <- assays(TSE)[[assay]]
         
         # node information
-        ld <- rowLinks(tse)
+        ld <- rowLinks(TSE)
         
         # sample information
-        sp_info <- colData(tse)
+        sp_info <- colData(TSE)
         
         # tree
-        tree <- rowTree(tse)
+        tree <- rowTree(TSE)
     } else {
         # the count table
-        count <- t(assays(tse)[[assayNum]])
+        count <- t(assays(TSE)[[assayNum]])
         
         # extract link data
-        ld <- colLinks(tse)
+        ld <- colLinks(TSE)
         
         # sample information
-        sp_info <- rowData(tse)
+        sp_info <- rowData(TSE)
         
         # tree
-        tree <- colTree(tse)
+        tree <- colTree(TSE)
     }
     
     # add rownames
@@ -194,12 +194,12 @@ runDA <- function(tse, feature_on_row = TRUE, assay = NULL,
     # -------------------------- output  ---------------------------------
     if (sum(isLow)) {
         out <- list(edgeR_results = lrt,
-                    tree = tree,
-                    nodes_drop = feature_drop)
+                    nodes_drop = feature_drop,
+                    tree = tree)
     } else {
         out <- list(edgeR_results = lrt,
-                    tree = tree,
-                    nodes_drop = NULL)
+                    nodes_drop = NULL,
+                    tree = tree)
     }
     
    return(out)
