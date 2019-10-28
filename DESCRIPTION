@@ -34,7 +34,6 @@ Imports:
     diffcyt,
     data.table
 Suggests:
-    ape,
     knitr,
     rmarkdown,
     ggrepel

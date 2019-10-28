@@ -4,14 +4,14 @@
 \alias{runDA}
 \title{Test for differential abundance using edgeR}
 \usage{
-runDA(tse, feature_on_row = TRUE, assay = NULL, option = c("glm",
+runDA(TSE, feature_on_row = TRUE, assay = NULL, option = c("glm",
   "glmQL"), design = NULL, contrast = NULL, filter_min_count = 10,
   filter_min_total_count = 15, filter_large_n = 10,
   filter_min_prop = 0.7, normalize = TRUE, normalize_method = "TMM",
   group_column = "group", design_terms = "group", ...)
 }
 \arguments{
-\item{tse}{A TreeSummarizedExperiment object.}
+\item{TSE}{A TreeSummarizedExperiment object.}
 
 \item{feature_on_row}{A logical value, TRUE or FALSE. If TRUE (default),
 features or entities (e.g. genes, OTUs) are in rows of the \code{assays}
@@ -121,7 +121,7 @@ nodes <- showNode(tree = tinyTree, only.leaf = FALSE)
 tse <- aggValue(x = lse, rowLevel = nodes)
 
 dd <- model.matrix( ~ group, data = colInf)
-out <- runDA(tse = tse, feature_on_row = TRUE,
+out <- runDA(TSE = tse, feature_on_row = TRUE,
              assay = 1, option = "glmQL",
              design = dd, contrast = NULL, 
              normalize = TRUE, 

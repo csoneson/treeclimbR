@@ -4,13 +4,16 @@
 \alias{topNodes}
 \title{Table of the top differentially abundant entities}
 \usage{
-topNodes(object, n = 10, adjust_method = "BH", sort_by = "PValue",
-  p_value = 1)
+topNodes(object, n = 10, type = c("DA", "DS"), adjust_method = "BH",
+  sort_by = "PValue", p_value = 1)
 }
 \arguments{
-\item{object}{The output from \link{runDA}.}
+\item{object}{The output from \link{runDA} or \link{runDS}.}
 
 \item{n}{A integer, maximum number of entities to return.}
+
+\item{type}{"DA" (\strong{object} from \link{runDA}) or "DS" (\strong{object}
+from \link{runDS})}
 
 \item{adjust_method}{A character string specifying the method used to adjust
 p-values for multiple testing. See \code{\link[stats]{p.adjust}} for
@@ -27,7 +30,8 @@ with adjusted p-values equal or lower than specified are returned.}
 A data frame. Columns including \strong{logFC}, \strong{logCPM},
   \strong{PValue}, \strong{FDR}, \strong{F} (or \strong{LR}) are from (the
   output table of) \code{\link[edgeR]{topTags}}. The \strong{node} column
-  stores the node number for each entities.
+  stores the node number for each entities. Note: \strong{FDR} is corrected
+  over all features and nodes when the specified \code{type = "DS"}.
 }
 \description{
 Extracts the most differentially abundant entities from a test object, ranked
@@ -53,7 +57,7 @@ nodes <- showNode(tree = tinyTree, only.leaf = FALSE)
 tse <- aggValue(x = lse, rowLevel = nodes)
 
 dd <- model.matrix( ~ group, data = colInf)
-out <- runDA(tse = tse, feature_on_row = TRUE,
+out <- runDA(TSE = tse, feature_on_row = TRUE,
              assay = 1, option = "glmQL",
              design = dd, contrast = NULL, 
              normalize = TRUE, 
