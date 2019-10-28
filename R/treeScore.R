@@ -87,12 +87,12 @@ treeScore <- function(tree, score_data, node_column,
     })
     
     
-    # nodes at different levels
+    # scores at nodes: leaf nodes U = S
     mat <- matTree(tree = tree)
     tempData <- score_data
     tempData[new_score] <- tempData[, score_column]
     
-    # rule out leaves
+    # Scores at internal nodes
     tempMat <- mat[, -1]
     for (i in seq_len(ncol(tempMat))) {
         mat.i <- tempMat[, i]
@@ -121,10 +121,14 @@ treeScore <- function(tree, score_data, node_column,
         node.ii <- node.i[!na.i]
         
         row.i <- match(node.ii, tempData[, node_column])
+        
+        # NA might occur in row.i 
+        ri <- !is.na(row.i)
+        row.i <- row.i[ri]
         # if (any(is.na(row.i))) {
         #     warnings("score_data doesn't provide all nodes required.")
         # }
-        tempData[row.i, new_score] <- unlist(score.ii)
+        tempData[row.i, new_score] <- unlist(score.ii)[ri]
         
     }
     

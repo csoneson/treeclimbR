@@ -204,12 +204,14 @@ runDS <- function(SE, tree,
     # extract: count, sample information, node information
     count <- assays(SE)[[assay]]
     sp_info <- colData(SE)
+    sp_min_0 <- min(table(sp_info[[group_column]]))
     
     sp_keep <- colSums(count, na.rm = TRUE) > 0
     if (sum(!sp_keep)) {
         count <- count[, sp_keep]
         sp_info <- sp_info[sp_keep, ,drop = FALSE]
     } 
+    sp_min_1 <- min(table(sp_info[[group_column]]))
     # ---------------------------- design matrix -----------------------
     if (is.null(design)) {
         formula <- as.formula(paste("~", paste(design_terms, collapse = "+")))
@@ -220,7 +222,9 @@ runDS <- function(SE, tree,
     # This is from (https://f1000research.com/articles/5-1438/v2).
     # The filtering is on count-per-million (CPM)
     ### -----------------------------------------------------------------------
-    # the cutoff
+    # Samples with zero library size are removed manually above, so we need to
+    # recalculate the min.prop here
+    filter_min_prop <- filter_min_prop * sp_min_0/sp_min_1
     keep <- filterByExpr(count, design = design, 
                          min.count = filter_min_count, 
                          min.total.count = filter_min_total_count,
