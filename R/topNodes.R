@@ -3,7 +3,9 @@
 #' Extracts the most differentially abundant entities from a test object, ranked
 #' either by p-value or by absolute log-fold-change.
 #' 
-#' @param object The output from \link{runDA}.
+#' @param object The output from \link{runDA} or \link{runDS}.
+#' @param type "DA" (\strong{object} from \link{runDA}) or "DS" (\strong{object}
+#'   from \link{runDS})
 #' @param n A integer, maximum number of entities to return.
 #' @param adjust_method A character string specifying the method used to adjust
 #'   p-values for multiple testing. See \code{\link[stats]{p.adjust}} for
@@ -15,12 +17,16 @@
 #'   with adjusted p-values equal or lower than specified are returned.
 #' 
 #' @importFrom edgeR topTags
+#' @importFrom dplyr arrange slice filter '%>%'
 #' @importFrom TreeSummarizedExperiment transNode
+#' @importFrom stats p.adjust
+#' @importFrom data.table rbindlist
 #' @export
 #' @return A data frame. Columns including \strong{logFC}, \strong{logCPM},
 #'   \strong{PValue}, \strong{FDR}, \strong{F} (or \strong{LR}) are from (the
 #'   output table of) \code{\link[edgeR]{topTags}}. The \strong{node} column
-#'   stores the node number for each entities.
+#'   stores the node number for each entities. Note: \strong{FDR} is corrected
+#'   over all features and nodes when the specified \code{type = "DS"}.
 #' @examples 
 #' library(TreeSummarizedExperiment)
 #' library(treeAGG2)
@@ -41,7 +47,7 @@
 #' tse <- aggValue(x = lse, rowLevel = nodes)
 #' 
 #' dd <- model.matrix( ~ group, data = colInf)
-#' out <- runDA(tse = tse, feature_on_row = TRUE,
+#' out <- runDA(TSE = tse, feature_on_row = TRUE,
 #'              assay = 1, option = "glmQL",
 #'              design = dd, contrast = NULL, 
 #'              normalize = TRUE, 
@@ -51,16 +57,46 @@
 #' 
 
 topNodes <- function(object, n = 10, 
+                     type = c("DA", "DS"),
                      adjust_method = "BH",
                      sort_by = "PValue", 
                      p_value = 1) {
-    tt <- topTags(object = object$edgeR_results, n = n, 
-                  adjust.method = adjust_method,
-                  sort.by = sort_by,
-                  p.value = p_value)$table
-    # add nodes
-    nod <- transNode(tree = object$tree, node = rownames(tt))
-    ct <- cbind(node = nod, tt)
+    type <- match.arg(type)
+    if (type == "DA") {
+        tt <- topTags(object = object$edgeR_results, n = n, 
+                      adjust.method = adjust_method,
+                      sort.by = sort_by,
+                      p.value = p_value)$table
+        # add nodes
+        nod <- transNode(tree = object$tree, node = rownames(tt))
+        ct <- cbind(node = nod, tt)
+    }
+    
+    if (type == "DS") {
+        res <- object$edgeR_results
+        tt <- lapply(seq_along(res), FUN = function(x) {
+            xx <- topTags(object = res[[x]], n = Inf,
+                          adjust.method = adjust_method,
+                          sort.by = sort_by, 
+                          p.value = p_value)$table
+            # add nodes
+            nod <- transNode(tree = object$tree, 
+                             node = names(res)[x])
+            cx <- cbind(xx, node = nod, feature = rownames(xx),
+                        stringsAsFactors = FALSE)
+            return(cx)
+        })
+        ct <- rbindlist(tt)
+        
+        # correct FDR
+        ct$FDR <- p.adjust(p = ct$PValue, method = adjust_method)
+        n <- min(nrow(ct), n)
+        ct <- ct %>%
+            arrange(!!as.symbol(sort_by)) %>%
+            slice(seq_len(n)) %>%
+            filter(FDR <= p_value)
+        
+    }
     
     return(ct)
 }
