@@ -123,16 +123,35 @@ evalCand <- function(tree,
     # enough data. In such case, an internal node would become a pseudo leaf 
     # node if its descendant nodes are filtered due to lack of sufficient data.
     
-    pseudo_leaf <- mapply(function(x, y) {
-        .pseudoLeaf(tree = x, score_data = y, 
-                    node_column = node_column, p_column = p_column)}, 
-        list(tree), score_data, SIMPLIFY = FALSE)
+    if (message) {
+        message("collecting the pseudo leaf level for all features ...")
+    }
+    
+    pseudo_leaf <- lapply(seq_along(score_data), FUN = function(x) {
+        if (message) {
+            message(x, " out of ", length(score_data),
+                    " features finished", "\r", appendLF = FALSE)
+            flush.console()}
+        
+        .pseudoLeaf(tree = tree, score_data = score_data[[x]], 
+                    node_column = node_column, p_column = p_column)
+    })
     names(pseudo_leaf) <- names(score_data)
     
     node_list <- lapply(score_data, FUN = function(x) {
         x[[node_column]]
     })
+    
+    if (message) {
+        message("Calculating the number of pseudo-leaves of each node 
+                for all features ...")
+    }
     info_nleaf <- lapply(seq_along(node_list), FUN = function(x) {
+        if (message) {
+            message(x, " out of ", length(node_list),
+                    " features finished", "\r", appendLF = FALSE)
+            flush.console()}
+        
         xx <- node_list[[x]]
         ps.x <- pseudo_leaf[[x]]
         
@@ -154,6 +173,10 @@ evalCand <- function(tree,
     # candidates in the candidate level
     # a data frame: t, br_size, candidate, method, limit_rej, level_name, 
     # rej_leaf, rej_node, rej_pseudo_leaf
+    
+    if (message) {
+        message("Evaluating candidates ... ")
+    }
     tlist <- lapply(levels, names)
     t <- tlist[!duplicated(tlist)]
     if (length(t) > 1) {
@@ -175,7 +198,7 @@ evalCand <- function(tree,
         # message
         if (message) {
             message("working on ", i , " out of ",
-                    length(t), "\r", appendLF = FALSE)
+                    length(t), " candidates \r", appendLF = FALSE)
             flush.console()
         }
         
@@ -243,6 +266,9 @@ evalCand <- function(tree,
     level_b <- lapply(levels, FUN = function(x) {x[[isB[1]]]})
     
     # output the result on the best level
+    if (message) {
+        message("mulitple-hypothesis correction on the best candidate ...")
+    }
     sel_b <- sel[[isB[1]]]
    
     outB <- lapply(seq_along(score_data), FUN = function(i) {
@@ -256,6 +282,9 @@ evalCand <- function(tree,
     outB$adj.p <- apv
     outB$signal.node <- apv <= limit_rej
 
+    if (message) {
+        message("output the results ...")
+    }
     out <- list(candidate_best = level_b, output = outB,
                 candidate_list = levels,  
                 level_info = level_info, 
@@ -278,7 +307,7 @@ evalCand <- function(tree,
         sc_col[xi]})
     exist_mat <- !is.na(val_mat)
     exist_leaf <- which(exist_mat, arr.ind = TRUE)
-    exist_leaf <- exist_leaf[order(exist_leaf[, 1]), ]
+    exist_leaf <- exist_leaf[order(exist_leaf[, 1]), , drop = FALSE]
     loc_leaf <- exist_leaf[!duplicated(exist_leaf[, 1]), ]
     leaf_0 <- unique(mat[loc_leaf])
     ind_0 <- lapply(leaf_0, FUN = function(x) {
