@@ -53,7 +53,7 @@ medianByClusterMarker <- function(SE, marker_in_column = TRUE,
         # data of type marker features
         data_mk <- t(assays(SE)[[1]])
         # cluster_id
-        cluster_id <- colData(SE)[[column_cluster]]
+        cluster_id <- as.character(colData(SE)[[column_cluster]])
     }
    # calculate the median
     med <- data_mk %>%
