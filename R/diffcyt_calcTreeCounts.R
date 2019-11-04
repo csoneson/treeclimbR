@@ -101,7 +101,8 @@ calcTreeCounts <- function(d_se, tree) {
     counts_all <- aggValue(x = counts_leaf, rowLevel = nodes, 
                            FUN = function(x) {sum(x, na.rm = TRUE)})
     
-    lab <- rowLinks(counts_all)$nodeLab
+    lab <- transNode(tree = tree, 
+                     node = rowLinks(counts_all)$nodeNum, use.alias = TRUE)
     rowData(counts_all) <- rowData(counts_all) %>%
         data.frame() %>%
         mutate(cluster_id = factor(lab, levels = lab)) %>%

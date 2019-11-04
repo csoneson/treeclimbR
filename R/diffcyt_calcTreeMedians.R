@@ -123,8 +123,12 @@ calcTreeMedians <- function(d_se, tree, message = FALSE) {
     sid <- unique(rd$sample_id)
     nodes <- sort(unique(as.vector(tree$edge)))
     labs <- transNode(tree = tree, 
-                      node = nodes, use.alias = FALSE)
-    lc <- lapply(sid, FUN = function(x) {
+                      node = nodes, use.alias = TRUE)
+    lc <- lapply(seq_along(sid), FUN = function(i) {
+        if (message) {
+            message("Working on ", i, " out of ", length(sid), " samples.")
+        }
+        x <- sid[i]
         sel <- rd$sample_id == x
         xx <- d_lse[sel, ]
         ax <- aggValue(x = xx, rowLevel = nodes, 
@@ -150,6 +154,7 @@ calcTreeMedians <- function(d_se, tree, message = FALSE) {
     
     # rowdata
     rd <- cbind.data.frame(cluster_id = factor(labs, levels = labs))
+    rownames(rd) <- labs
     
     # column data
     cd <- rowData(d_se) %>%
