@@ -29,6 +29,11 @@
 #'   the argument \code{method} in \code{\link[stats]{p.adjust}}. Default is
 #'   "BH".
 #' @param limit_rej The FDR level. Default is 0.05.
+#' @param control_fdr_on "leaf" or "pseudo-leaf". If "leaf", the FDR is
+#'   calculated on the leaf level of the tree; If "pseudo-leaf", the FDR is
+#'   calculated on the pseudo leaf level. The pseudo-leaf level is the level on
+#'   which entities have sufficient data to run analysis and the level that is
+#'   closest to the leaf level.
 #' @param message A logical value, TRUE or FALSE. Default is FALSE. If TRUE, the
 #'   message about running process is printed out.
 #'
@@ -99,6 +104,7 @@ evalCand <- function(tree,
                      feature_column = NULL,
                      method = "BH", 
                      limit_rej = 0.05,
+                     control_fdr_on = c("leaf", "pseudo-leaf"),
                      message = FALSE) {
     
     if (!is(tree, "phylo")) {
@@ -117,7 +123,7 @@ evalCand <- function(tree,
                 feature_column is required")
     }
     
-    
+    control_fdr_on <- match.arg(control_fdr_on)
     # ------------------------- the pseudo leaf level -------------------------
     # some nodes might not be included in the analysis step because they have no
     # enough data. In such case, an internal node would become a pseudo leaf 
@@ -237,7 +243,7 @@ evalCand <- function(tree,
         rej_m2 <- sum(unlist(rej_m2)[rej_i %in% TRUE])
         r_i2 <- 2 * limit_rej * (rej_m2/max(rej_C, 1) - 1)
         
-        r_i <- min(r_i1, r_i2)
+        r_i <- ifelse(control_fdr_on == "leaf", r_i2, r_i1)
         level_info$r[i] <- r_i
         level_info$rej_leaf[i] <- rej_m2
         level_info$rej_pseudo_leaf[i] <- rej_m1
