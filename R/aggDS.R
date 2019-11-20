@@ -19,7 +19,24 @@
 #' @return A singleCellExperiment object. In \code{assays}, each matrix is data of a node on the tree. Rows of matrix represent genes and columns represent samples.
 #' 
 #' @examples 
+#' library(treeclimbR)
+#' library(ape)
 #' 
+#' tr <- rtree(3, tip.label = LETTERS[1:3])
+#' cc <- matrix(rpois(50, 10), nrow = 5)
+#' rownames(cc) <- paste0("gene", 1:5)
+#' colnames(cc) <- paste0("cell", 1:10)
+#' cd <- data.frame(sid = rep(1:2, each = 5),
+#'                  gid = rep(letters[1:2], each = 5),
+#'                  cid = sample(LETTERS[1:3], size = 10, replace = TRUE),
+#'                  stringsAsFactors = FALSE)
+#' tse <- TreeSummarizedExperiment(assays = list(cc),
+#'                                 colTree = tr, 
+#'                                 colNodeLab = cd$cid,
+#'                                 colData = cd)
+#' 
+#' out <- aggDS(TSE = tse, assay = 1, sample_id = "sid",
+#'              group_id = "gid", cluster_id = "cid")
 
 aggDS <- function(TSE,  
                   assay = "counts", 
@@ -76,7 +93,6 @@ aggDS <- function(TSE,
     dat_list <- vector("list", length(ind_list3))
     names(dat_list) <- names(ind_list3)
     for (i in seq_along(dat_list)) {
-        
         ind_i <- ind_list3[[i]]
         sp_i <- names(ind_i)
         asy_i <- lapply(ind_i, FUN = function(x) {
@@ -100,17 +116,17 @@ aggDS <- function(TSE,
     # sample information
     if (message) {
         message("Working on sample information ...") }
-    sample_info <- colData(TSE)[, c(sample_id, group_id)] %>%
+    sample_df <- colData(TSE)[, c(sample_id, group_id)] %>%
         data.frame() %>%
-        distinct() %>%
-        mutate(group_id = factor(group_id)) %>%
-        column_to_rownames(sample_id)
+        distinct()
+    sample_info <- sample_df[, group_id, drop = FALSE]
+    rownames(sample_info) <- sample_df[[sample_id]]
     sample_info <- sample_info[colnames(dat_list[[1]]), ,drop = FALSE]
     
     # meta data:
     if (message) {
         message("Working on metadata ...") }
-    cell_n <- table(cell_info[[sample_id]])
+    cell_n <- table(cell_info[["sample_id"]])
     experiment_info <- cell_info %>%
         data.frame() %>%
         select(sample_id, group_id) %>%
@@ -122,8 +138,8 @@ aggDS <- function(TSE,
                      fun = deparse(substitute(FUN)),
                      scale = FALSE)
     # on leaf level
-    cell_tab <- table(cell_info[[cluster_id]],
-                      cell_info[[sample_id]])
+    cell_tab <- table(cell_info[["cluster_id"]],
+                      cell_info[["sample_id"]])
     rn <- transNode(tree = tree,
                     node = rownames(cell_tab))
     
