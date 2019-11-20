@@ -7,7 +7,7 @@
 evalCand(tree, type = c("single", "multiple"), levels = cand_list,
   score_data = res_gene, node_column, p_column, sign_column,
   feature_column = NULL, method = "BH", limit_rej = 0.05,
-  message = FALSE)
+  control_fdr_on = c("leaf", "pseudo-leaf"), message = FALSE)
 }
 \arguments{
 \item{tree}{A phylo object.}
@@ -45,6 +45,12 @@ the argument \code{method} in \code{\link[stats]{p.adjust}}. Default is
 "BH".}
 
 \item{limit_rej}{The FDR level. Default is 0.05.}
+
+\item{control_fdr_on}{"leaf" or "pseudo-leaf". If "leaf", the FDR is
+calculated on the leaf level of the tree; If "pseudo-leaf", the FDR is
+calculated on the pseudo leaf level. The pseudo-leaf level is the level on
+which entities have sufficient data to run analysis and the level that is
+closest to the leaf level.}
 
 \item{message}{A logical value, TRUE or FALSE. Default is FALSE. If TRUE, the
 message about running process is printed out.}

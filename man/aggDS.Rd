@@ -32,5 +32,22 @@ aggregate data
 \code{aggDS} aggregate data based on the tree.
 }
 \examples{
+library(treeclimbR)
+library(ape)
 
+tr <- rtree(3, tip.label = LETTERS[1:3])
+cc <- matrix(rpois(50, 10), nrow = 5)
+rownames(cc) <- paste0("gene", 1:5)
+colnames(cc) <- paste0("cell", 1:10)
+cd <- data.frame(sid = rep(1:2, each = 5),
+                 gid = rep(letters[1:2], each = 5),
+                 cid = sample(LETTERS[1:3], size = 10, replace = TRUE),
+                 stringsAsFactors = FALSE)
+tse <- TreeSummarizedExperiment(assays = list(cc),
+                                colTree = tr, 
+                                colNodeLab = cd$cid,
+                                colData = cd)
+
+out <- aggDS(TSE = tse, assay = 1, sample_id = "sid",
+             group_id = "gid", cluster_id = "cid")
 }
