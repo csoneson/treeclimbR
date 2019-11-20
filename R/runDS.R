@@ -182,6 +182,7 @@ runDS <- function(SE, tree,
    return(out)
 }
 
+#' @importFrom stats as.formula
 .DS <- function(SE, feature_on_row = TRUE, assay,
                 option = c("glm", "glmQL"),
                 design = NULL, contrast = NULL, 

@@ -81,7 +81,7 @@
 #' 
 #' @examples
 #' library(TreeSummarizedExperiment)
-#' library(treeAGG2)
+#' library(treeclimbR)
 #' set.seed(1)
 #' count <- matrix(rnbinom(300,size=1,mu=10),nrow=10)
 #' colnames(count) <- paste(rep(LETTERS[1:3], each = 10), rep(1:10,3), sep = "_")
