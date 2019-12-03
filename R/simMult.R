@@ -140,6 +140,11 @@ simMult <- function(pr, libSize, tree, scenario = "S1",
                     ratio = 2, adjB = NULL,
                     pct = 0.6, nSam = c(50, 50),
                     n = 1, message = FALSE) {
+    
+    if (length(libSize) == 1) {
+        libSize <- rep(libSize, 2)
+    }
+    
     # select branches
     data = list(pi = pr, theta = NULL)
     
