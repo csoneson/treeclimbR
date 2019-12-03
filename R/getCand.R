@@ -78,10 +78,9 @@ getCand <- function(tree, t = NULL,
         
         # S
         name_S <- paste0("S_", t[i])
-        # score_data[[name_S]] <- ifelse(p_col > t[i], 1-p_col, 
-        #                                1) * sign(sign_col)
-        score_data[[name_S]] <- ifelse(p_col > t[i], 0, 
+        score_data[[name_S]] <- ifelse(p_col > t[i], 1-p_col,
                                        1) * sign(sign_col)
+        
         # U
         name_U <- paste0("U_", t[i])
         score_data <- treeScore(tree = tree,
