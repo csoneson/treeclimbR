@@ -62,7 +62,7 @@ getCand <- function(tree, t = NULL,
     }
     
     if (is.null(t)) {
-        t <- seq(0, 1, by = 0.05)
+        t <- c(0.01, seq(0.05, 1, by = 0.05))
     }
     # a list to store levels under different ts
     level_list <- vector("list", length(t) + 1)
@@ -73,14 +73,15 @@ getCand <- function(tree, t = NULL,
     
     for (i in seq_along(t)) {
         if (message) {
-            message("Calculating U at t = ", x, " ...")
+            message("Calculating U at t = ", t[i], " ...")
         }
         
         # S
         name_S <- paste0("S_", t[i])
-        score_data[[name_S]] <- ifelse(p_col > t[i], 1-p_col, 
+        # score_data[[name_S]] <- ifelse(p_col > t[i], 1-p_col, 
+        #                                1) * sign(sign_col)
+        score_data[[name_S]] <- ifelse(p_col > t[i], 0, 
                                        1) * sign(sign_col)
-        
         # U
         name_U <- paste0("U_", t[i])
         score_data <- treeScore(tree = tree,
@@ -94,7 +95,7 @@ getCand <- function(tree, t = NULL,
         
         # get levels
         if (message) {
-            message("Searching the candidate level at t = ", t, " ...")
+            message("Searching the candidate level at t = ", t[i], " ...")
         }
         lev <- getLevel(tree = tree,
                         score_data = score_data,
