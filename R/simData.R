@@ -48,8 +48,8 @@
 #' @param mu,size The parameters of the Negative Binomial distribution. (see mu
 #'   and size in \code{\link[stats:NegBinomial]{rnbinom}}). Parameters used to
 #'   generate the library size for each simulated sample. If \code{size} is not
-#'   specified then the library size is sampled randomly with replacement from
-#'   the \code{mu}.
+#'   specified, \code{mu} should be a vector of numbers from which the library
+#'   size is sampled from with replacement.
 #' @param n A numeric value to specify how many count tables would be generated
 #'   with the same settings. Default is one and one count table would be
 #'   obtained at the end. If above one, the output is a list of matrices (count
@@ -145,7 +145,7 @@ simData <- function(tree = NULL, data = NULL,
                     minTip.A = 0, maxTip.A = Inf,
                     minTip.B = 0, maxTip.B = Inf,
                     minPr.A = 0, maxPr.A = 1,
-                    ratio = 2, adjB = NULL,
+                    ratio = 4, adjB = NULL,
                     pct = 0.6, nSam = c(50, 50),
                     mu = 10000, size = NULL,
                     n = 1, FUN = sum, message = FALSE){
