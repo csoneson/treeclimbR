@@ -15,8 +15,8 @@
 #'   stores the number of the node, and the other stores the original score of
 #'   the corresponding node.
 #' @param node_column The name of the column that stores the number of the node.
-#' @param score_column The name of the column that stores the original score of the
-#'   node.
+#' @param score_column The name of the column that stores the original score of
+#'   the node.
 #' @param new_score The name of the column that stores the generated score.
 #' @importFrom TreeSummarizedExperiment printNode matTree
 #' @export
