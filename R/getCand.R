@@ -62,7 +62,8 @@ getCand <- function(tree, t = NULL,
     }
     
     if (is.null(t)) {
-        t <- c(0.01, seq(0.05, 1, by = 0.05))
+        t <- c(seq(0.01, 0.04, by = 0.01), 
+               seq(0.05, 1, by = 0.05))
     }
     # a list to store levels under different ts
     level_list <- vector("list", length(t) + 1)
