@@ -85,7 +85,7 @@
 #'                  pvalue = pv,
 #'                  foldChange = fc)
 #' ll <- getCand(tree = tinyTree, score_data = df, 
-#'               t = seq(0, 1, by = 0.05),
+#'               #t = seq(0, 1, by = 0.05),
 #'                node_column = "node",
 #'                p_column = "pvalue",
 #'                sign_column = "foldChange")
@@ -94,17 +94,16 @@
 #'                p_column = "pvalue", sign_column = "foldChange",
 #'                limit_rej = 0.05 )
 #' cc$output
-
 evalCand <- function(tree, 
                      type = c("single", "multiple"),
                      levels = cand_list,
-                     score_data = res_gene, 
+                     score_data = NULL, 
                      node_column, p_column,
-                     sign_column,
+                     sign_column = sign_column,
                      feature_column = NULL,
                      method = "BH", 
                      limit_rej = 0.05,
-                     control_fdr_on = c("leaf", "pseudo-leaf"),
+                     # control_fdr_on = c("leaf", "pseudo-leaf"),
                      message = FALSE) {
     
     if (!is(tree, "phylo")) {
@@ -123,7 +122,7 @@ evalCand <- function(tree,
                 feature_column is required")
     }
     
-    control_fdr_on <- match.arg(control_fdr_on)
+   
     # ------------------------- the pseudo leaf level -------------------------
     # some nodes might not be included in the analysis step because they have no
     # enough data. In such case, an internal node would become a pseudo leaf 
@@ -157,19 +156,19 @@ evalCand <- function(tree,
             message(x, " out of ", length(node_list),
                     " features finished", "\r", appendLF = FALSE)
             flush.console()}
-        
+
         xx <- node_list[[x]]
         ps.x <- pseudo_leaf[[x]]
-        
-        desd.x <- findOS(tree = tree, node = xx, 
+
+        desd.x <- findOS(tree = tree, node = xx,
                          only.leaf = FALSE, self.include = TRUE)
-        leaf.x <- findOS(tree = tree, node = xx, 
+        leaf.x <- findOS(tree = tree, node = xx,
                          only.leaf = TRUE, self.include = TRUE)
         psLeaf.x <- lapply(desd.x, FUN = function(x) {
             intersect(x, ps.x)})
         info <- cbind(n_leaf = unlist(lapply(leaf.x, length)),
                       n_pseudo_leaf = unlist(lapply(psLeaf.x, length)))
-        
+
         return(info)
     })
     names(info_nleaf) <- names(score_data)
@@ -192,15 +191,18 @@ evalCand <- function(tree,
     t[t == "leaf"] <- NA
     t <- as.numeric(t)
     
-    level_info <- data.frame(t = t, r = NA, is_valid = FALSE,
+    level_info <- data.frame(t = t, lower_t = NA, upper_t = NA, 
+                             is_valid = FALSE,
                              method = method, limit_rej = limit_rej,
                              level_name = tlist[[1]],
-                             rej_leaf = NA, rej_pseudo_leaf = NA,
-                             rej_node = NA)
+                             rej_leaf = NA, rej_node = NA,
+                             rej_pseudo_leaf = NA,
+                             rej_pseudo_node = NA)
     
     sel <- vector("list", length(t))
     names(sel) <- tlist[[1]]
     for (i in seq_along(t)) {
+        message(i)
         # message
         if (message) {
             message("working on ", i , " out of ",
@@ -217,8 +219,8 @@ evalCand <- function(tree,
             ii <- match(x, y[[node_column]])
         }, level_i, score_data, SIMPLIFY = FALSE)
         len_i <- lapply(sel_i, length)
-        ind_i <- mapply(FUN = function(x, y) { rep(x, y)}, 
-                        seq_along(sel_i), len_i, SIMPLIFY = FALSE)
+        # ind_i <- mapply(FUN = function(x, y) { rep(x, y)}, 
+        #                 seq_along(sel_i), len_i, SIMPLIFY = FALSE)
         
         
         # adjust p-values
@@ -228,26 +230,52 @@ evalCand <- function(tree,
         adp_i <- p.adjust(p = unlist(p_i), method = method)
         rej_i <- adp_i <= limit_rej
         
+        # the low bound of t
+        low_i <- min(unlist(p_i)[rej_i])
+        
         # calculate r
-        rej_C <- sum(rej_i %in% TRUE)
+        # rejected nodes
+        nd_i <- mapply(FUN = function(x, y) {
+            x[y, node_column]
+        }, score_data, sel_i, SIMPLIFY = FALSE)
+        sign_i <- mapply(FUN = function(x, y) {
+            sign(x[y, sign_column])
+        }, score_data, sel_i, SIMPLIFY = FALSE)
+        rej_sign <- unlist(sign_i)[rej_i %in% TRUE]
+        rej_N <- unlist(nd_i)[rej_i %in% TRUE]
+        rej_N <- split(rej_N, rej_sign)
+        
+        # rejected branches
+        path <- matTree(tree = tree)
+        is_L <- lapply(rej_N, FUN = function(x) {
+            isLeaf(tree = tree, node = x)})
+        rej_L <- mapply(FUN = function(x, y) {
+            unique(x[y])}, rej_N, is_L)
+        rej_I <- mapply(FUN = function(x, y) {
+            unique(x[!y]) }, rej_N, is_L)
+        rej_L2 <- lapply(rej_L, FUN = function(x) {
+            unique(path[path[, "L1"] %in% x, "L2"])}) 
+        n_C <- length(rej_I) + length(unlist(rej_L2))
+        
+        
         rej_m1 <- mapply(FUN = function(x, y) {
             x[y, "n_pseudo_leaf"]
         }, info_nleaf, sel_i, SIMPLIFY = FALSE)
-        rej_m1 <- sum(unlist(rej_m1)[rej_i %in% TRUE])
-        r_i1 <- 2 * limit_rej * (rej_m1/max(rej_C, 1) - 1)
+        n_m1 <- sum(unlist(rej_m1)[rej_i %in% TRUE])
+        up_i <- 2 * limit_rej * (n_m1/max(n_C, 1) - 1)
         
         
         rej_m2 <- mapply(FUN = function(x, y) {
             x[y, "n_leaf"]
         }, info_nleaf, sel_i, SIMPLIFY = FALSE)
-        rej_m2 <- sum(unlist(rej_m2)[rej_i %in% TRUE])
-        r_i2 <- 2 * limit_rej * (rej_m2/max(rej_C, 1) - 1)
+        n_m2 <- sum(unlist(rej_m2)[rej_i %in% TRUE])
         
-        r_i <- ifelse(control_fdr_on == "leaf", r_i2, r_i1)
-        level_info$r[i] <- r_i
-        level_info$rej_leaf[i] <- rej_m2
-        level_info$rej_pseudo_leaf[i] <- rej_m1
-        level_info$rej_node[i] <- rej_C
+        level_info$lower_t[i] <- low_i
+        level_info$upper_t[i] <- up_i
+        level_info$rej_leaf[i] <- n_m2
+        level_info$rej_pseudo_leaf[i] <- n_m1
+        level_info$rej_node[i] <- length(unlist(rej_N))
+        level_info$rej_pseudo_node[i] <- n_C
         sel[[i]] <- sel_i
         
         # the leaf is always valid; 
@@ -255,7 +283,7 @@ evalCand <- function(tree,
         if (is.na(t[i]) & name_i == "leaf") {
             level_info$is_valid[i] <- TRUE
         } else {
-            level_info$is_valid[i] <- r_i >= limit_rej & t[i] <= r_i
+            level_info$is_valid[i] <- up_i >= t[i] & t[i] >= low_i
         }
     }
     
@@ -276,7 +304,7 @@ evalCand <- function(tree,
         message("mulitple-hypothesis correction on the best candidate ...")
     }
     sel_b <- sel[[isB[1]]]
-   
+    
     outB <- lapply(seq_along(score_data), FUN = function(i) {
         si <- sel_b[[i]]
         score_data[[i]][si, , drop = FALSE]
@@ -287,7 +315,7 @@ evalCand <- function(tree,
     apv <- p.adjust(pv, method = method)
     outB$adj.p <- apv
     outB$signal.node <- apv <= limit_rej
-
+    
     if (message) {
         message("output the results ...")
     }
@@ -303,18 +331,12 @@ evalCand <- function(tree,
 #' @keywords internal
 .pseudoLeaf <- function(tree, score_data, node_column, p_column) {
     mat <- matTree(tree = tree)
+    nd <- score_data[[node_column]][!is.na(score_data[[p_column]])]
+    exist_mat <- apply(mat, 2, FUN = function(x) {x %in% nd})
     
-    nd_col <- score_data[[node_column]]
-    sc_col <- score_data[[p_column]]
-    
-    # matrix: scores of nodes
-    val_mat <- apply(mat, 2, FUN = function(x) {
-        xi <- match(x, nd_col)
-        sc_col[xi]})
-    exist_mat <- !is.na(val_mat)
-    exist_leaf <- which(exist_mat, arr.ind = TRUE)
-    exist_leaf <- exist_leaf[order(exist_leaf[, 1]), , drop = FALSE]
-    loc_leaf <- exist_leaf[!duplicated(exist_leaf[, 1]), ]
+    ww <- which(exist_mat, arr.ind = TRUE)
+    ww <- ww[order(ww[, 1]), , drop = FALSE]
+    loc_leaf <- ww[!duplicated(ww[, 1]), ]
     leaf_0 <- unique(mat[loc_leaf])
     ind_0 <- lapply(leaf_0, FUN = function(x) {
         xx <- which(mat == x, arr.ind = TRUE)
@@ -322,7 +344,7 @@ evalCand <- function(tree,
         y0 <- nrow(ux) == 1
         if (nrow(ux) > 1) {
             ux[, "col"] <- ux[, "col"] - 1
-            y1 <- all(is.na(val_mat[ux]))
+            y1 <- all(is.na(exist_mat[ux]))
             y0 <- y0 | y1
         }
         return(y0)
@@ -332,3 +354,4 @@ evalCand <- function(tree,
     
     return(leaf_1)
 }
+
