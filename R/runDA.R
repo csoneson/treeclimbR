@@ -71,11 +71,11 @@
 #' @return a list includes \strong{edgeR_results}, \strong{tree}, and
 #'   \strong{nodes_drop}.
 #' \describe{
-#'   \item{edgeR_results} {The output of \code{\link[edgeR]{glmQLFTest}} or
+#'   \item{edgeR_results}{The output of \code{\link[edgeR]{glmQLFTest}} or
 #'      \code{\link[edgeR]{glmLRT}} depends on the specified \code{option}.}
-#'   \item{tree} {The hiearchical structure of entities that was stored in the
+#'   \item{tree}{The hiearchical structure of entities that was stored in the
 #'      input \code{tse}}
-#'   \item{nodes_drop} {A vector storing the alias node labels of entities. 
+#'   \item{nodes_drop}{A vector storing the alias node labels of entities. 
 #'      These entities are filtered before analysis due to low counts. }
 #' }
 #' 
@@ -108,10 +108,10 @@
 runDA <- function(TSE, feature_on_row = TRUE, assay = NULL,
                   option = c("glm", "glmQL"),
                   design = NULL, contrast = NULL, 
-                  filter_min_count = 1, 
+                  filter_min_count = 10, 
                   filter_min_total_count = 15,
                   filter_large_n = 10,
-                  filter_min_prop = 1, 
+                  filter_min_prop = 0.7, 
                   normalize = TRUE, normalize_method = "TMM",
                   group_column = "group", 
                   design_terms = "group", ...) {
