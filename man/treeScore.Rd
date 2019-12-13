@@ -15,8 +15,8 @@ the corresponding node.}
 
 \item{node_column}{The name of the column that stores the number of the node.}
 
-\item{score_column}{The name of the column that stores the original score of the
-node.}
+\item{score_column}{The name of the column that stores the original score of
+the node.}
 
 \item{new_score}{The name of the column that stores the generated score.}
 }

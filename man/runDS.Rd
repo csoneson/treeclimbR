@@ -72,12 +72,12 @@ is printed out.}
 a list includes \strong{edgeR_results}, \strong{tree}, and
   \strong{nodes_drop}.
 \describe{
-  \item{edgeR_results} {A list, each of its element is the output of
+  \item{edgeR_results}{A list, each of its element is the output of
   \code{\link[edgeR]{glmQLFTest}} or \code{\link[edgeR]{glmLRT}} depends on
   the specified \code{option}. The list is named by the alias label of nodes}
-  \item{tree} {The hiearchical structure of entities that was stored in the
+  \item{tree}{The hiearchical structure of entities that was stored in the
      input \code{tse}}
-  \item{nodes_drop} {A vector storing the alias node labels of entities. 
+  \item{nodes_drop}{A vector storing the alias node labels of entities. 
      These nodes have no sufficient data to run analysis. }
 }
 }
