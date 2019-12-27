@@ -61,59 +61,171 @@ getCand <- function(tree, t = NULL,
         stop("tree should be a phylo object.")
     }
     
+    # t values
     if (is.null(t)) {
-        t <- c(seq(0.01, 0.04, by = 0.01), 
+        t <- c(0,
+               seq(0.01, 0.04, by = 0.01), 
                seq(0.05, 1, by = 0.05))
     }
-    # a list to store levels under different ts
-    level_list <- vector("list", length(t) + 1)
-    names(level_list) <- c(t, "leaf")
     
+    # a list to store levels under different t 
+    level_list <- vector("list", length(t))
+    names(level_list) <- c(t)
+    
+    # columns: p value, sign, node
     p_col <- score_data[[p_column]]
     sign_col <- score_data[[sign_column]]
+    node_col <- score_data[[node_column]]
     
+    # paths
+    path <- matTree(tree = tree)
+    
+    # for each t
     for (i in seq_along(t)) {
         if (message) {
-            message("Calculating U at t = ", t[i], " ...")
+            message("Searching candidates on t =  ", t[i], " ...")
         }
-        
-        # S
-        name_S <- paste0("S_", t[i])
-        score_data[[name_S]] <- ifelse(p_col > t[i], 1-p_col,
+        # q
+        name_q <- paste0("q_", t[i])
+        score_data[[name_q]] <- ifelse(p_col > t[i], 0,
                                        1) * sign(sign_col)
         
-        # U
-        name_U <- paste0("U_", t[i])
-        score_data <- treeScore(tree = tree,
-                                score_data = score_data,
-                                node_column = node_column,
-                                score_column = name_S,
-                                new_score = name_U)
-        
-        # U: transform u to U (U = abs(u))
-        score_data[[name_U]] <- abs(score_data[[name_U]])
-        
-        # get levels
-        if (message) {
-            message("Searching the candidate level at t = ", t[i], " ...")
+        # add a column to store the result of search: keep
+        if (any(colnames(score_data) == "keep")) {
+            stop("The result will be output in the 'keep' column;
+             Please use other name for the current 'keep' column.")
         }
-        lev <- getLevel(tree = tree,
-                        score_data = score_data,
-                        score_column = name_U,
-                        node_column = node_column,
-                        get_max = TRUE,
-                        parent_first = TRUE,
-                        message = FALSE)
-        level_list[[i]] <- lev[[node_column]][lev$keep]
+        
+        keep <- !is.na(p_col)
+        node_keep <- score_data[[node_column]][keep]
+        node_all <- printNode(tree = tree, type = "all")
+        node_in <- node_all[["nodeNum"]][!node_all[["isLeaf"]]]
+        node_in <- intersect(node_keep, node_in)
+        
+        # nodes with p value available
+        leaf <- .pseudoLeaf(tree = tree, score_data = score_data, 
+                            node_column = node_column,
+                            p_column = p_column)
+        
+        
+        # For an internal node, if more than half of its direct child nodes has
+        # NA score, it would not be picked.
+        chl_I <- findChild(tree = tree, node = node_in)
+        sel_0 <- lapply(chl_I, FUN = function(x){
+            xx <- match(x, node_col)
+            qx <- score_data[[name_q]][xx]
+            sum(!is.na(qx))/length(qx) > 0.5
+        })
+        sel_0 <- unlist(sel_0)
+        node_0 <- node_in[sel_0]
+        
+        
+        
+        # For an internal nodes, if itself and all its descendant have q score
+        # equals 1 or -1, pick the node
+        br_I <- findOS(tree = tree, node = node_0, only.leaf = FALSE,
+                         self.include = TRUE, use.alias = TRUE)
+        
+        sel_1 <- lapply(br_I, FUN = function(x){
+            xx <- match(x, node_col)
+            qx <- score_data[[name_q]][xx]
+            abs(mean(qx, na.rm = TRUE)) == 1
+        })
+        sel_1 <- unlist(sel_1)
+        node_1 <- node_0[sel_1]
+        
+        # remove nodes whose ancestor is selected
+        ind0 <- apply(path, 2, FUN = function(x) {
+            x %in% node_1
+        })
+        ind0 <- which(ind0, arr.ind = TRUE)
+        rs <- split(seq_len(nrow(ind0)), ind0[, "row"])
+        rl <- unlist(lapply(rs, length)) > 1
+        rs <- rs[rl]
+        node_rm <- lapply(rs, FUN = function(x) {
+            xx <- ind0[x, , drop = FALSE]
+            mx <- xx[, "col"] < max(xx[, "col"])
+            fx <- xx[mx, , drop = FALSE]
+            path[fx]
+        })
+        node_rm <- unlist(node_rm)
+        node_2 <- setdiff(node_1, node_rm)
+        desd_2 <- findOS(tree = tree, node = node_2, 
+                         only.leaf = FALSE, self.include = TRUE)
+        desd_2 <- unlist(desd_2)
+        
+        level_list[[i]] <- c(setdiff(leaf, desd_2), node_2)
         
     }
-    
-    # the leaf level
-    leaf <- showNode(tree = tree, only.leaf = TRUE)
-    level_list$leaf <- leaf
     
     out <- list(candidate_list = level_list,
                 score_data = score_data)
     return(out)
     
 }
+
+# getCand <- function(tree, t = NULL,
+#                     score_data, node_column,
+#                     p_column, sign_column,
+#                     message = FALSE) {
+#     
+#     if (!is(tree, "phylo")) {
+#         stop("tree should be a phylo object.")
+#     }
+#     
+#     if (is.null(t)) {
+#         t <- c(seq(0.01, 0.04, by = 0.01), 
+#                seq(0.05, 1, by = 0.05))
+#     }
+#     # a list to store levels under different ts
+#     level_list <- vector("list", length(t) + 1)
+#     names(level_list) <- c(t, "leaf")
+#     
+#     p_col <- score_data[[p_column]]
+#     sign_col <- score_data[[sign_column]]
+#     
+#     for (i in seq_along(t)) {
+#         if (message) {
+#             message("Calculating U at t = ", t[i], " ...")
+#         }
+#         
+#         # S
+#         name_S <- paste0("S_", t[i])
+#         score_data[[name_S]] <- ifelse(p_col > t[i], 1-p_col,
+#                                        1) * sign(sign_col)
+#         
+#         # U
+#         name_U <- paste0("U_", t[i])
+#         score_data <- treeScore(tree = tree,
+#                                 score_data = score_data,
+#                                 node_column = node_column,
+#                                 score_column = name_S,
+#                                 new_score = name_U)
+#         
+#         # U: transform u to U (U = abs(u))
+#         score_data[[name_U]] <- abs(score_data[[name_U]])
+#         
+#         # get levels
+#         if (message) {
+#             message("Searching the candidate level at t = ", t[i], " ...")
+#         }
+#         lev <- getLevel(tree = tree,
+#                         score_data = score_data,
+#                         score_column = name_U,
+#                         node_column = node_column,
+#                         get_max = TRUE,
+#                         parent_first = TRUE,
+#                         message = FALSE)
+#         level_list[[i]] <- lev[[node_column]][lev$keep]
+#         
+#     }
+#     
+#     # the leaf level
+#     leaf <- showNode(tree = tree, only.leaf = TRUE)
+#     level_list$leaf <- leaf
+#     
+#     out <- list(candidate_list = level_list,
+#                 score_data = score_data)
+#     return(out)
+#     
+# }

@@ -103,7 +103,6 @@ evalCand <- function(tree,
                      feature_column = NULL,
                      method = "BH", 
                      limit_rej = 0.05,
-                     # control_fdr_on = c("leaf", "pseudo-leaf"),
                      message = FALSE) {
     
     if (!is(tree, "phylo")) {
@@ -171,6 +170,8 @@ evalCand <- function(tree,
 
         return(info)
     })
+    
+    
     names(info_nleaf) <- names(score_data)
     
     # add two columns in score_data
@@ -188,21 +189,22 @@ evalCand <- function(tree,
         stop("the names of elements in 'levels' are different")
     }
     t <- unlist(t)
-    t[t == "leaf"] <- NA
+#    t[t == "leaf"] <- NA
     t <- as.numeric(t)
     
-    level_info <- data.frame(t = t, lower_t = NA, upper_t = NA, 
+    level_info <- data.frame(t = t, upper_t = NA, 
                              is_valid = FALSE,
-                             method = method, limit_rej = limit_rej,
+                             method = method, 
+                             limit_rej = limit_rej,
                              level_name = tlist[[1]],
-                             rej_leaf = NA, rej_node = NA,
+                             rej_leaf = NA, 
+                             rej_node = NA,
                              rej_pseudo_leaf = NA,
                              rej_pseudo_node = NA)
     
     sel <- vector("list", length(t))
     names(sel) <- tlist[[1]]
     for (i in seq_along(t)) {
-        message(i)
         # message
         if (message) {
             message("working on ", i , " out of ",
@@ -231,7 +233,7 @@ evalCand <- function(tree,
         rej_i <- adp_i <= limit_rej
         
         # the low bound of t
-        low_i <- min(unlist(p_i)[rej_i])
+        #low_i <- min(unlist(p_i)[rej_i])
         
         # calculate r
         # rejected nodes
@@ -270,7 +272,7 @@ evalCand <- function(tree,
         }, info_nleaf, sel_i, SIMPLIFY = FALSE)
         n_m2 <- sum(unlist(rej_m2)[rej_i %in% TRUE])
         
-        level_info$lower_t[i] <- low_i
+        #level_info$lower_t[i] <- low_i
         level_info$upper_t[i] <- up_i
         level_info$rej_leaf[i] <- n_m2
         level_info$rej_pseudo_leaf[i] <- n_m1
@@ -278,13 +280,7 @@ evalCand <- function(tree,
         level_info$rej_pseudo_node[i] <- n_C
         sel[[i]] <- sel_i
         
-        # the leaf is always valid; 
-        # the aggregated level should be in a specific range to be valid
-        if (is.na(t[i]) & name_i == "leaf") {
-            level_info$is_valid[i] <- TRUE
-        } else {
-            level_info$is_valid[i] <- up_i >= t[i] & t[i] >= low_i
-        }
+        level_info$is_valid[i] <- up_i >= t[i] 
     }
     
     # candidates: levels that fullfil the requirement to control FDR on the 
@@ -344,7 +340,7 @@ evalCand <- function(tree,
         y0 <- nrow(ux) == 1
         if (nrow(ux) > 1) {
             ux[, "col"] <- ux[, "col"] - 1
-            y1 <- all(is.na(exist_mat[ux]))
+            y1 <- all(!exist_mat[ux])
             y0 <- y0 | y1
         }
         return(y0)
