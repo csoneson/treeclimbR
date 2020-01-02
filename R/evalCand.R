@@ -197,6 +197,7 @@ evalCand <- function(tree,
                              method = method, 
                              limit_rej = limit_rej,
                              level_name = tlist[[1]],
+                             best = FALSE,
                              rej_leaf = NA, 
                              rej_node = NA,
                              rej_pseudo_leaf = NA,
@@ -287,12 +288,13 @@ evalCand <- function(tree,
     # (pseudo) leaf level when multiple hypothesis correction is performed on it
     isB <- level_info %>%
         filter(is_valid) %>%
-        filter(rej_pseudo_leaf == max(rej_pseudo_leaf)) %>%
+        filter(rej_leaf == max(rej_leaf)) %>%
         filter(rej_node == min(rej_node)) %>%
         select(level_name) %>% 
         unlist() %>%
         as.character()
-    
+    level_info <- level_info %>%
+        mutate(best = level_name %in% isB)
     level_b <- lapply(levels, FUN = function(x) {x[[isB[1]]]})
     
     # output the result on the best level
