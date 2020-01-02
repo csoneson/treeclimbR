@@ -55,6 +55,7 @@
 getCand <- function(tree, t = NULL,
                     score_data, node_column,
                     p_column, sign_column,
+                    threshold = 0.05,
                     message = FALSE) {
     
     if (!is(tree, "phylo")) {
@@ -132,7 +133,11 @@ getCand <- function(tree, t = NULL,
             abs(mean(qx, na.rm = TRUE)) == 1
         })
         sel_1 <- unlist(sel_1)
-        node_1 <- node_0[sel_1]
+        
+        # filter by threshold
+        sel_2 <- p_col[match(node_0, node_col)] <= threshold
+        
+        node_1 <- node_0[sel_1 & sel_2]
         
         # remove nodes whose ancestor is selected
         ind0 <- apply(path, 2, FUN = function(x) {
