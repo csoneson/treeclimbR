@@ -186,8 +186,19 @@ viewBranch <- function(tree,
     
     # group the branches
     if (!is.null(group_leaf)) {
-        p0 <- groupOTU(p0, group_leaf, "grp") + aes(color = grp) +
+        dt0 <- data.frame(grp = "0", 
+                          node = showNode(tree = tree, only.leaf = FALSE),
+                          stringsAsFactors = FALSE)
+        dt1 <- data.frame(grp = rep(names(group_leaf), 
+                                   unlist(lapply(group_leaf, length))),
+                         node = unlist(group_leaf),
+                         stringsAsFactors = FALSE)
+        
+        dt0$grp[match(dt1$node, dt0$node)] <- dt1$grp
+        p0 <- p0 %<+% dt0 + aes(color = grp) +
             scale_color_manual(values = group_color)
+        # p0 <- groupOTU(p0, group_leaf, "grp") + aes(color = grp) +
+        #     scale_color_manual(values = group_color)
     }
     
     # add annotate data
