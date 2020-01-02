@@ -164,13 +164,7 @@ viewBranch <- function(tree,
             
         } 
         point_color <- point_color[order(point_node)]
-        # if (cn != pn) {
-        #     if (cn == 1) {
-        #         point_color <- rep(point_color, pn)
-        #     } else {
-        #         stop("ann_color has different length to ann_column.")
-        #     }
-        # }
+
     }
     
     # ===================================================================
@@ -189,6 +183,12 @@ viewBranch <- function(tree,
         dt0 <- data.frame(grp = "0", 
                           node = showNode(tree = tree, only.leaf = FALSE),
                           stringsAsFactors = FALSE)
+        group_leaf <- lapply(group_leaf, FUN = function(x){
+            xx <- signalNode(tree = tree, node = x)
+            fx <- findOS(tree = tree, node = xx, only.leaf = FALSE, 
+                         self.include = TRUE)
+            unlist(fx)
+        })
         dt1 <- data.frame(grp = rep(names(group_leaf), 
                                    unlist(lapply(group_leaf, length))),
                          node = unlist(group_leaf),
