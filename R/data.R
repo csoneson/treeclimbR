@@ -13,3 +13,10 @@
 #' 
 #'
 "throat"
+
+#' from HMP16SData
+#' 
+#'
+#' 
+#'
+"saliva_2019"
