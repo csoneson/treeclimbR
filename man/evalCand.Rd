@@ -101,7 +101,7 @@ df <- data.frame(node = 1:19,
                  pvalue = pv,
                  foldChange = fc)
 ll <- getCand(tree = tinyTree, score_data = df, 
-              t = seq(0, 1, by = 0.05),
+              #t = seq(0, 1, by = 0.05),
                node_column = "node",
                p_column = "pvalue",
                sign_column = "foldChange")
