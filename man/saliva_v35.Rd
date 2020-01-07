@@ -4,7 +4,7 @@
 \name{saliva_v35}
 \alias{saliva_v35}
 \title{from HMP16SData}
-\format{An object of class \code{TreeSummarizedExperiment} with 990 rows and 299 columns.}
+\format{An object of class \code{TreeSummarizedExperiment} with 956 rows and 153 columns.}
 \usage{
 saliva_v35
 }

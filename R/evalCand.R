@@ -265,7 +265,8 @@ evalCand <- function(tree,
             x[y, "n_pseudo_leaf"]
         }, info_nleaf, sel_i, SIMPLIFY = FALSE)
         n_m1 <- sum(unlist(rej_m1)[rej_i %in% TRUE])
-        up_i <- 2 * limit_rej * (n_m1/max(n_C, 1) - 1)
+        av_size <- n_m1/max(n_C, 1)
+        up_i <- 2 * limit_rej * (max(av_size, 1) - 1)
         
         
         rej_m2 <- mapply(FUN = function(x, y) {
@@ -281,7 +282,7 @@ evalCand <- function(tree,
         level_info$rej_pseudo_node[i] <- n_C
         sel[[i]] <- sel_i
         
-        level_info$is_valid[i] <- up_i >= t[i] 
+        level_info$is_valid[i] <- up_i > t[i] | t[i] == 0
     }
     
     # candidates: levels that fullfil the requirement to control FDR on the 
