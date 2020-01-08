@@ -258,7 +258,7 @@ evalCand <- function(tree,
             unique(x[!y]) }, rej_N, is_L)
         rej_L2 <- lapply(rej_L, FUN = function(x) {
             unique(path[path[, "L1"] %in% x, "L2"])}) 
-        n_C <- length(rej_I) + length(unlist(rej_L2))
+        n_C <- length(unlist(rej_I)) + length(unlist(rej_L2))
         
         
         rej_m1 <- mapply(FUN = function(x, y) {
