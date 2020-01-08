@@ -268,6 +268,8 @@ evalCand <- function(tree,
         av_size <- n_m1/max(n_C, 1)
         up_i <- 2 * limit_rej * (max(av_size, 1) - 1)
         
+        # This is to avoid get TRUE from (2*0.05*(2.5-1)) > 0.15
+        up_i <- round(up_i, 10)
         
         rej_m2 <- mapply(FUN = function(x, y) {
             x[y, "n_leaf"]
