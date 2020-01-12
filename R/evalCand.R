@@ -103,6 +103,7 @@ evalCand <- function(tree,
                      feature_column = NULL,
                      method = "BH", 
                      limit_rej = 0.05,
+                     use_pseudo_leaf = TRUE,
                      message = FALSE) {
     
     if (!is(tree, "phylo")) {
@@ -265,16 +266,26 @@ evalCand <- function(tree,
             x[y, "n_pseudo_leaf"]
         }, info_nleaf, sel_i, SIMPLIFY = FALSE)
         n_m1 <- sum(unlist(rej_m1)[rej_i %in% TRUE])
-        av_size <- n_m1/max(n_C, 1)
-        up_i <- 2 * limit_rej * (max(av_size, 1) - 1)
         
-        # This is to avoid get TRUE from (2*0.05*(2.5-1)) > 0.15
-        up_i <- round(up_i, 10)
         
         rej_m2 <- mapply(FUN = function(x, y) {
             x[y, "n_leaf"]
         }, info_nleaf, sel_i, SIMPLIFY = FALSE)
         n_m2 <- sum(unlist(rej_m2)[rej_i %in% TRUE])
+        
+        if(use_pseudo_leaf) {
+            av_size <- n_m1/max(n_C, 1)
+        } else {
+            av_size <- n_m2/max(n_C, 1)
+        }
+        
+        
+        up_i <- 2 * limit_rej * (max(av_size, 1) - 1)
+        
+        # This is to avoid get TRUE from (2*0.05*(2.5-1)) > 0.15
+        up_i <- round(up_i, 10)
+        
+        
         
         #level_info$lower_t[i] <- low_i
         level_info$upper_t[i] <- up_i
