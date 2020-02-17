@@ -4,9 +4,18 @@
 \alias{selNode}
 \title{Select branches}
 \usage{
-selNode(pr = NULL, obj = NULL, data = NULL, tree = NULL,
-  minTip = 0, maxTip = Inf, minPr = 0, maxPr = 1, skip = NULL,
-  all = FALSE)
+selNode(
+  pr = NULL,
+  obj = NULL,
+  data = NULL,
+  tree = NULL,
+  minTip = 0,
+  maxTip = Inf,
+  minPr = 0,
+  maxPr = 1,
+  skip = NULL,
+  all = FALSE
+)
 }
 \arguments{
 \item{pr}{A named numeric vector to provide proportions of entities.}

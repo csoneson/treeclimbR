@@ -4,8 +4,12 @@
 \alias{medianByClusterMarker}
 \title{calculate median values of markers for each cluster}
 \usage{
-medianByClusterMarker(SE, marker_in_column = TRUE,
-  column_cluster = "cluster_id", use_marker = NULL)
+medianByClusterMarker(
+  SE,
+  marker_in_column = TRUE,
+  column_cluster = "cluster_id",
+  use_marker = NULL
+)
 }
 \arguments{
 \item{SE}{A \code{\link[SummarizedExperiment]{SummarizedExperiment}} object.}

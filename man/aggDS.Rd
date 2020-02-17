@@ -5,9 +5,15 @@
 \title{aggregate data
 \code{aggDS} aggregate data based on the tree.}
 \usage{
-aggDS(TSE, assay = "counts", sample_id = "sample_id",
-  group_id = "group_id", cluster_id = "cluster_id", FUN = sum,
-  message = FALSE)
+aggDS(
+  TSE,
+  assay = "counts",
+  sample_id = "sample_id",
+  group_id = "group_id",
+  cluster_id = "cluster_id",
+  FUN = sum,
+  message = FALSE
+)
 }
 \arguments{
 \item{TSE}{A \code{TreeSummarizedExperiment} object}

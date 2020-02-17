@@ -4,10 +4,20 @@
 \alias{evalCand}
 \title{evaluate candidate levels and select the best one}
 \usage{
-evalCand(tree, type = c("single", "multiple"), levels = cand_list,
-  score_data = NULL, node_column, p_column, sign_column = sign_column,
-  feature_column = NULL, method = "BH", limit_rej = 0.05,
-  message = FALSE)
+evalCand(
+  tree,
+  type = c("single", "multiple"),
+  levels = cand_list,
+  score_data = NULL,
+  node_column,
+  p_column,
+  sign_column = sign_column,
+  feature_column = NULL,
+  method = "BH",
+  limit_rej = 0.05,
+  use_pseudo_leaf = TRUE,
+  message = FALSE
+)
 }
 \arguments{
 \item{tree}{A phylo object.}

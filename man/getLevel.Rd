@@ -4,8 +4,16 @@
 \alias{getLevel}
 \title{search for a target level on the tree via a specified score}
 \usage{
-getLevel(tree, score_data, drop, score_column, node_column, get_max,
-  parent_first = TRUE, message = FALSE)
+getLevel(
+  tree,
+  score_data,
+  drop,
+  score_column,
+  node_column,
+  get_max,
+  parent_first = TRUE,
+  message = FALSE
+)
 }
 \arguments{
 \item{tree}{a phylo object to provide the hierarchical structure of nodes.}

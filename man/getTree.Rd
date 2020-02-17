@@ -5,8 +5,14 @@
 \title{build a tree from clusters 
 \code{getTree} creates a tree (\code{phylo} class).}
 \usage{
-getTree(SE, column_cluster = "cluster_id", use_marker = NULL,
-  npcs = NULL, dist_method = "euclidean", hclust_method = "average")
+getTree(
+  SE,
+  column_cluster = "cluster_id",
+  use_marker = NULL,
+  npcs = NULL,
+  dist_method = "euclidean",
+  hclust_method = "average"
+)
 }
 \arguments{
 \item{SE}{A

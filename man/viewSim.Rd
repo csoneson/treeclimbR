@@ -4,8 +4,14 @@
 \alias{viewSim}
 \title{visualize simulated scenario}
 \usage{
-viewSim(obj, zoom_scale = 2, legend_position = "left",
-  show_leaf = FALSE, ref_value = 1, ...)
+viewSim(
+  obj,
+  zoom_scale = 2,
+  legend_position = "left",
+  show_leaf = FALSE,
+  ref_value = 1,
+  ...
+)
 }
 \arguments{
 \item{obj}{The output from \code{simData}}

@@ -4,11 +4,29 @@
 \alias{simData}
 \title{Simulate different scenarios of abundance change in entities}
 \usage{
-simData(tree = NULL, data = NULL, obj = NULL, scenario = "S1",
-  from.A = NULL, from.B = NULL, minTip.A = 0, maxTip.A = Inf,
-  minTip.B = 0, maxTip.B = Inf, minPr.A = 0, maxPr.A = 1,
-  ratio = 4, adjB = NULL, pct = 0.6, nSam = c(50, 50),
-  mu = 10000, size = NULL, n = 1, FUN = sum, message = FALSE)
+simData(
+  tree = NULL,
+  data = NULL,
+  obj = NULL,
+  scenario = "S1",
+  from.A = NULL,
+  from.B = NULL,
+  minTip.A = 0,
+  maxTip.A = Inf,
+  minTip.B = 0,
+  maxTip.B = Inf,
+  minPr.A = 0,
+  maxPr.A = 1,
+  ratio = 4,
+  adjB = NULL,
+  pct = 0.6,
+  nSam = c(50, 50),
+  mu = 10000,
+  size = NULL,
+  n = 1,
+  FUN = sum,
+  message = FALSE
+)
 }
 \arguments{
 \item{tree}{A phylo object. Only use when \code{obj} is NULL.}

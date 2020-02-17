@@ -4,11 +4,23 @@
 \alias{runDA}
 \title{Test for differential abundance using edgeR}
 \usage{
-runDA(TSE, feature_on_row = TRUE, assay = NULL, option = c("glm",
-  "glmQL"), design = NULL, contrast = NULL, filter_min_count = 10,
-  filter_min_total_count = 15, filter_large_n = 10,
-  filter_min_prop = 0.7, normalize = TRUE, normalize_method = "TMM",
-  group_column = "group", design_terms = "group", ...)
+runDA(
+  TSE,
+  feature_on_row = TRUE,
+  assay = NULL,
+  option = c("glm", "glmQL"),
+  design = NULL,
+  contrast = NULL,
+  filter_min_count = 10,
+  filter_min_total_count = 15,
+  filter_large_n = 10,
+  filter_min_prop = 0.7,
+  normalize = TRUE,
+  normalize_method = "TMM",
+  group_column = "group",
+  design_terms = "group",
+  ...
+)
 }
 \arguments{
 \item{TSE}{A TreeSummarizedExperiment object.}

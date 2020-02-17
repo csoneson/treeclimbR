@@ -4,8 +4,14 @@
 \alias{topNodes}
 \title{Table of the top differentially abundant entities}
 \usage{
-topNodes(object, n = 10, type = c("DA", "DS"), adjust_method = "BH",
-  sort_by = "PValue", p_value = 1)
+topNodes(
+  object,
+  n = 10,
+  type = c("DA", "DS"),
+  adjust_method = "BH",
+  sort_by = "PValue",
+  p_value = 1
+)
 }
 \arguments{
 \item{object}{The output from \link{runDA} or \link{runDS}.}

@@ -4,11 +4,27 @@
 \alias{.doData}
 \title{Simulate a count table}
 \usage{
-.doData(tree = NULL, data = NULL, scenario = "S1", from.A = NULL,
-  from.B = NULL, minTip.A = 0, maxTip.A = Inf, minTip.B = 0,
-  maxTip.B = Inf, minPr.A = 0, maxPr.A = 1, ratio = 2,
-  adjB = NULL, pct = 0.6, nSam = c(50, 50), mu = 50,
-  size = 10000, n = 1, FUN = sum)
+.doData(
+  tree = NULL,
+  data = NULL,
+  scenario = "S1",
+  from.A = NULL,
+  from.B = NULL,
+  minTip.A = 0,
+  maxTip.A = Inf,
+  minTip.B = 0,
+  maxTip.B = Inf,
+  minPr.A = 0,
+  maxPr.A = 1,
+  ratio = 2,
+  adjB = NULL,
+  pct = 0.6,
+  nSam = c(50, 50),
+  mu = 50,
+  size = 10000,
+  n = 1,
+  FUN = sum
+)
 }
 \arguments{
 \item{tree}{A phylo object}

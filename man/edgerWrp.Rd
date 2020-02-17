@@ -4,9 +4,16 @@
 \alias{edgerWrp}
 \title{A wrapper function of edgeR}
 \usage{
-edgerWrp(count, lib_size = NULL, option = c("glm", "glmQL"),
-  design = NULL, contrast = NULL, normalize = TRUE,
-  normalize_method = "TMM", ...)
+edgerWrp(
+  count,
+  lib_size = NULL,
+  option = c("glm", "glmQL"),
+  design = NULL,
+  contrast = NULL,
+  normalize = TRUE,
+  normalize_method = "TMM",
+  ...
+)
 }
 \arguments{
 \item{count}{A matrix with features (e.g., genes or microbes) on rows and
