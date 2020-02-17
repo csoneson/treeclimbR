@@ -4,8 +4,16 @@
 \alias{.doFC}
 \title{Generate the fold change}
 \usage{
-.doFC(tree = NULL, data = NULL, scenario = "S1", branchA = NULL,
-  branchB = NULL, ratio = 1, adjB = NULL, pct = 1)
+.doFC(
+  tree = NULL,
+  data = NULL,
+  scenario = "S1",
+  branchA = NULL,
+  branchB = NULL,
+  ratio = 1,
+  adjB = NULL,
+  pct = 1
+)
 }
 \arguments{
 \item{tree}{A phylo object}

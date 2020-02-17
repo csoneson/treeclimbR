@@ -4,8 +4,16 @@
 \alias{getCand}
 \title{search candidates under different thresholds}
 \usage{
-getCand(tree, t = NULL, score_data, node_column, p_column, sign_column,
-  message = FALSE)
+getCand(
+  tree,
+  t = NULL,
+  score_data,
+  node_column,
+  p_column,
+  sign_column,
+  threshold = 0.05,
+  message = FALSE
+)
 }
 \arguments{
 \item{tree}{A phylo object.}

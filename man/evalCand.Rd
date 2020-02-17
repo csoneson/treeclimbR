@@ -4,10 +4,20 @@
 \alias{evalCand}
 \title{evaluate candidate levels and select the best one}
 \usage{
-evalCand(tree, type = c("single", "multiple"), levels = cand_list,
-  score_data = NULL, node_column, p_column, sign_column = sign_column,
-  feature_column = NULL, method = "BH", limit_rej = 0.05,
-  message = FALSE)
+evalCand(
+  tree,
+  type = c("single", "multiple"),
+  levels = cand_list,
+  score_data = NULL,
+  node_column,
+  p_column,
+  sign_column = sign_column,
+  feature_column = NULL,
+  method = "BH",
+  limit_rej = 0.05,
+  use_pseudo_leaf = TRUE,
+  message = FALSE
+)
 }
 \arguments{
 \item{tree}{A phylo object.}
@@ -101,7 +111,7 @@ df <- data.frame(node = 1:19,
                  pvalue = pv,
                  foldChange = fc)
 ll <- getCand(tree = tinyTree, score_data = df, 
-              t = seq(0, 1, by = 0.05),
+              #t = seq(0, 1, by = 0.05),
                node_column = "node",
                p_column = "pvalue",
                sign_column = "foldChange")

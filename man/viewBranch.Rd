@@ -4,14 +4,32 @@
 \alias{viewBranch}
 \title{view tree and its two zoomed branches}
 \usage{
-viewBranch(tree, ann_data = NULL, ann_column = NULL,
-  ann_color = "black", ann_hjust = c(0.2, 0.2), ann_vjust = c(0.6,
-  -0.5), ann_size = 1, hlight_node = NULL, hlight_alpha = 0.5,
-  hlight_fill = "blue", point_node = NULL, point_color = "cyan",
-  point_size = 3, view_node = NULL, zoom_node = NULL,
-  zoom_scale = 2, group_leaf = NULL, group_color = "orange",
-  nrow = nrow, rel_widths = c(0.5, 2, 3), branch_length = "none",
-  layout = "rectangular", edge_size = 1, ...)
+viewBranch(
+  tree,
+  ann_data = NULL,
+  ann_column = NULL,
+  ann_color = "black",
+  ann_hjust = c(0.2, 0.2),
+  ann_vjust = c(0.6, -0.5),
+  ann_size = 1,
+  hlight_node = NULL,
+  hlight_alpha = 0.5,
+  hlight_fill = "blue",
+  point_node = NULL,
+  point_color = "cyan",
+  point_size = 3,
+  view_node = NULL,
+  zoom_node = NULL,
+  zoom_scale = 2,
+  group_leaf = NULL,
+  group_color = "orange",
+  nrow = nrow,
+  rel_widths = c(0.5, 2, 3),
+  branch_length = "none",
+  layout = "rectangular",
+  edge_size = 1,
+  ...
+)
 }
 \arguments{
 \item{tree}{A phylo object}

@@ -164,13 +164,7 @@ viewBranch <- function(tree,
             
         } 
         point_color <- point_color[order(point_node)]
-        # if (cn != pn) {
-        #     if (cn == 1) {
-        #         point_color <- rep(point_color, pn)
-        #     } else {
-        #         stop("ann_color has different length to ann_column.")
-        #     }
-        # }
+
     }
     
     # ===================================================================
@@ -186,8 +180,25 @@ viewBranch <- function(tree,
     
     # group the branches
     if (!is.null(group_leaf)) {
-        p0 <- groupOTU(p0, group_leaf, "grp") + aes(color = grp) +
+        dt0 <- data.frame(grp = "0", 
+                          node = showNode(tree = tree, only.leaf = FALSE),
+                          stringsAsFactors = FALSE)
+        group_leaf <- lapply(group_leaf, FUN = function(x){
+            xx <- signalNode(tree = tree, node = x)
+            fx <- findOS(tree = tree, node = xx, only.leaf = FALSE, 
+                         self.include = TRUE)
+            unlist(fx)
+        })
+        dt1 <- data.frame(grp = rep(names(group_leaf), 
+                                   unlist(lapply(group_leaf, length))),
+                         node = unlist(group_leaf),
+                         stringsAsFactors = FALSE)
+        
+        dt0$grp[match(dt1$node, dt0$node)] <- dt1$grp
+        p0 <- p0 %<+% dt0 + aes(color = grp) +
             scale_color_manual(values = group_color)
+        # p0 <- groupOTU(p0, group_leaf, "grp") + aes(color = grp) +
+        #     scale_color_manual(values = group_color)
     }
     
     # add annotate data

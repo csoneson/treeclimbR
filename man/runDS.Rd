@@ -4,12 +4,24 @@
 \alias{runDS}
 \title{Test for differential state using edgeR}
 \usage{
-runDS(SE, tree, option = c("glm", "glmQL"), design = NULL,
-  contrast = NULL, filter_min_count = 10,
-  filter_min_total_count = 15, filter_large_n = 10,
-  filter_min_prop = 0.7, normalize = TRUE, normalize_method = "TMM",
-  group_column = "group_id", design_terms = "group_id",
-  message = TRUE, ...)
+runDS(
+  SE,
+  tree,
+  option = c("glm", "glmQL"),
+  design = NULL,
+  contrast = NULL,
+  filter_min_count = 1,
+  filter_min_total_count = 15,
+  filter_large_n = 10,
+  filter_min_prop = 1,
+  min_cells = 10,
+  normalize = TRUE,
+  normalize_method = "TMM",
+  group_column = "group_id",
+  design_terms = "group_id",
+  message = TRUE,
+  ...
+)
 }
 \arguments{
 \item{SE}{A SummarizedExperiment object.}

@@ -7,12 +7,27 @@ viewPath shows all paths on the tree. Each connects a leaf to the root. Users
 could decide what to display on the x and y axis. The data show on x and y
 axis should be provided as a data frame.}
 \usage{
-viewPath(tree, data_frame, node_column, y_axis_column,
-  x_axis_column = NULL, y_lab = NULL, x_lab = NULL, node_true,
-  lab_true, col_true, node_found, legend_title_found = "Found",
-  legend_title_true = "Truth", only_true_path = FALSE,
-  point_size = 2, point_stroke = 2, point_shape = 21, log_x = TRUE,
-  log_y = TRUE)
+viewPath(
+  tree,
+  data_frame,
+  node_column,
+  y_axis_column,
+  x_axis_column = NULL,
+  y_lab = NULL,
+  x_lab = NULL,
+  node_true,
+  lab_true,
+  col_true,
+  node_found,
+  legend_title_found = "Found",
+  legend_title_true = "Truth",
+  only_true_path = FALSE,
+  point_size = 2,
+  point_stroke = 2,
+  point_shape = 21,
+  log_x = TRUE,
+  log_y = TRUE
+)
 }
 \arguments{
 \item{tree}{A phylo object.}
