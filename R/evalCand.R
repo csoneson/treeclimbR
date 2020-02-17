@@ -280,7 +280,7 @@ evalCand <- function(tree,
         }
         
         
-        up_i <- 2 * limit_rej * (max(av_size, 1) - 1)
+        up_i <- min(2 * limit_rej * (max(av_size, 1) - 1), 1)
         
         # This is to avoid get TRUE from (2*0.05*(2.5-1)) > 0.15
         up_i <- round(up_i, 10)
