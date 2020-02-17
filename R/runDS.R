@@ -114,10 +114,11 @@
 runDS <- function(SE, tree, 
                   option = c("glm", "glmQL"),
                   design = NULL, contrast = NULL, 
-                  filter_min_count = 10, 
+                  filter_min_count = 1, 
                   filter_min_total_count = 15,
                   filter_large_n = 10,
-                  filter_min_prop = 0.7, 
+                  filter_min_prop = 1, 
+                  min_cells = 10,
                   normalize = TRUE, 
                   normalize_method = "TMM",
                   group_column = "group_id", 
@@ -126,6 +127,16 @@ runDS <- function(SE, tree,
     
     # the alias of nodes
     alias <- names(assays(SE))
+    
+    # filter nodes by the number of cells
+    ncell <- metadata(SE)$n_cells
+    ind_cell <- apply(ncell, 1, FUN = function(x) {
+        sum(x > min_cells) > 0.5 * length(x)
+    })
+    warning(sum(!ind_cell), " nodes are ignored. ", 
+            "They don't have cells above ", 
+            min_cells, " in more than half samples")
+    alias <- alias[ind_cell]
     res <- vector("list", length(alias))
     names(res) <- alias
     nodes_list <- res
