@@ -103,7 +103,7 @@ evalCand <- function(tree,
                      feature_column = NULL,
                      method = "BH", 
                      limit_rej = 0.05,
-                     use_pseudo_leaf = TRUE,
+                     use_pseudo_leaf = FALSE,
                      message = FALSE) {
     
     if (!is(tree, "phylo")) {
@@ -223,8 +223,6 @@ evalCand <- function(tree,
             ii <- match(x, y[[node_column]])
         }, level_i, score_data, SIMPLIFY = FALSE)
         len_i <- lapply(sel_i, length)
-        # ind_i <- mapply(FUN = function(x, y) { rep(x, y)}, 
-        #                 seq_along(sel_i), len_i, SIMPLIFY = FALSE)
         
         
         # adjust p-values
@@ -233,9 +231,6 @@ evalCand <- function(tree,
         }, score_data, sel_i, SIMPLIFY = FALSE)
         adp_i <- p.adjust(p = unlist(p_i), method = method)
         rej_i <- adp_i <= limit_rej
-        
-        # the low bound of t
-        #low_i <- min(unlist(p_i)[rej_i])
         
         # calculate r
         # rejected nodes
@@ -248,6 +243,7 @@ evalCand <- function(tree,
         rej_sign <- unlist(sign_i)[rej_i %in% TRUE]
         rej_N <- unlist(nd_i)[rej_i %in% TRUE]
         rej_N <- split(rej_N, rej_sign)
+        
         
         # rejected branches
         path <- matTree(tree = tree)
