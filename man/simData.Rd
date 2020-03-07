@@ -138,7 +138,7 @@ a TreeSummarizedExperiment object.
 \code{simData} simulates different abundance patterns for entities under
 different conditions. These entities have their corresponding nodes on a
 tree. More details about the simulated patterns could be found in the
-vignette via \code{browseVignettes("treeAGG")}.
+vignette via \code{browseVignettes("treeclimbR")}.
 }
 \details{
 \code{simData} simulates a count table for entities which are

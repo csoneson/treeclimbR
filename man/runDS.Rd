@@ -60,6 +60,9 @@ coefficient will be tested equal to zero.}
 \item{filter_min_prop}{A numeric value. It's passed to \strong{min.prop} of
 \code{\link[edgeR]{filterByExpr}}.}
 
+\item{min_cells}{A numeric value. The minimum number of cells in a node to
+include a node in the analysis.}
+
 \item{normalize}{A logical value, TRUE or FALSE. The default is TRUE.}
 
 \item{normalize_method}{Normalization method to be used. See
@@ -143,7 +146,7 @@ d_se <- aggDS(TSE = d_tse,
 res <- runDS(SE = d_se, tree = tinyTree, 
              option = "glm", group_column = "group",
              design_terms = "group")
-topNodes(res, type = "DS")
+nodeResult(res, type = "DS")
 }
 \author{
 Ruizhu Huang

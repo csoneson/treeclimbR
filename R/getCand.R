@@ -3,9 +3,9 @@
 #' \code{getCand} search candidates under different thresholds
 #'
 #' @param tree A phylo object.
-#' @param t A sequence of values with the range between 0 and 1.
-#'   Thresholds used to search candidates. The default is to use a sequence from
-#'   0 to 1 with step 0.05.
+#' @param t A sequence of values with the range between 0 and 1. Thresholds used
+#'   to search candidates. The default is to use a sequence \code{c(seq(0, 0.04,
+#'   by = 0.01), seq(0.05, 1, by = 0.05))}
 #' @param score_data A data frame includes at least one column about the nodes,
 #'   one column about the p value (\code{p_column}) and one column about the
 #'   direction of change (\code{sign_column}).
@@ -13,6 +13,8 @@
 #' @param p_column The name of the column that gives p values of nodes.
 #' @param sign_column The name of the column that gives the direction of the
 #'   difference.
+#' @param threshold Default is 0.05. A value to hinder an internal to be picked
+#'   due to randomness.
 #' @param message A logical value, TRUE or FALSE. Default is FALSE. If TRUE, the
 #'   message about running process is printed out.
 #'

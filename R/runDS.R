@@ -42,6 +42,8 @@
 #'   \code{\link[edgeR]{filterByExpr}}.
 #' @param filter_min_prop A numeric value. It's passed to \strong{min.prop} of
 #'   \code{\link[edgeR]{filterByExpr}}.
+#' @param min_cells A numeric value. The minimum number of cells in a node to
+#'   include a node in the analysis.
 #' @param normalize A logical value, TRUE or FALSE. The default is TRUE.
 #' @param normalize_method Normalization method to be used. See
 #'   \code{\link[edgeR]{calcNormFactors}} for more details.
@@ -109,7 +111,7 @@
 #' res <- runDS(SE = d_se, tree = tinyTree, 
 #'              option = "glm", group_column = "group",
 #'              design_terms = "group")
-#' topNodes(res, type = "DS")
+#' nodeResult(res, type = "DS")
 
 runDS <- function(SE, tree, 
                   option = c("glm", "glmQL"),

@@ -29,8 +29,8 @@
 #'   the argument \code{method} in \code{\link[stats]{p.adjust}}. Default is
 #'   "BH".
 #' @param limit_rej The FDR level. Default is 0.05.
-#' @param control_fdr_on "leaf" or "pseudo-leaf". If "leaf", the FDR is
-#'   calculated on the leaf level of the tree; If "pseudo-leaf", the FDR is
+#' @param use_pseudo_leaf TRUE or FALSE. If FALSE, the FDR is
+#'   calculated on the leaf level of the tree; If TRUE, the FDR is
 #'   calculated on the pseudo leaf level. The pseudo-leaf level is the level on
 #'   which entities have sufficient data to run analysis and the level that is
 #'   closest to the leaf level.
@@ -68,7 +68,7 @@
 #' @examples
 #' library(TreeSummarizedExperiment)
 #' library(ggtree)
-#' 
+#'
 #' data(tinyTree)
 #' ggtree(tinyTree, branch.length = "none") +
 #'    geom_text2(aes(label = node)) +
@@ -77,14 +77,14 @@
 #' set.seed(2)
 #' pv <- runif(19, 0, 1)
 #' pv[c(1:5, 13, 14, 18)] <- runif(8, 0, 0.001)
-#' 
+#'
 #' fc <- sample(c(-1, 1), 19, replace = TRUE)
 #' fc[c(1:3, 13, 14)] <- 1
 #' fc[c(4, 5, 18)] <- -1
 #' df <- data.frame(node = 1:19,
 #'                  pvalue = pv,
 #'                  foldChange = fc)
-#' ll <- getCand(tree = tinyTree, score_data = df, 
+#' ll <- getCand(tree = tinyTree, score_data = df,
 #'               #t = seq(0, 1, by = 0.05),
 #'                node_column = "node",
 #'                p_column = "pvalue",
@@ -94,14 +94,14 @@
 #'                p_column = "pvalue", sign_column = "foldChange",
 #'                limit_rej = 0.05 )
 #' cc$output
-evalCand <- function(tree, 
+evalCand <- function(tree,
                      type = c("single", "multiple"),
                      levels = cand_list,
-                     score_data = NULL, 
+                     score_data = NULL,
                      node_column, p_column,
                      sign_column = sign_column,
                      feature_column = NULL,
-                     method = "BH", 
+                     method = "BH",
                      limit_rej = 0.05,
                      use_pseudo_leaf = FALSE,
                      message = FALSE) {
@@ -118,67 +118,75 @@ evalCand <- function(tree,
     
     
     if (type == "multiple" & is.null(feature_column)) {
-        warning("To distinct results from different features, 
+        warning("To distinct results from different features,
                 feature_column is required")
     }
-    
-   
-    # ------------------------- the pseudo leaf level -------------------------
-    # some nodes might not be included in the analysis step because they have no
-    # enough data. In such case, an internal node would become a pseudo leaf 
-    # node if its descendant nodes are filtered due to lack of sufficient data.
-    
-    if (message) {
-        message("collecting the pseudo leaf level for all features ...")
-    }
-    
-    pseudo_leaf <- lapply(seq_along(score_data), FUN = function(x) {
-        if (message) {
-            message(x, " out of ", length(score_data),
-                    " features finished", "\r", appendLF = FALSE)
-            flush.console()}
-        
-        .pseudoLeaf(tree = tree, score_data = score_data[[x]], 
-                    node_column = node_column, p_column = p_column)
-    })
-    names(pseudo_leaf) <- names(score_data)
     
     node_list <- lapply(score_data, FUN = function(x) {
         x[[node_column]]
     })
     
-    if (message) {
-        message("Calculating the number of pseudo-leaves of each node 
-                for all features ...")
-    }
-    info_nleaf <- lapply(seq_along(node_list), FUN = function(x) {
+    # ------------------------- the pseudo leaf level -------------------------
+    # some nodes might not be included in the analysis step because they have no
+    # enough data. In such case, an internal node would become a pseudo leaf
+    # node if its descendant nodes are filtered due to lack of sufficient data.
+    
+    if (use_pseudo_leaf) {
         if (message) {
-            message(x, " out of ", length(node_list),
-                    " features finished", "\r", appendLF = FALSE)
-            flush.console()}
-
-        xx <- node_list[[x]]
-        ps.x <- pseudo_leaf[[x]]
-
-        desd.x <- findOS(tree = tree, node = xx,
-                         only.leaf = FALSE, self.include = TRUE)
-        leaf.x <- findOS(tree = tree, node = xx,
-                         only.leaf = TRUE, self.include = TRUE)
-        psLeaf.x <- lapply(desd.x, FUN = function(x) {
-            intersect(x, ps.x)})
-        info <- cbind(n_leaf = unlist(lapply(leaf.x, length)),
-                      n_pseudo_leaf = unlist(lapply(psLeaf.x, length)))
-
-        return(info)
-    })
-    
-    
-    names(info_nleaf) <- names(score_data)
+            message("collecting the pseudo leaf level for all features ...")
+        }
+        
+        pseudo_leaf <- lapply(seq_along(score_data), FUN = function(x) {
+            if (message) {
+                message(x, " out of ", length(score_data),
+                        " features finished", "\r", appendLF = FALSE)
+                flush.console()}
+            
+            .pseudoLeaf(tree = tree, score_data = score_data[[x]],
+                        node_column = node_column, p_column = p_column)
+        })
+        names(pseudo_leaf) <- names(score_data)
+        
+        
+        if (message) {
+            message("Calculating the number of pseudo-leaves of each node
+                for all features ...")
+        }
+        info_nleaf <- lapply(seq_along(node_list), FUN = function(x) {
+            if (message) {
+                message(x, " out of ", length(node_list),
+                        " features finished", "\r", appendLF = FALSE)
+                flush.console()}
+            
+            xx <- node_list[[x]]
+            ps.x <- pseudo_leaf[[x]]
+            
+            desd.x <- findOS(tree = tree, node = xx,
+                             only.leaf = FALSE, self.include = TRUE)
+            leaf.x <- findOS(tree = tree, node = xx,
+                             only.leaf = TRUE, self.include = TRUE)
+            psLeaf.x <- lapply(desd.x, FUN = function(x) {
+                intersect(x, ps.x)})
+            info <- cbind(n_leaf = unlist(lapply(leaf.x, length)),
+                          n_pseudo_leaf = unlist(lapply(psLeaf.x, length)))
+            
+            return(info)
+        })
+        
+        names(info_nleaf) <- names(score_data)
+    } else {
+        node_all <- showNode(tree = tree, only.leaf = FALSE)
+        desc_all <- findOS(tree = tree, node = node_all,
+                           only.leaf = TRUE, self.include = TRUE)
+        info_nleaf <- data.frame(
+            node = node_all,
+            n_leaf = unlist(lapply(desc_all, length)))
+    }
     
     # add two columns in score_data
     # ---------------- info about the candidate level --------------------------
     # candidates in the candidate level
-    # a data frame: t, br_size, candidate, method, limit_rej, level_name, 
+    # a data frame: t, br_size, candidate, method, limit_rej, level_name,
     # rej_leaf, rej_node, rej_pseudo_leaf
     
     if (message) {
@@ -190,16 +198,15 @@ evalCand <- function(tree,
         stop("the names of elements in 'levels' are different")
     }
     t <- unlist(t)
-#    t[t == "leaf"] <- NA
     t <- as.numeric(t)
     
-    level_info <- data.frame(t = t, upper_t = NA, 
+    level_info <- data.frame(t = t, upper_t = NA,
                              is_valid = FALSE,
-                             method = method, 
+                             method = method,
                              limit_rej = limit_rej,
                              level_name = tlist[[1]],
                              best = FALSE,
-                             rej_leaf = NA, 
+                             rej_leaf = NA,
                              rej_node = NA,
                              rej_pseudo_leaf = NA,
                              rej_pseudo_node = NA)
@@ -232,53 +239,51 @@ evalCand <- function(tree,
         adp_i <- p.adjust(p = unlist(p_i), method = method)
         rej_i <- adp_i <= limit_rej
         
-        # calculate r
-        # rejected nodes
-        nd_i <- mapply(FUN = function(x, y) {
-            x[y, node_column]
-        }, score_data, sel_i, SIMPLIFY = FALSE)
-        sign_i <- mapply(FUN = function(x, y) {
-            sign(x[y, sign_column])
-        }, score_data, sel_i, SIMPLIFY = FALSE)
-        rej_sign <- unlist(sign_i)[rej_i %in% TRUE]
-        rej_N <- unlist(nd_i)[rej_i %in% TRUE]
-        rej_N <- split(rej_N, rej_sign)
+        # the largest p value that is rejected
+        maxp_i <- max(unlist(p_i)[rej_i])
         
-        
-        # rejected branches
+        # the number of branches
         path <- matTree(tree = tree)
-        is_L <- lapply(rej_N, FUN = function(x) {
-            isLeaf(tree = tree, node = x)})
-        rej_L <- mapply(FUN = function(x, y) {
-            unique(x[y])}, rej_N, is_L)
-        rej_I <- mapply(FUN = function(x, y) {
-            unique(x[!y]) }, rej_N, is_L)
-        rej_L2 <- lapply(rej_L, FUN = function(x) {
-            unique(path[path[, "L1"] %in% x, "L2"])}) 
-        n_C <- length(unlist(rej_I)) + length(unlist(rej_L2))
+        n_C <- mapply(FUN = function(x, y) {
+            # nodes rejected in each feature
+            xx <- x[y, c(node_column, sign_column, p_column)]
+            xs <- xx[xx[[p_column]] <= maxp_i, ]
+            
+            # split nodes by sign
+            sn <- split(xs[[node_column]], sign(xs[[sign_column]]))
+            
+            is_L <- lapply(sn, FUN = function(x) {
+                isLeaf(tree = tree, node = x)})
+            rej_L <- mapply(FUN = function(x, y) {
+                unique(x[y])}, sn, is_L)
+            rej_I <- mapply(FUN = function(x, y) {
+                unique(x[!y]) }, sn, is_L)
+            rej_L2 <- lapply(rej_L, FUN = function(x) {
+                unique(path[path[, "L1"] %in% x, "L2"])})
+            length(unlist(rej_I)) + length(unlist(rej_L2))
+        }, score_data, sel_i, SIMPLIFY = FALSE)
+        n_C <- sum(unlist(n_C))
         
-        
-        rej_m1 <- mapply(FUN = function(x, y) {
-            x[y, "n_pseudo_leaf"]
-        }, info_nleaf, sel_i, SIMPLIFY = FALSE)
-        n_m1 <- sum(unlist(rej_m1)[rej_i %in% TRUE])
-        
-        
-        rej_m2 <- mapply(FUN = function(x, y) {
-            x[y, "n_leaf"]
-        }, info_nleaf, sel_i, SIMPLIFY = FALSE)
-        n_m2 <- sum(unlist(rej_m2)[rej_i %in% TRUE])
-        
+        # The number of leaves
         if(use_pseudo_leaf) {
+            rej_m1 <- mapply(FUN = function(x, y) {
+                x[y, "n_pseudo_leaf"]
+            }, info_nleaf, sel_i, SIMPLIFY = FALSE)
+            n_m1 <- sum(unlist(rej_m1)[rej_i %in% TRUE])
             av_size <- n_m1/max(n_C, 1)
+            
         } else {
+            node_i <- mapply(FUN = function(x, y) {
+                x[y, node_column]
+            }, score_data, sel_i, SIMPLIFY = FALSE)
+            node_r <- unlist(node_i)[rej_i %in% TRUE]
+            ind_r <- match(node_r, info_nleaf[["node"]])
+            n_m2 <- sum(info_nleaf[ind_r, "n_leaf"])
             av_size <- n_m2/max(n_C, 1)
         }
         
-        
-        up_i <- min(2 * limit_rej * (max(av_size, 1) - 1), 1)
-        
         # This is to avoid get TRUE from (2*0.05*(2.5-1)) > 0.15
+        up_i <- min(2 * limit_rej * (max(av_size, 1) - 1), 1)
         up_i <- round(up_i, 10)
         
         
@@ -286,21 +291,24 @@ evalCand <- function(tree,
         #level_info$lower_t[i] <- low_i
         level_info$upper_t[i] <- up_i
         level_info$rej_leaf[i] <- n_m2
-        level_info$rej_pseudo_leaf[i] <- n_m1
-        level_info$rej_node[i] <- length(unlist(rej_N))
-        level_info$rej_pseudo_node[i] <- n_C
+        level_info$rej_node[i] <- sum(rej_i)
+        
+        if (use_pseudo_leaf) {
+            level_info$rej_pseudo_leaf[i] <- n_m1
+            level_info$rej_pseudo_node[i] <- n_C
+        }
         sel[[i]] <- sel_i
         
         level_info$is_valid[i] <- up_i > t[i] | t[i] == 0
     }
     
-    # candidates: levels that fullfil the requirement to control FDR on the 
+    # candidates: levels that fullfil the requirement to control FDR on the
     # (pseudo) leaf level when multiple hypothesis correction is performed on it
     isB <- level_info %>%
         filter(is_valid) %>%
         filter(rej_leaf == max(rej_leaf)) %>%
         filter(rej_node == min(rej_node)) %>%
-        select(level_name) %>% 
+        select(level_name) %>%
         unlist() %>%
         as.character()
     level_info <- level_info %>%
@@ -327,10 +335,16 @@ evalCand <- function(tree,
     if (message) {
         message("output the results ...")
     }
-    out <- list(candidate_best = level_b, output = outB,
-                candidate_list = levels,  
-                level_info = level_info, 
-                FDR = limit_rej, method = method)
+    out <- list(candidate_best = level_b, 
+                output = outB,
+                candidate_list = levels,
+                level_info = level_info,
+                FDR = limit_rej, 
+                method = method,
+                column_info = list("node_column" = node_column,
+                                   "p_column"= p_column,
+                                   "sign_column"= sign_column,
+                                   "feature_column" = feature_column))
     return(out)
     
 }
