@@ -29,8 +29,8 @@
 #'   the argument \code{method} in \code{\link[stats]{p.adjust}}. Default is
 #'   "BH".
 #' @param limit_rej The FDR level. Default is 0.05.
-#' @param control_fdr_on "leaf" or "pseudo-leaf". If "leaf", the FDR is
-#'   calculated on the leaf level of the tree; If "pseudo-leaf", the FDR is
+#' @param use_pseudo_leaf TRUE or FALSE. If FALSE, the FDR is
+#'   calculated on the leaf level of the tree; If TRUE, the FDR is
 #'   calculated on the pseudo leaf level. The pseudo-leaf level is the level on
 #'   which entities have sufficient data to run analysis and the level that is
 #'   closest to the leaf level.

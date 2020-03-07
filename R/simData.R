@@ -3,7 +3,7 @@
 #' \code{simData} simulates different abundance patterns for entities under
 #' different conditions. These entities have their corresponding nodes on a
 #' tree. More details about the simulated patterns could be found in the
-#' vignette via \code{browseVignettes("treeAGG")}.
+#' vignette via \code{browseVignettes("treeclimbR")}.
 #'
 #' @param tree A phylo object. Only use when \code{obj} is NULL.
 #' @param data A matrix, representing a table of values, such as count,
