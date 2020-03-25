@@ -240,7 +240,7 @@ evalCand <- function(tree,
         rej_i <- adp_i <= limit_rej
         
         # the largest p value that is rejected
-        maxp_i <- max(unlist(p_i)[rej_i])
+        maxp_i <- max(c(-1, unlist(p_i)[rej_i]))
         
         # the number of branches
         path <- matTree(tree = tree)
