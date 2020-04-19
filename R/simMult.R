@@ -128,7 +128,6 @@
 #' 
 #' count <- assays(tse)[[1]]
 #' rownames(count) <- rowLinks(tse)$nodeLab
-#' viewHeatmap(obj = tse)
 #' 
 
 
