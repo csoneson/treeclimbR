@@ -7,7 +7,7 @@
 .doFC(
   tree = NULL,
   data = NULL,
-  scenario = "S1",
+  scenario = "BS",
   branchA = NULL,
   branchB = NULL,
   ratio = 1,
@@ -20,7 +20,7 @@
 
 \item{data}{The real data (count table)}
 
-\item{scenario}{Scenarios (\dQuote{S1}, \dQuote{S2}, \dQuote{S3})}
+\item{scenario}{Scenarios (\dQuote{BS}, \dQuote{US}, \dQuote{SS})}
 
 \item{branchA}{The branch node label of branch A.}
 
@@ -30,7 +30,7 @@
 (B/A)}
 
 \item{adjB}{A numeric value between 0 and 1 (only for \code{scenario}
-is \dQuote{S3}). Default is NULL. If NULL, branch A and branch B swap their
+is \dQuote{SS}). Default is NULL. If NULL, branch A and branch B swap their
 proportions. If a numeric value, e.g. 0.1, then branch B decreases to its
 one tenth proportion and the decrease in branch B is added to branch A.
 For example, assume there are two experimental conditions (C1 & C2), branch
