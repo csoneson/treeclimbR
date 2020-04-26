@@ -23,10 +23,6 @@ Imports:
     SummarizedExperiment,
     S4Vectors,
     dirmult,
-    ggtree,
-    ggplot2,
-    ComplexHeatmap,
-    cowplot,
     dplyr,
     tibble,
     tidyr,
@@ -35,7 +31,7 @@ Imports:
     data.table
 Suggests:
     knitr,
-    rmarkdown,
-    ggrepel
+    ggtree,
+    rmarkdown
 RoxygenNote: 7.0.0
 VignetteBuilder: knitr

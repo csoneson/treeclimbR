@@ -122,12 +122,6 @@
 #' names(prob) <- tinyTree$tip.label
 #' 
 #' tse <- simMult(pr = prob, libSize = 500, tree = tinyTree)
-#' viewSim(tse) + geom_tiplab()
-#' 
-#' # heatmap
-#' 
-#' count <- assays(tse)[[1]]
-#' rownames(count) <- rowLinks(tse)$nodeLab
 #' 
 
 
