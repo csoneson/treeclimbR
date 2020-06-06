@@ -1,7 +1,7 @@
 
 # treeclimbR
 
-`treeclimbR` is a new algorithm to pinpoint the data-dependent resosultion on hierarchcial hypotheses.
+`treeclimbR` is an algorithm to pinpoint the data-dependent resosultion on hierarchcial hypotheses.
 
 ## Installation
 ``` r
