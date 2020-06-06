@@ -28,3 +28,4 @@ Nodes identified by `treeclimbR` are compared to those identified by `BH` under 
 </p>
 
 ## Learn more
+More examples about using `treeclimbR` could be found [here](https://github.com/fionarhuang/treeclimbR_article)
