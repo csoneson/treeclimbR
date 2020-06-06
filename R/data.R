@@ -1,22 +1,7 @@
-#' A selected microbial data on human saliva bodysite.
-#' 
-#' A TreeSummarizedExperiment object stores the seleted (top abundant) 1000 OTU
-#' from the human microbial data on saliva site from 226 samples.
+#' a subset data from HMP16SData
+#' A dataset containing 16sRNA counts on body subsite: Throat
 #'
-#' 
-#'
-"saliva"
+#' @format A TreesummarizedExperiment object with 956 OTUs and 153 samples
+#' @source  \url{https://gist.github.com/fionarhuang/5f18a93243fc9f901f61451d18eab2aa}
+"throat_v35"
 
-#' throat data
-#' 
-#'
-#' 
-#'
-"throat"
-
-#' from HMP16SData
-#' 
-#'
-#' 
-#'
-"saliva_v35"
