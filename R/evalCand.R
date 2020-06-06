@@ -269,8 +269,8 @@ evalCand <- function(tree,
             rej_m1 <- mapply(FUN = function(x, y) {
                 x[y, "n_pseudo_leaf"]
             }, info_nleaf, sel_i, SIMPLIFY = FALSE)
-            n_m1 <- sum(unlist(rej_m1)[rej_i %in% TRUE])
-            av_size <- n_m1/max(n_C, 1)
+            n_m <- sum(unlist(rej_m1)[rej_i %in% TRUE])
+            av_size <- n_m/max(n_C, 1)
             
         } else {
             node_i <- mapply(FUN = function(x, y) {
@@ -278,8 +278,8 @@ evalCand <- function(tree,
             }, score_data, sel_i, SIMPLIFY = FALSE)
             node_r <- unlist(node_i)[rej_i %in% TRUE]
             ind_r <- match(node_r, info_nleaf[["node"]])
-            n_m2 <- sum(info_nleaf[ind_r, "n_leaf"])
-            av_size <- n_m2/max(n_C, 1)
+            n_m <- sum(info_nleaf[ind_r, "n_leaf"])
+            av_size <- n_m/max(n_C, 1)
         }
         
         # This is to avoid get TRUE from (2*0.05*(2.5-1)) > 0.15
@@ -290,11 +290,11 @@ evalCand <- function(tree,
         
         #level_info$lower_t[i] <- low_i
         level_info$upper_t[i] <- up_i
-        level_info$rej_leaf[i] <- n_m2
+        level_info$rej_leaf[i] <- n_m
         level_info$rej_node[i] <- sum(rej_i)
         
         if (use_pseudo_leaf) {
-            level_info$rej_pseudo_leaf[i] <- n_m1
+            level_info$rej_pseudo_leaf[i] <- n_m
             level_info$rej_pseudo_node[i] <- n_C
         }
         sel[[i]] <- sel_i

@@ -7,7 +7,7 @@
 .doData(
   tree = NULL,
   data = NULL,
-  scenario = "S1",
+  scenario = "BS",
   from.A = NULL,
   from.B = NULL,
   minTip.A = 0,
@@ -32,8 +32,8 @@
 \item{data}{A matrix, representing a count table from real data. It has the
 entities corresponding to tree leaves in the row and samples in the column.}
 
-\item{scenario}{\dQuote{S1}, \dQuote{S2}, or \dQuote{S3} (see
-\bold{Details}). Default is \dQuote{S1}.}
+\item{scenario}{\dQuote{BS}, \dQuote{US}, or \dQuote{SS} (see
+\bold{Details}). Default is \dQuote{BS}.}
 
 \item{from.A, from.B}{The branch node labels of branches A and B for which the
 signal is swapped. Default, both are NULL. In simulation, we select two
@@ -61,7 +61,7 @@ exactly this ratio, the pair with the value closest to \code{ratio} would
 be selected.}
 
 \item{adjB}{a numeric value selected from 0 and 1 (only for \code{scenario}
-is \dQuote{S3}). Default is NULL. If NULL, branch A and branch B swap their
+is \dQuote{SS}). Default is NULL. If NULL, branch A and branch B swap their
 proportions. If a numeric value, e.g. 0.1, then branch B decreases to its
 one tenth proportion and the decrease in branch B is added to branch A. For
 example, assume there are two experimental conditions (C1 & C2), branch A
@@ -70,7 +70,7 @@ B becomes 4 and branch A 46 so that the total proportion stays the same.}
 
 \item{pct}{a numeric value selected from 0 and 1. The percentage of leaves in
 branch B that have differential abundance under different conditions (only
-for scenario \dQuote{S3})}
+for scenario \dQuote{SS})}
 
 \item{nSam}{A numeric vector of length 2, containing the sample size for two
 different conditions}
@@ -118,12 +118,12 @@ in the different conditions.
   real data set specified by the argument \code{data} via the function
   \code{dirmult} (see \code{\link[dirmult]{dirmult}}). To generate different
   abundance patterns under different conditions, we provide three different
-  scenarios, \dQuote{S1}, \dQuote{S2}, and \dQuote{S3} (specified via
-  \code{scenario}). \itemize{ \item S1: two branches are selected to swap
+  scenarios, \dQuote{BS}, \dQuote{US}, and \dQuote{SS} (specified via
+  \code{scenario}). \itemize{ \item BS: two branches are selected to swap
   their proportions, and leaves on the same branch have the same fold change.
-  \item S2: two branches are selected to swap their proportions. Leaves in
+  \item US: two branches are selected to swap their proportions. Leaves in
   the same branch have different fold changes but same direction (either
-  increase or decrease). \item S3: two branches are selected. One branch has
+  increase or decrease). \item SS: two branches are selected. One branch has
   its proportion swapped with the proportion of some leaves from the other
   branch.}
 }
