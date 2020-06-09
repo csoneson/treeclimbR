@@ -33,5 +33,9 @@ Nodes identified by `treeclimbR` are compared to those identified by `BH` under 
 
 ![Alt Text](https://github.com/fionarhuang/treeclimbR_animation/blob/master/output/pk_BS.gif)
 
+2. SS
+
+![Alt Text](https://github.com/fionarhuang/treeclimbR_animation/blob/master/output/pk_SS.gif)
+
 ## Learn more
 More examples about using `treeclimbR` could be found [here](https://github.com/fionarhuang/treeclimbR_article)
