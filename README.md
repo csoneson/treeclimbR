@@ -27,5 +27,11 @@ Nodes identified by `treeclimbR` are compared to those identified by `BH` under 
 <img src="https://github.com/fionarhuang/treeclimbR_toy_example/blob/master/output/signal_result.png">
 </p>
 
+
+## More scenarios
+1. BS
+
+![Alt Text](https://github.com/fionarhuang/treeclimbR_animation/blob/master/output/pk_BS.gif)
+
 ## Learn more
 More examples about using `treeclimbR` could be found [here](https://github.com/fionarhuang/treeclimbR_article)
