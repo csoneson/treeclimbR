@@ -28,7 +28,7 @@ Nodes identified by `treeclimbR` are compared to those identified by `BH` under 
 </p>
 
 
-## More scenarios
+## More scenarios ([here](https://htmlpreview.github.io/?https://github.com/fionarhuang/treeclimbR_animation/blob/master/docs/index.html))
 1. BS
 
 ![Alt Text](https://github.com/fionarhuang/treeclimbR_animation/blob/master/output/pk_BS.gif)
