@@ -1,7 +1,7 @@
 Package: treeclimbR
 Type: Package
 Title: An algorithm to find the signal level on the tree
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: person("Ruizhu", "Huang", email = "ruizhuRH@gmail.com",
            role = c("aut", "cre"), comment = c(ORCID = "0000-0003-3285-1945"))
 Description: The arrangement of hypotheses in a hierarchical structure appears 
