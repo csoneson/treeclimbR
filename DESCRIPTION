@@ -33,5 +33,5 @@ Suggests:
     knitr,
     ggtree,
     rmarkdown
-RoxygenNote: 7.0.0
+RoxygenNote: 7.1.1
 VignetteBuilder: knitr

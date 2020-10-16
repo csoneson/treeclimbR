@@ -115,8 +115,8 @@
 #'
 parEstimate <- function(obj) {
     
-    stopifnot(class(obj) %in% c("matrix", "list",
-                                 "TreeSummarizedExperiment"))
+    stopifnot(any(class(obj) %in% c("matrix", "list",
+                                 "TreeSummarizedExperiment")))
     
     if (is.matrix(obj)) {
         out <- .estimateA(obj = obj)
