@@ -122,8 +122,8 @@ calcTreeMedians <- function(d_se, tree, message = FALSE) {
     rd <- rowData(d_lse)
     sid <- unique(rd$sample_id)
     nodes <- sort(unique(as.vector(tree$edge)))
-    labs <- transNode(tree = tree, 
-                      node = nodes, use.alias = TRUE)
+    labs <- convertNode(tree = tree, 
+                        node = nodes, use.alias = TRUE)
     lc <- lapply(seq_along(sid), FUN = function(i) {
         if (message) {
             message("Working on ", i, " out of ", length(sid), " samples.")
@@ -139,10 +139,21 @@ calcTreeMedians <- function(d_se, tree, message = FALSE) {
         # counts
         cx <- assays(ax)[[1]]
         
+        # for missing nodes
+        nam <- setdiff(labs, rownames(cx))
+        if (length(nam)) {
+            mx <- matrix(NA, nrow = length(nam), ncol = ncol(cx))
+            rownames(mx) <- nam
+            colnames(mx) <- colnames(cx)
+        } else {
+            mx <- NULL
+        }
+        
+        cx <- rbind(cx, mx)[labs, ]
         return(cx)
     })
     
-    ## assays : reforme data to split by markers
+    ## assays : reform data to split by markers
     rc <- do.call(rbind, lc)
     lcm <- lapply(seq_len(ncol(rc)), FUN = function(x) {
         xx <- matrix(rc[, x], ncol = length(sid), byrow = FALSE)
@@ -170,7 +181,7 @@ calcTreeMedians <- function(d_se, tree, message = FALSE) {
                id_state_markers = colnames(d_lse) %in% sM)
     
     # row node label
-    rnl <- transNode(tree = rowTree(d_lse), node = nodes, use.alias = TRUE)
+    rnl <- convertNode(tree = rowTree(d_lse), node = nodes, use.alias = TRUE)
     # output
     out <- TreeSummarizedExperiment(assays = lcm,
                                     rowData  = rd,
