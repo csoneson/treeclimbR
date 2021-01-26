@@ -420,8 +420,8 @@ simData <- function(tree = NULL, data = NULL,
     # rename using the alias of node label
     pars <- parEstimate(obj = data)$pi
     nam1 <- names(pars)
-    val1 <- transNode(tree = tree, node = nam1, message = FALSE)
-    nam2 <- transNode(tree = tree, node = val1, use.alias = TRUE,
+    val1 <- convertNode(tree = tree, node = nam1, message = FALSE)
+    nam2 <- convertNode(tree = tree, node = val1, use.alias = TRUE,
                       message = FALSE)
     names(pars) <- nam2
     # df <- data.frame(pr = pars, nodeLab = nam1,
@@ -432,14 +432,14 @@ simData <- function(tree = NULL, data = NULL,
     leaf <- sort(leaf)
     nodI <- setdiff(tree$edge[, 1], leaf)
     nodI <- sort(nodI)
-    desI <- findOS(tree = tree, node = nodI,
+    desI <- findDescendant(tree = tree, node = nodI,
                    only.leaf = TRUE,
                    self.include = TRUE,
                    use.alias = TRUE)
     desI <- lapply(desI, FUN = function(x) {
-        transNode(tree = tree, node = x, 
+        convertNode(tree = tree, node = x, 
                   use.alias = TRUE, message = FALSE)})
-    names(desI) <- transNode(tree = tree, node = nodI,
+    names(desI) <- convertNode(tree = tree, node = nodI,
                              use.alias = TRUE, message = FALSE)
     nodP <- mapply(function(x, y) {sum(x[y])},
                    x = list(pars), y = desI)
@@ -447,7 +447,7 @@ simData <- function(tree = NULL, data = NULL,
     # matrix: abundance proprotion & the number of descendant leaves
     lenI <- unlist(lapply(desI, length))
     tt <- cbind(nodP, lenI)
-    rownames(tt) <- transNode(tree = tree,
+    rownames(tt) <- convertNode(tree = tree,
                               node = nodI,
                               use.alias = TRUE,
                               message = FALSE)
@@ -473,7 +473,7 @@ simData <- function(tree = NULL, data = NULL,
         if (is.character(from.A)) {
             from.A <- from.A
         } else {
-            from.A <- transNode(tree = tree, node = from.A,
+            from.A <- convertNode(tree = tree, node = from.A,
                                 use.alias = TRUE,
                                 message = FALSE)
         }
@@ -547,9 +547,9 @@ simData <- function(tree = NULL, data = NULL,
     bn <- colnames(nm)[wi[si, 2]]
     
     du <- cbind.data.frame(
-        "A" = transNode(tree = tree, node = an,
+        "A" = convertNode(tree = tree, node = an,
                         use.alias = FALSE, message = FALSE),
-        "B" = transNode(tree = tree, node = bn,
+        "B" = convertNode(tree = tree, node = bn,
                         use.alias = FALSE, message = FALSE),
         "ratio" = unique(nm[wi]),
         "A_tips" = tt[an, 2],
@@ -586,8 +586,8 @@ simData <- function(tree = NULL, data = NULL,
     # rename using the alias of node label
     pars <- parEstimate(obj = data)$pi
     nam1 <- names(pars)
-    val1 <- transNode(tree = tree, node = nam1, message = FALSE)
-    nam2 <- transNode(tree = tree, node = val1, use.alias = TRUE,
+    val1 <- convertNode(tree = tree, node = nam1, message = FALSE)
+    nam2 <- convertNode(tree = tree, node = val1, use.alias = TRUE,
                       message = FALSE)
     names(pars) <- nam2
     
@@ -599,12 +599,12 @@ simData <- function(tree = NULL, data = NULL,
     nodA <- c(leaf, nodI)
     
     # find descendants
-    desI <- findOS(tree = tree, node = nodI,
+    desI <- findDescendant(tree = tree, node = nodI,
                    only.leaf = TRUE,
                    self.include = TRUE,
                    use.alias = TRUE)
     desI <- lapply(desI, FUN = function(x) {
-        transNode(tree = tree, node = x, 
+        convertNode(tree = tree, node = x, 
                   use.alias = TRUE, message = FALSE)})
         
     nodP <- mapply(function(x, y) {
@@ -614,17 +614,17 @@ simData <- function(tree = NULL, data = NULL,
     # matrix: abundance proprotion & the number of descendant leaves
     lenI <- unlist(lapply(desI, length))
     tt <- cbind(nodP, lenI)
-    rownames(tt) <- transNode(tree = tree, node = nodI,
+    rownames(tt) <- convertNode(tree = tree, node = nodI,
                               use.alias = TRUE,
                               message = FALSE)
     
     # if both branches are given
     labA <- ifelse(is.character(from.A), from.A,
-                   transNode(tree = tree, node = from.A,
+                   convertNode(tree = tree, node = from.A,
                              use.alias = TRUE,
                              message = FALSE))
     labB <- ifelse(is.character(from.B), from.B,
-                   transNode(tree = tree, node = from.B,
+                   convertNode(tree = tree, node = from.B,
                              use.alias = TRUE,
                              message = FALSE))
     rAB <- tt[labB, 1]/tt[labA, 1]
@@ -683,32 +683,32 @@ simData <- function(tree = NULL, data = NULL,
     
     # beta
     beta <- rep(1, length(leaf))
-    names(beta) <- transNode(tree = tree, node = leaf,
+    names(beta) <- convertNode(tree = tree, node = leaf,
                              use.alias = TRUE)
     
     ## the label of nodes on branch A
     # leaves
-    tip.A <- findOS(tree = tree, node = branchA,
+    tip.A <- findDescendant(tree = tree, node = branchA,
                     only.leaf = TRUE, self.include = TRUE,
                     use.alias = TRUE)
-    tip.A <- transNode(tree = tree, node = unlist(tip.A), 
+    tip.A <- convertNode(tree = tree, node = unlist(tip.A), 
                        use.alias = TRUE, message = FALSE)
     # nodes
-    nodA.A <- findOS(tree = tree, node = branchA,
+    nodA.A <- findDescendant(tree = tree, node = branchA,
                      only.leaf = FALSE, self.include = TRUE,
                      use.alias = TRUE)
-    nodA.A <- transNode(tree = tree, node = unlist(nodA.A), 
+    nodA.A <- convertNode(tree = tree, node = unlist(nodA.A), 
                         use.alias = TRUE, message = FALSE)
     # internal nodes
     nodI.A <- setdiff(nodA.A, tip.A)
     
     # descendants of internal nodes
-    des.IA <- findOS(tree = tree, node = nodI.A,
+    des.IA <- findDescendant(tree = tree, node = nodI.A,
                      only.leaf = TRUE,
                      self.include = TRUE,
                      use.alias = TRUE)
     des.IA <- lapply(des.IA, FUN = function(x) {
-        transNode(tree = tree, node = x, 
+        convertNode(tree = tree, node = x, 
                   use.alias = TRUE, message = FALSE)
     })
     
@@ -716,8 +716,8 @@ simData <- function(tree = NULL, data = NULL,
     # rename using the alias of node label
     pars <- parEstimate(obj = data)$pi
     nam1 <- names(pars)
-    val1 <- transNode(tree = tree, node = nam1, message = FALSE)
-    nam2 <- transNode(tree = tree, node = val1, use.alias = TRUE,
+    val1 <- convertNode(tree = tree, node = nam1, message = FALSE)
+    nam2 <- convertNode(tree = tree, node = val1, use.alias = TRUE,
                       message = FALSE)
     names(pars) <- nam2
     
@@ -725,10 +725,10 @@ simData <- function(tree = NULL, data = NULL,
     # have the same fold change
     if (scenario == "BS") {
         # leaves on branch B
-        tip.B <- findOS(tree = tree, node = branchB,
+        tip.B <- findDescendant(tree = tree, node = branchB,
                         only.leaf = TRUE, self.include = TRUE,
                         use.alias = TRUE)
-        tip.B <- transNode(tree = tree, node = unlist(tip.B), 
+        tip.B <- convertNode(tree = tree, node = unlist(tip.B), 
                            use.alias = TRUE, message = FALSE)
         beta[tip.A] <- ratio
         beta[tip.B] <- 1/ratio
@@ -738,10 +738,10 @@ simData <- function(tree = NULL, data = NULL,
     # have different fold changes but same direction (either
     # increase or decrease)
     if (scenario == "US") {
-        tip.B <- findOS(tree = tree, node = branchB,
+        tip.B <- findDescendant(tree = tree, node = branchB,
                         only.leaf = TRUE, self.include = TRUE,
                         use.alias = TRUE)
-        tip.B <- transNode(tree = tree, node = unlist(tip.B), 
+        tip.B <- convertNode(tree = tree, node = unlist(tip.B), 
                            use.alias = TRUE, message = FALSE)
         
         # proportion on two branches
@@ -823,10 +823,10 @@ simData <- function(tree = NULL, data = NULL,
             stop("No suitable branches.
                  Try another branchA or another max of ratio... \n")
         }
-        tip.B <- findOS(tree = tree, node = branchB,
+        tip.B <- findDescendant(tree = tree, node = branchB,
                         only.leaf = TRUE, self.include = TRUE,
                         use.alias = TRUE)
-        tip.B <- transNode(tree = tree, node = unlist(tip.B), 
+        tip.B <- convertNode(tree = tree, node = unlist(tip.B), 
                            use.alias = TRUE, message = FALSE)
         sumB <- sum(pars[tip.B])
         
@@ -843,7 +843,7 @@ simData <- function(tree = NULL, data = NULL,
         }
     
     # rename beta with the node label instead of the alias of node label
-    names(beta) <- transNode(tree = tree, node = leaf,
+    names(beta) <- convertNode(tree = tree, node = leaf,
                              use.alias = FALSE)
     return(beta)
 }

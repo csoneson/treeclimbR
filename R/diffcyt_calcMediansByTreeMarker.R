@@ -104,8 +104,8 @@ calcMediansByTreeMarker <- function(d_se, tree) {
     
     # calculate median value at each node
     nodes <- showNode(tree = tree, only.leaf = FALSE, use.alias = FALSE)
-    d_tse <- aggValue(x = d_lse, rowLevel = nodes, 
-                      FUN = function(x){
+    d_tse <- aggTSE(x = d_lse, rowLevel = nodes, 
+                      rowFun = function(x){
                           median(x, na.rm = TRUE)
                       })
     rownames(d_tse) <- rowLinks(d_tse)$nodeLab

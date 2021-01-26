@@ -149,7 +149,6 @@ in the vignette via \code{browseVignettes("treeAGG")}.
 \examples{
 
 library(TreeSummarizedExperiment)
-library(ComplexHeatmap)
 library(ggtree)
 
 data("tinyTree")

@@ -110,7 +110,6 @@
 #' @examples
 #' 
 #' library(TreeSummarizedExperiment)
-#' library(ComplexHeatmap)
 #' library(ggtree)
 #' 
 #' data("tinyTree")
@@ -153,7 +152,7 @@ simMult <- function(pr, libSize, tree, scenario = "BS",
         }
         
         beta <- rep(1, length(leaf))
-        names(beta) <- transNode(tree = tree, node = leaf, use.alias = FALSE)
+        names(beta) <- convertNode(tree = tree, node = leaf, use.alias = FALSE)
         pk <- NULL
     } else {
        # scenario BS, US, SS

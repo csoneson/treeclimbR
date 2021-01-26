@@ -78,7 +78,7 @@ treeScore <- function(tree, score_data, node_column,
     desdA <- c(as.list(tip), desd)
     
     # the number of descendant leaves for each node
-    leafA <- findOS(tree = tree, node = nodeA, 
+    leafA <- findDescendant(tree = tree, node = nodeA, 
                     only.leaf = TRUE, self.include = TRUE)
     leafDF <- data.frame(node = nodeA, 
                          num = unlist(lapply(leafA, length)))

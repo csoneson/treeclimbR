@@ -89,15 +89,15 @@ selNode <- function(pr = NULL, obj = NULL,
     leaf <- setdiff(tree$edge[, 2], tree$edge[, 1])
     nodI <- setdiff(tree$edge[, 1], leaf)
     # nodA <- c(leaf, nodI)
-    nodeLab <- transNode(tree = tree, node = nodI,
+    nodeLab <- convertNode(tree = tree, node = nodI,
                          use.alias = FALSE,
                          message = FALSE)
-    nodeLab_alias <- transNode(tree = tree, node = nodI,
+    nodeLab_alias <- convertNode(tree = tree, node = nodI,
                                use.alias = TRUE,
                                message = FALSE)
     
     # descendant leaves
-    tipI <- findOS(tree = tree, node = nodI,
+    tipI <- findDescendant(tree = tree, node = nodI,
                    only.leaf = TRUE, self.include = TRUE)
     names(tipI) <- nodeLab_alias
     
@@ -107,7 +107,7 @@ selNode <- function(pr = NULL, obj = NULL,
     
     ##------------ proportions on nodes -----------
     # a vector of node numbers with node labels as names
-    vnum <- transNode(tree = tree, node = names(pars),
+    vnum <- convertNode(tree = tree, node = names(pars),
                       message = FALSE)
     
     # proportion for each node
@@ -118,7 +118,7 @@ selNode <- function(pr = NULL, obj = NULL,
     
     ##---------- sample ---------------
     if (any(duplicated(nodeLab))) {
-        tt <- cbind.data.frame(nodeNum = transNode(tree = tree,
+        tt <- cbind.data.frame(nodeNum = convertNode(tree = tree,
                                                    node = names(nodP),
                                                    message = FALSE),
                                nodeLab = nodeLab,
@@ -127,7 +127,7 @@ selNode <- function(pr = NULL, obj = NULL,
                                numTip = numI,
                                stringsAsFactors =FALSE)
     } else {
-        tt <- cbind.data.frame(nodeNum = transNode(tree = tree,
+        tt <- cbind.data.frame(nodeNum = convertNode(tree = tree,
                                                    node = names(nodP),
                                                    message = FALSE),
                                nodeLab = nodeLab,
@@ -155,15 +155,15 @@ selNode <- function(pr = NULL, obj = NULL,
     # remove those overlapped
     if (!is.null(skip)) {
         if (is.character(skip)) {
-            skip <- transNode(tree = tree, node = skip,
+            skip <- convertNode(tree = tree, node = skip,
                               message = FALSE)
         }
-        tipS <- findOS(tree = tree, node = skip,
+        tipS <- findDescendant(tree = tree, node = skip,
                        only.leaf = TRUE, self.include = TRUE)
         tipS <- unlist(tipS)
         
         rmp <- vapply(st$nodeNum, FUN = function(x){
-            tx <- findOS(node = x, tree = tree, only.leaf = TRUE,
+            tx <- findDescendant(node = x, tree = tree, only.leaf = TRUE,
                          self.include = TRUE)
             ix <- intersect(tipS, unlist(tx))
             length(ix) == 0

@@ -54,14 +54,14 @@ aggDS <- function(TSE,
     tree <- colTree(TSE)
     cell_info <- colData(TSE)[, c(sample_id, group_id, cluster_id)]
     colnames(cell_info) <- c("sample_id", "group_id", "cluster_id")
-    cell_info$node <- transNode(tree = tree, 
+    cell_info$node <- convertNode(tree = tree, 
                                 node = as.character(cell_info$cluster_id))
     
     # tree information
     if (message) {
         message("Extracting tree information ...") }
     node <- showNode(tree = tree, only.leaf = FALSE, use.alias = TRUE)
-    desd_list <- findOS(tree = tree, node = node, 
+    desd_list <- findDescendant(tree = tree, node = node, 
                         only.leaf = TRUE, self.include = TRUE)
     names(desd_list) <- names(node)
     
@@ -140,11 +140,11 @@ aggDS <- function(TSE,
     # on leaf level
     cell_tab <- table(cell_info[["cluster_id"]],
                       cell_info[["sample_id"]])
-    rn <- transNode(tree = tree,
+    rn <- convertNode(tree = tree,
                     node = rownames(cell_tab))
     
     # on all levels
-    desd <- findOS(tree = tree, node = node,
+    desd <- findDescendant(tree = tree, node = node,
                    only.leaf = TRUE, self.include = TRUE)
     cell_tab <- as.matrix(cell_tab)
     clus_tab <- lapply(desd, FUN = function(x) {

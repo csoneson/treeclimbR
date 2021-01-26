@@ -98,10 +98,10 @@ calcTreeCounts <- function(d_se, tree) {
     
     # counts on all nodes
     nodes <- showNode(tree = tree, only.leaf = FALSE)
-    counts_all <- aggValue(x = counts_leaf, rowLevel = nodes, 
-                           FUN = function(x) {sum(x, na.rm = TRUE)})
+    counts_all <- aggTSE(x = counts_leaf, rowLevel = nodes, 
+                         rowFun = function(x) {sum(x, na.rm = TRUE)})
     
-    lab <- transNode(tree = tree, 
+    lab <- convertNode(tree = tree, 
                      node = rowLinks(counts_all)$nodeNum, use.alias = TRUE)
     rowData(counts_all) <- rowData(counts_all) %>%
         data.frame() %>%

@@ -72,6 +72,6 @@ buildTree <- function(d_se, dist_method = "euclidean",
     tree_h <- hclust(dist(md, method = dist_method), method = hclust_method)
     
     tree_p <- as.phylo(tree_h)
-    tree_p <- addLabel(tree_p)
+    tree_p <- addLabel(tree_p, on = "internal")
     return(tree_p)
 }

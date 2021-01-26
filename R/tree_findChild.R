@@ -50,7 +50,7 @@ findChild <- function(tree, node,
     matN <- matTree(tree = tree)
     
     if (is.character(node)) {
-        numA <- transNode(tree = tree, node = node,
+        numA <- convertNode(tree = tree, node = node,
                           use.alias = TRUE,
                           message = FALSE)
     } else {
@@ -79,7 +79,7 @@ findChild <- function(tree, node,
     
     matNN <- apply(matN, 2, FUN = function(x) {
         xe <- x[!is.na(x)]
-        xx <- transNode(tree = tree, node = xe,
+        xx <- convertNode(tree = tree, node = xe,
                         use.alias = use.alias,
                         message = FALSE)
         x[!is.na(x)] <- xx
@@ -98,7 +98,7 @@ findChild <- function(tree, node,
     })
     
     # final output (node number or label)
-    names(chl) <- transNode(tree = tree, node = numA,
+    names(chl) <- convertNode(tree = tree, node = numA,
                             use.alias = use.alias,
                             message = FALSE)
     return(chl)

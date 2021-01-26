@@ -37,8 +37,8 @@
 #'            hjust = -0.5, vjust = 0.7, size = 4) +
 #'     geom_text2(aes(label = label), color = "darkorange",
 #'                hjust = -0.1, vjust = -0.7, size = 4) +
-#'     geom_hilight(13, fill = "blue", alpha = 0.4) +
-#'     geom_hilight(16, fill = "orange", alpha = 0.4)
+#'     geom_hilight(node = 13, fill = "blue", alpha = 0.4) +
+#'     geom_hilight(node = 16, fill = "orange", alpha = 0.4)
 #' 
 #' # generate score for each node     
 #' pv <- rep(0.1, 19)
@@ -152,7 +152,7 @@ getLevel <- function(tree, score_data, drop, score_column,
         message("searching the descendant nodes of the candidate nodes... ")
     }
     
-    descI <- findOS(tree = tree, node = nodeI, only.leaf = FALSE,
+    descI <- findDescendant(tree = tree, node = nodeI, only.leaf = FALSE,
                     self.include = FALSE, use.alias = TRUE)
     chlI <- findChild(tree = tree, node = nodeI)
     

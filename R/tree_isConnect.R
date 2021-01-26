@@ -28,11 +28,11 @@ isConnect <- function(tree, node_a, node_b, connect = "any") {
     }
     
     if (is.character(node_a)) {
-        node_a <- transNode(tree = tree, node = node_a, use.alias = FALSE)
+        node_a <- convertNode(tree = tree, node = node_a, use.alias = FALSE)
     }
     
     if (is.character(node_b)) {
-        node_b <- transNode(tree = tree, node = node_b, use.alias = FALSE)
+        node_b <- convertNode(tree = tree, node = node_b, use.alias = FALSE)
     }
     # path
     path <- matTree(tree = tree)

@@ -18,7 +18,7 @@
 #' 
 #' @importFrom edgeR topTags
 #' @importFrom dplyr arrange slice filter '%>%'
-#' @importFrom TreeSummarizedExperiment transNode
+#' @importFrom TreeSummarizedExperiment convertNode
 #' @importFrom stats p.adjust
 #' @importFrom data.table rbindlist
 #' @export
@@ -44,7 +44,7 @@
 #'                                 colData = colInf,
 #'                                 rowTree = tinyTree)
 #' nodes <- showNode(tree = tinyTree, only.leaf = FALSE)
-#' tse <- aggValue(x = lse, rowLevel = nodes)
+#' tse <- aggTSE(x = lse, rowLevel = nodes)
 #' 
 #' dd <- model.matrix( ~ group, data = colInf)
 #' out <- runDA(TSE = tse, feature_on_row = TRUE,
@@ -68,7 +68,7 @@ nodeResult <- function(object, n = 10,
                       sort.by = sort_by,
                       p.value = p_value)$table
         # add nodes
-        nod <- transNode(tree = object$tree, node = rownames(tt))
+        nod <- convertNode(tree = object$tree, node = rownames(tt))
         ct <- cbind(node = nod, tt)
     }
     
@@ -80,7 +80,7 @@ nodeResult <- function(object, n = 10,
                           sort.by = sort_by, 
                           p.value = p_value)$table
             # add nodes
-            nod <- transNode(tree = object$tree, 
+            nod <- convertNode(tree = object$tree, 
                              node = names(res)[x])
             cx <- cbind(xx, node = nod, feature = rownames(xx),
                         stringsAsFactors = FALSE)

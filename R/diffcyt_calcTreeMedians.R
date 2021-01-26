@@ -131,8 +131,8 @@ calcTreeMedians <- function(d_se, tree, message = FALSE) {
         x <- sid[i]
         sel <- rd$sample_id == x
         xx <- d_lse[sel, ]
-        ax <- aggValue(x = xx, rowLevel = nodes, 
-                       FUN = function(x){
+        ax <- aggTSE(x = xx, rowLevel = nodes, 
+                       rowFun = function(x){
                            median(x, na.rm = TRUE)
                        }, message = message)
         

@@ -51,11 +51,11 @@ tpr <- function(tree, truth, found,
     }
     
    if (is.character(truth)) {
-        truth <- transNode(tree = tree, node = truth,
+        truth <- convertNode(tree = tree, node = truth,
                            message = FALSE)
     }
     if (is.character(found)) {
-        found <- transNode(tree = tree, node = found,
+        found <- convertNode(tree = tree, node = found,
                            message = FALSE)
     }
     
@@ -113,7 +113,7 @@ tpr <- function(tree, truth, found,
         c(tp = 1, pos = 1)
     } else {
         # ================= with diff ===========================
-        nodeT <- findOS(tree = tree, node = truth,
+        nodeT <- findDescendant(tree = tree, node = truth,
                         only.leaf = only.leaf, self.include = TRUE)
         nodeT <- unique(unlist(nodeT))
         
@@ -122,7 +122,7 @@ tpr <- function(tree, truth, found,
             c(tp = 0, pos = length(nodeT)) 
         } else {
             # found 
-            nodeF <- findOS(tree = tree, node = found,
+            nodeF <- findDescendant(tree = tree, node = found,
                             only.leaf = only.leaf, self.include = TRUE)
             nodeF <- unique(unlist(nodeF))
             # true positive & positive

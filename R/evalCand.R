@@ -42,7 +42,7 @@
 #' @importFrom stats p.adjust
 #' @importFrom dplyr select
 #' @importFrom data.table rbindlist
-#' @importFrom TreeSummarizedExperiment findOS
+#' @importFrom TreeSummarizedExperiment findDescendant
 #' @export
 #' @return a list.
 #'   \describe{
@@ -161,9 +161,9 @@ evalCand <- function(tree,
             xx <- node_list[[x]]
             ps.x <- pseudo_leaf[[x]]
             
-            desd.x <- findOS(tree = tree, node = xx,
+            desd.x <- findDescendant(tree = tree, node = xx,
                              only.leaf = FALSE, self.include = TRUE)
-            leaf.x <- findOS(tree = tree, node = xx,
+            leaf.x <- findDescendant(tree = tree, node = xx,
                              only.leaf = TRUE, self.include = TRUE)
             psLeaf.x <- lapply(desd.x, FUN = function(x) {
                 intersect(x, ps.x)})
@@ -176,7 +176,7 @@ evalCand <- function(tree,
         names(info_nleaf) <- names(score_data)
     } else {
         node_all <- showNode(tree = tree, only.leaf = FALSE)
-        desc_all <- findOS(tree = tree, node = node_all,
+        desc_all <- findDescendant(tree = tree, node = node_all,
                            only.leaf = TRUE, self.include = TRUE)
         info_nleaf <- data.frame(
             node = node_all,

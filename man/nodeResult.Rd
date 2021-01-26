@@ -60,7 +60,7 @@ lse <- TreeSummarizedExperiment(assays = list(count),
                                 colData = colInf,
                                 rowTree = tinyTree)
 nodes <- showNode(tree = tinyTree, only.leaf = FALSE)
-tse <- aggValue(x = lse, rowLevel = nodes)
+tse <- aggTSE(x = lse, rowLevel = nodes)
 
 dd <- model.matrix( ~ group, data = colInf)
 out <- runDA(TSE = tse, feature_on_row = TRUE,

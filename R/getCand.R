@@ -126,7 +126,7 @@ getCand <- function(tree, t = NULL,
         
         # For an internal nodes, if itself and all its descendant have q score
         # equals 1 or -1, pick the node
-        br_I <- findOS(tree = tree, node = node_0, only.leaf = FALSE,
+        br_I <- findDescendant(tree = tree, node = node_0, only.leaf = FALSE,
                          self.include = TRUE, use.alias = TRUE)
         
         sel_1 <- lapply(br_I, FUN = function(x){
@@ -157,7 +157,7 @@ getCand <- function(tree, t = NULL,
         })
         node_rm <- unlist(node_rm)
         node_2 <- setdiff(node_1, node_rm)
-        desd_2 <- findOS(tree = tree, node = node_2, 
+        desd_2 <- findDescendant(tree = tree, node = node_2, 
                          only.leaf = FALSE, self.include = TRUE)
         desd_2 <- unlist(desd_2)
         

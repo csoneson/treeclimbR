@@ -49,11 +49,11 @@ fdr <- function(tree, truth, found,
     }
     
     if (is.character(truth)) {
-        truth <- transNode(tree = tree, node = truth,
+        truth <- convertNode(tree = tree, node = truth,
                            message = FALSE)
     }
     if (is.character(found)) {
-        found <- transNode(tree = tree, node = found,
+        found <- convertNode(tree = tree, node = found,
                            message = FALSE)
     }
     
@@ -114,7 +114,7 @@ fdr <- function(tree, truth, found,
     } else {
         
         # =================   with discovery  =======================
-        nodeF <- findOS(tree = tree, node = found,
+        nodeF <- findDescendant(tree = tree, node = found,
                         only.leaf = only.leaf, self.include = TRUE)
         nodeF <- unique(unlist(nodeF))
         
@@ -123,7 +123,7 @@ fdr <- function(tree, truth, found,
             c(fd = length(nodeF), disc = length(nodeF)) 
         } else {
            # if has diff
-           nodeT <- findOS(tree = tree, node = truth,
+           nodeT <- findDescendant(tree = tree, node = truth,
                            only.leaf = only.leaf, self.include = TRUE)
            nodeT <- unique(unlist(nodeT))
            # false discovery & discovery
