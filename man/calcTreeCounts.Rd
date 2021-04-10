@@ -30,6 +30,7 @@ leaf level of the tree here. More details about the data could be found in
 \examples{
 # For a complete workflow example demonstrating each step, please see the
 # vignette of 'diffcyt'
+\dontrun{
 library(diffcyt)
 
 # Function to create random data (one sample)
@@ -76,6 +77,7 @@ tr <- buildTree(d_se)
 
 # calculate medians on nodes of a tree
 d_medians_tree <- calcTreeCounts(d_se = d_se, tree = tr)
+}
 }
 \author{
 Ruizhu Huang

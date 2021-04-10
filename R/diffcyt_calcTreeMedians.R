@@ -17,7 +17,7 @@
 #'   medians for each cluster-sample-marker combination).
 #'
 #'   The data object is assumed to contain a factor \code{marker_class} in the
-#'   column meta-data (see \code{\link{prepareData}}), which indicates the
+#'   column meta-data (see \code{\link[diffcyt]{prepareData}}), which indicates the
 #'   protein marker class for each column of data (\code{"type"},
 #'   \code{"state"}, or \code{"none"}).
 #'
@@ -48,7 +48,7 @@
 #' @examples 
 #' # For a complete workflow example demonstrating each step, please see the
 #' # vignette of 'diffcyt'
-#' 
+#' \dontrun{
 #' library(diffcyt)
 #' 
 #' # Function to create random data (one sample)
@@ -95,6 +95,7 @@
 #' 
 #' # calculate medians on nodes of a tree
 #' d_medians_tree <- calcTreeMedians(d_se = d_se, tree = tr)
+#' }
 
 calcTreeMedians <- function(d_se, tree, message = FALSE) {
     
@@ -168,6 +169,7 @@ calcTreeMedians <- function(d_se, tree, message = FALSE) {
     rownames(rd) <- labs
     
     # column data
+    group_id <- sample_id <- NULL
     cd <- rowData(d_se) %>%
         data.frame() %>%
         select(group_id, sample_id) %>%

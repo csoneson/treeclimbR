@@ -15,7 +15,8 @@
 #'   contain a factor marker_class.
 #' @param tree A phylo object from \code{\link{buildTree}}
 #' 
-#' @importFrom dplyr mutate
+#' @importFrom dplyr mutate "%>%" 
+#' @import SummarizedExperiment
 #' @import TreeSummarizedExperiment
 #' @importFrom methods is 
 #' @export
@@ -25,6 +26,7 @@
 #' @examples 
 #' # For a complete workflow example demonstrating each step, please see the
 #' # vignette of 'diffcyt'
+#' \dontrun{
 #' library(diffcyt)
 #' 
 #' # Function to create random data (one sample)
@@ -71,6 +73,7 @@
 #' 
 #' # calculate medians on nodes of a tree
 #' d_medians_tree <- calcTreeCounts(d_se = d_se, tree = tr)
+#' }
 
 calcTreeCounts <- function(d_se, tree) {
     
@@ -85,7 +88,7 @@ calcTreeCounts <- function(d_se, tree) {
     }
     
     # counts on the leaf level
-    d_counts <- calcCounts(d_se)
+    d_counts <- .calcCounts(d_se)
     
     # build a TreeSummarizedExperiment object
     rlab <- as.character(rowData(d_counts)$cluster_id)
@@ -111,3 +114,42 @@ calcTreeCounts <- function(d_se, tree) {
 
     return(counts_all)
     }
+
+#' @importFrom reshape2 acast
+#' @importFrom dplyr "%>%" group_by 
+#' @importFrom tidyr complete
+#' @import SummarizedExperiment
+
+.calcCounts <- function(d_se) {
+    if (!is(d_se, "SummarizedExperiment")) {
+        stop("Data object must be a 'SummarizedExperiment'")
+    }
+    if (!("cluster_id" %in% (colnames(rowData(d_se))))) {
+        stop("Data object does not contain cluster labels. Run 'generateClusters' to generate cluster labels.")
+    }
+    rowdata_df <- as.data.frame(rowData(d_se))
+    n_cells <- rowdata_df %>% group_by(cluster_id, sample_id, 
+                                       .drop = FALSE) %>% tally %>% complete(sample_id)
+    n_cells <- acast(n_cells, cluster_id ~ sample_id, value.var = "n", 
+                     fill = 0)
+    if (nrow(n_cells) < nlevels(rowData(d_se)$cluster_id)) {
+        ix_missing <- which(!(levels(rowData(d_se)$cluster_id) %in% 
+                                  rownames(n_cells)))
+        n_cells_tmp <- matrix(0, nrow = length(ix_missing), ncol = ncol(n_cells))
+        rownames(n_cells_tmp) <- ix_missing
+        n_cells <- rbind(n_cells, n_cells_tmp)
+        n_cells <- n_cells[order(as.numeric(rownames(n_cells))), 
+                           , drop = FALSE]
+    }
+    n_cells_total <- rowSums(n_cells)
+    row_data <- data.frame(cluster_id = factor(rownames(n_cells), 
+                                               levels = levels(rowData(d_se)$cluster_id)), n_cells = n_cells_total, 
+                           stringsAsFactors = FALSE)
+    col_data <- metadata(d_se)$experiment_info
+    n_cells <- n_cells[, match(col_data$sample_id, colnames(n_cells)), 
+                       drop = FALSE]
+    stopifnot(all(col_data$sample_id == colnames(n_cells)))
+    d_counts <- SummarizedExperiment(assays = list(counts = n_cells), 
+                                     rowData = row_data, colData = col_data)
+    d_counts
+}

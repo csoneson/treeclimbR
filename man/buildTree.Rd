@@ -32,6 +32,7 @@ build a tree from clusters
 \examples{
 # For a complete workflow example demonstrating each step in the 'diffcyt'
 # pipeline, please see the diffcyt vignette.
+\dontrun{
 library(diffcyt)
 
 # Function to create random data (one sample)
@@ -75,5 +76,5 @@ d_se <- generateClusters(d_se)
 
 # build a tree
 tr <- buildTree(d_se)
-
+}
 }

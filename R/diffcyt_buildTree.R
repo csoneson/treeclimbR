@@ -13,14 +13,15 @@
 #'   or "centroid" (= UPGMC). Please refer to \code{method} in
 #'   \code{\link[stats]{hclust}}
 #' 
-#' @importFrom diffcyt calcMediansByClusterMarker
 #' @importFrom stats hclust dist
 #' @importFrom ape as.phylo
+#' @importFrom SummarizedExperiment assay
 #' @export
 #' @return A phylo object
 #' @examples 
 #' # For a complete workflow example demonstrating each step in the 'diffcyt'
 #' # pipeline, please see the diffcyt vignette.
+#' \dontrun{
 #' library(diffcyt)
 #' 
 #' # Function to create random data (one sample)
@@ -64,11 +65,15 @@
 #' 
 #' # build a tree
 #' tr <- buildTree(d_se)
-#' 
+#' }
 buildTree <- function(d_se, dist_method = "euclidean",
                       hclust_method = "average") {
-    d_medians <- calcMediansByClusterMarker(d_se)
-    md <- assay(d_medians)[, metadata(d_medians)$id_type_markers]
+    
+    d_medians <- medianByClusterMarker(SE = d_se, 
+                                       marker_in_column = TRUE,
+                                       column_cluster = "cluster_id")
+    type_markers <- colData(d_se)$marker_class %in% "type"
+    md <- assay(d_medians)[, type_markers]
     tree_h <- hclust(dist(md, method = dist_method), method = hclust_method)
     
     tree_p <- as.phylo(tree_h)

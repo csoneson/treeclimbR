@@ -28,7 +28,7 @@ A TreeSummarizedExperiment object.  Calculate median marker
   medians for each cluster-sample-marker combination).
 
   The data object is assumed to contain a factor \code{marker_class} in the
-  column meta-data (see \code{\link{prepareData}}), which indicates the
+  column meta-data (see \code{\link[diffcyt]{prepareData}}), which indicates the
   protein marker class for each column of data (\code{"type"},
   \code{"state"}, or \code{"none"}).
 
@@ -64,7 +64,7 @@ leaf level of the tree here. More details about the data could be found in
 \examples{
 # For a complete workflow example demonstrating each step, please see the
 # vignette of 'diffcyt'
-
+\dontrun{
 library(diffcyt)
 
 # Function to create random data (one sample)
@@ -111,4 +111,5 @@ tr <- buildTree(d_se)
 
 # calculate medians on nodes of a tree
 d_medians_tree <- calcTreeMedians(d_se = d_se, tree = tr)
+}
 }

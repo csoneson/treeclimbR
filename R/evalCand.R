@@ -106,6 +106,8 @@ evalCand <- function(tree,
                      use_pseudo_leaf = FALSE,
                      message = FALSE) {
     
+    cand_list <- is_valid <- rej_leaf <- rej_node <- NULL
+    level_name <- rej_pseudo_leaf <- rej_pseudo_node <- NULL
     if (!is(tree, "phylo")) {
         stop("tree should be a phylo object.")
     }
