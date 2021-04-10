@@ -139,6 +139,17 @@ calcTreeMedians <- function(d_se, tree, message = FALSE) {
         # counts
         cx <- assays(ax)[[1]]
         
+        # for missing nodes
+        nam <- setdiff(labs, rownames(cx))
+        if (length(nam)) {
+            mx <- matrix(NA, nrow = length(nam), ncol = ncol(cx))
+            rownames(mx) <- nam
+            colnames(mx) <- colnames(cx)
+        } else {
+            mx <- NULL
+        }
+        
+        cx <- rbind(cx, mx)[labs, ]
         return(cx)
     })
     
