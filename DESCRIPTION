@@ -12,7 +12,7 @@ Description: The arrangement of hypotheses in a hierarchical structure appears
     is desired. Our package treeclimbR is such a tool that using a tuning 
     parameter to generate candidate resolutions and further select the best 
     resolution level.
-License: GPL (>=2)
+License: Artistic-2.0
 Encoding: UTF-8
 LazyData: true
 Depends: R(>= 3.6.0), TreeSummarizedExperiment(>= 1.99.0)
