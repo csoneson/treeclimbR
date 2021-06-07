@@ -1,5 +1,8 @@
 
 # treeclimbR
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/fionarhuang/treeclimbR/workflows/R-CMD-check/badge.svg)](https://github.com/fionarhuang/treeclimbR/actions)
+<!-- badges: end -->
 
 `treeclimbR` is an algorithm to pinpoint the data-dependent resosultion on hierarchcial hypotheses.
 
