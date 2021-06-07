@@ -11,7 +11,7 @@ on:
       - main
       - master
 
-name: R-CMD-check_more
+name: R-CMD-check
 
 jobs:
   R-CMD-check:
