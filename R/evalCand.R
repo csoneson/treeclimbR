@@ -112,8 +112,10 @@ evalCand <- function(tree,
     
     type <- match.arg(type)
     if (type == "single") {
-        score_data <- list(score_data)
+        score_data <- list(data.frame(score_data))
         levels <- list(levels)
+    } else {
+        score_data <- lapply(score_data, data.frame)
     }
     
     
@@ -235,6 +237,7 @@ evalCand <- function(tree,
         # adjust p-values
         p_i <- mapply(FUN = function(x, y) {
             x[y, p_column]
+            
         }, score_data, sel_i, SIMPLIFY = FALSE)
         adp_i <- p.adjust(p = unlist(p_i), method = method)
         rej_i <- adp_i <= limit_rej
