@@ -15,6 +15,9 @@
 #'   difference.
 #' @param threshold Default is 0.05. A value to hinder an internal to be picked
 #'   due to randomness.
+#' @param pct_na A numeric value. Default is 0.5. Internal nodes that are 
+#'   finally selected should have more than half of direct children (> 0.5) 
+#'   without missing p values. 
 #' @param message A logical value, TRUE or FALSE. Default is FALSE. If TRUE, the
 #'   message about running process is printed out.
 #'
@@ -58,6 +61,7 @@ getCand <- function(tree, t = NULL,
                     score_data, node_column,
                     p_column, sign_column,
                     threshold = 0.05,
+                    pct_na = 0.5,
                     message = FALSE) {
     
     if (!is(tree, "phylo")) {
@@ -117,7 +121,7 @@ getCand <- function(tree, t = NULL,
         sel_0 <- lapply(chl_I, FUN = function(x){
             xx <- match(x, node_col)
             qx <- score_data[[name_q]][xx]
-            sum(!is.na(qx))/length(qx) > 0.5
+            sum(!is.na(qx))/length(qx) > pct_na
         })
         sel_0 <- unlist(sel_0)
         node_0 <- node_in[sel_0]
@@ -171,68 +175,4 @@ getCand <- function(tree, t = NULL,
     
 }
 
-# getCand <- function(tree, t = NULL,
-#                     score_data, node_column,
-#                     p_column, sign_column,
-#                     message = FALSE) {
-#     
-#     if (!is(tree, "phylo")) {
-#         stop("tree should be a phylo object.")
-#     }
-#     
-#     if (is.null(t)) {
-#         t <- c(seq(0.01, 0.04, by = 0.01), 
-#                seq(0.05, 1, by = 0.05))
-#     }
-#     # a list to store levels under different ts
-#     level_list <- vector("list", length(t) + 1)
-#     names(level_list) <- c(t, "leaf")
-#     
-#     p_col <- score_data[[p_column]]
-#     sign_col <- score_data[[sign_column]]
-#     
-#     for (i in seq_along(t)) {
-#         if (message) {
-#             message("Calculating U at t = ", t[i], " ...")
-#         }
-#         
-#         # S
-#         name_S <- paste0("S_", t[i])
-#         score_data[[name_S]] <- ifelse(p_col > t[i], 1-p_col,
-#                                        1) * sign(sign_col)
-#         
-#         # U
-#         name_U <- paste0("U_", t[i])
-#         score_data <- treeScore(tree = tree,
-#                                 score_data = score_data,
-#                                 node_column = node_column,
-#                                 score_column = name_S,
-#                                 new_score = name_U)
-#         
-#         # U: transform u to U (U = abs(u))
-#         score_data[[name_U]] <- abs(score_data[[name_U]])
-#         
-#         # get levels
-#         if (message) {
-#             message("Searching the candidate level at t = ", t[i], " ...")
-#         }
-#         lev <- getLevel(tree = tree,
-#                         score_data = score_data,
-#                         score_column = name_U,
-#                         node_column = node_column,
-#                         get_max = TRUE,
-#                         parent_first = TRUE,
-#                         message = FALSE)
-#         level_list[[i]] <- lev[[node_column]][lev$keep]
-#         
-#     }
-#     
-#     # the leaf level
-#     leaf <- showNode(tree = tree, only.leaf = TRUE)
-#     level_list$leaf <- leaf
-#     
-#     out <- list(candidate_list = level_list,
-#                 score_data = score_data)
-#     return(out)
-#     
-# }
+
