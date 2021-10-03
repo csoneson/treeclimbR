@@ -12,6 +12,7 @@ getCand(
   p_column,
   sign_column,
   threshold = 0.05,
+  pct_NA = 0.5,
   message = FALSE
 )
 }
@@ -38,6 +39,10 @@ due to randomness.}
 
 \item{message}{A logical value, TRUE or FALSE. Default is FALSE. If TRUE, the
 message about running process is printed out.}
+
+\item{pct_na}{A numeric value. Default is 0.5. Internal nodes that are 
+finally selected should have more than half of direct children (> 0.5) 
+without missing p values.}
 }
 \value{
 A list includes \code{candidate_list} and \code{score_data}. 
