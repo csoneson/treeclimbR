@@ -6,8 +6,8 @@
 \usage{
 getData(
   tree_hm,
-  type = c("heatmap", "row_name", "column_name", "title", "column_anno",
-    "column_order", "column_split")
+  type = c("heatmap", "row_name", "column_name", "title", "column_anno", "column_order",
+    "column_split")
 )
 }
 \arguments{
