@@ -35,8 +35,8 @@ between two options are in the help page of \code{\link[edgeR]{glmQLFit}}.}
 \item{contrast}{A numeric vector specifying one contrast of
 the linear model coefficients to be tested equal to zero. Its length
 must equal to the number of columns of design. If NULL, the last
-coefficient will be tested equal to zero. Please refer to \code{contrast} in
-\code{\link[edgeR]{glmQLFTest}} and \code{\link[edgeR]{glmLRT}}.}
+coefficient will be tested equal to zero. Please refer to \code{contrast}
+in \code{\link[edgeR]{glmQLFTest}} and \code{\link[edgeR]{glmLRT}}.}
 
 \item{normalize}{A logical value, TRUE or FALSE, to specify whether
 \code{count} should be normalized. The default is TRUE.}
@@ -90,7 +90,7 @@ colnames(y) <- paste(rep(LETTERS[1:2], each = 3),
 rownames(y) <- paste("gene", 1:ngenes, sep=".")
 
 # analysis
-out <- edgerWrp(count = y, option = "glm", 
+out <- edgerWrp(count = y, option = "glm",
                 design = design, normalize = FALSE)
 
 }

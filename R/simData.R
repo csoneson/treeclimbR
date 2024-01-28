@@ -19,8 +19,8 @@
 #' @param from.A,from.B The branch node labels of branches A and B for which the
 #'   signal is swapped. Default, both are NULL. In simulation, we select two
 #'   branches (A & B) to have differential abundance under different conditions.
-#'   One could specify these two branches or let \code{simData} choose. (Note: If
-#'   \code{from.A} is NULL, \code{from.B} is set to NULL).
+#'   One could specify these two branches or let \code{simData} choose. (Note:
+#'   If \code{from.A} is NULL, \code{from.B} is set to NULL).
 #' @param minTip.A The minimum number of leaves in branch A
 #' @param maxTip.A The maximum number of leaves in branch A
 #' @param minTip.B The minimum number of leaves in branch B
@@ -149,7 +149,7 @@ simData <- function(tree = NULL, data = NULL,
                     pct = 0.6, nSam = c(50, 50),
                     mu = 10000, size = NULL,
                     n = 1, FUN = sum, message = FALSE){
-    
+
     # -------------------------------------------------------------------------
     # provide (tree & data)
     if (is.null(obj)) {
@@ -165,8 +165,8 @@ simData <- function(tree = NULL, data = NULL,
                            ratio = ratio, adjB = adjB, pct = pct,
                            nSam = nSam, mu = mu, size = size,
                            n = n, FUN = FUN) }
-        
-        # -------------------------------------------------------------------------
+
+        # ----------------------------------------------------------------------
         # provide a TreeSummarizedExperiment object
     } else {
         pars <- obj$pars
@@ -174,13 +174,13 @@ simData <- function(tree = NULL, data = NULL,
             obj <- parEstimate(obj = obj)
             pars <- metadata(obj)$assays.par
             tree <- rowTree(obj)
-            
+
             if(length(assays(obj)) > 1){
                 message("\n more than one table provided in the assays;
                         only the first one would be used. \n")}
             data <- assays(obj)[[1]]
             }
-        
+
         obj <- .doData(tree = tree, data = pars,
                        scenario = scenario, from.A = from.A,
                        from.B = from.B,
@@ -190,7 +190,7 @@ simData <- function(tree = NULL, data = NULL,
                        ratio = ratio, adjB = adjB, pct = pct,
                        nSam = nSam, mu = mu, size = size,
                        n = n, FUN = FUN)
-        
+
     }
     return(obj)
 }
@@ -211,8 +211,8 @@ simData <- function(tree = NULL, data = NULL,
 #' @param from.A,from.B The branch node labels of branches A and B for which the
 #'   signal is swapped. Default, both are NULL. In simulation, we select two
 #'   branches (A & B) to have differential abundance under different conditions.
-#'   One could specify these two branches or let \code{.doData} choose. (Note: If
-#'   \code{from.A} is NULL, \code{from.B} is set to NULL).
+#'   One could specify these two branches or let \code{.doData} choose. (Note:
+#'   If \code{from.A} is NULL, \code{from.B} is set to NULL).
 #' @param minTip.A The minimum number of leaves in branch A
 #' @param maxTip.A The maximum number of leaves in branch A
 #' @param minTip.B The minimum number of leaves in branch B
@@ -242,8 +242,8 @@ simData <- function(tree = NULL, data = NULL,
 #'   generate the library size for each simulated sample.
 #' @param n A numeric value to specify how many count tables would be generated
 #'   with the same settings. Default is one and one count table would be
-#'   obtained at the end. If above one, the output of \code{.doData} is a list of
-#'   matrices (count tables). This is useful, when one needs multiple
+#'   obtained at the end. If above one, the output of \code{.doData} is a list
+#'   of matrices (count tables). This is useful, when one needs multiple
 #'   simulations.
 #' @param FUN A function to derive the count at each internal node based on its
 #'   descendant leaves, e.g. sum, mean. The argument of the function is a
@@ -306,12 +306,12 @@ simData <- function(tree = NULL, data = NULL,
                     pct = 0.6, nSam = c(50, 50),
                     mu = 50, size = 10000,
                     n = 1, FUN = sum){
-    
+
     # ---check input is in correct format --------
     if(!is(tree, "phylo")){
         stop("tree requires a phylo object")
     }
-    
+
     if (!is.list(data)) {
         if (!is.matrix(data)) {
             stop("data requires a matrix")
@@ -321,11 +321,11 @@ simData <- function(tree = NULL, data = NULL,
             }
         }
     }
-    
-    
+
+
     # estimate parameters for Dirichlet-multinomial distribution
     data <- parEstimate(obj = data)
-    
+
     if (!is.null(from.A) && !is.null(from.B)) {
         pk <- .infLoc(tree = tree, data = data,
                       from.A = from.A, from.B = from.B)
@@ -336,22 +336,22 @@ simData <- function(tree = NULL, data = NULL,
                        maxTip.B = maxTip.B, minPr.A = minPr.A,
                        maxPr.A = maxPr.A, ratio = ratio)
     }
-    
-    
+
+
     beta <- .doFC(tree = tree, data = data,
                   scenario = scenario,
                   branchA = pk$A,
                   branchB = pk$B,
                   ratio = pk$`ratio`,
                   adjB = adjB, pct = pct)
-    
-    
-    
+
+
+
     count <- .doCount(data = data, FC = beta,
                       nSam = nSam, mu = mu,
                       size = size, n = n)
-    
-    
+
+
     if(is.list(count)) {
         grpDat <- data.frame(group = substr(colnames(count[[1]]), 1, 2))
         lse <- TreeSummarizedExperiment(assays = count,
@@ -360,10 +360,10 @@ simData <- function(tree = NULL, data = NULL,
                                             branch = pk,
                                             scenario = scenario),
                                         colData = grpDat,
-                                        rowTree = tree, 
+                                        rowTree = tree,
                                         rowNodeLab = rownames(count[[1]]))
     }
-    
+
     if(is.matrix(count)) {
         grpDat <- data.frame(group = substr(colnames(count), 1, 2))
         lse <- TreeSummarizedExperiment(assays = list(count),
@@ -415,7 +415,7 @@ simData <- function(tree = NULL, data = NULL,
                      minTip.B = 0, maxTip.B = Inf,
                      minPr.A = 0, maxPr.A = 1,
                      ratio = 1) {
-    
+
     # tip proportions estimated from real data
     # rename using the alias of node label
     pars <- parEstimate(obj = data)$pi
@@ -426,7 +426,7 @@ simData <- function(tree = NULL, data = NULL,
     names(pars) <- nam2
     # df <- data.frame(pr = pars, nodeLab = nam1,
     #                  nodNum = val1, nodeLab_alias = nam2)
-    
+
     # proportion of internal nodes
     leaf <- setdiff(tree$edge[, 2], tree$edge[, 1])
     leaf <- sort(leaf)
@@ -437,13 +437,13 @@ simData <- function(tree = NULL, data = NULL,
                    self.include = TRUE,
                    use.alias = TRUE)
     desI <- lapply(desI, FUN = function(x) {
-        convertNode(tree = tree, node = x, 
+        convertNode(tree = tree, node = x,
                   use.alias = TRUE, message = FALSE)})
     names(desI) <- convertNode(tree = tree, node = nodI,
                              use.alias = TRUE, message = FALSE)
     nodP <- mapply(function(x, y) {sum(x[y])},
                    x = list(pars), y = desI)
-    
+
     # matrix: abundance proprotion & the number of descendant leaves
     lenI <- unlist(lapply(desI, length))
     tt <- cbind(nodP, lenI)
@@ -451,7 +451,7 @@ simData <- function(tree = NULL, data = NULL,
                               node = nodI,
                               use.alias = TRUE,
                               message = FALSE)
-    
+
     # return error when the given limits for
     # proportion are outside
     # the range estimated from the real data.
@@ -463,7 +463,7 @@ simData <- function(tree = NULL, data = NULL,
         stop("minPr.A*ratio is above the maximum value of
              node proportion; try lower ratio", signif(min(tt[, 1]), 2), "\n")
     }
-    
+
     # only consider nodes with enough tips and
     # desired proportion level
     if (is.null(from.A)) {
@@ -479,7 +479,7 @@ simData <- function(tree = NULL, data = NULL,
         }
         tt.sel <- tt[match(from.A, rownames(tt)), , drop = FALSE]
     }
-    
+
     st <- tt.sel[tt.sel[, 2] >= minTip.A &
                  tt.sel[, 2] <= maxTip.A &
                  tt.sel[, 1] >= minPr.A &
@@ -491,27 +491,27 @@ simData <- function(tree = NULL, data = NULL,
     }
     st2 <- tt[tt[, 2] >= minTip.B &
               tt[, 2] <= maxTip.B, , drop = FALSE]
-    
+
     # fold change between any two nodes (large/small)
     mm <- (1/st[, 1]) %o% st2[, 1]
     rownames(mm) <- rownames(st)
-    
+
     maxM <- max(mm, na.rm = TRUE)
     minM <- min(mm, na.rm = TRUE)
-    
+
     if (ratio > 1 & ratio > maxM) {
         stop("could not find any two branches which fullfill
              these requirement;
              try lower ratio, lower minTip.A, or higher maxTip.B",
              "\n")
     }
-    
+
     if (ratio < 1 & ratio < minM) {
         stop("could not find any two branches which fullfill
              these requirement; try higher ratio or lower minTip.B",
              "\n")
     }
-    
+
     nm <- mm
     nm[] <- vapply(
         seq_len(ncol(mm)),
@@ -519,11 +519,11 @@ simData <- function(tree = NULL, data = NULL,
             # each column
             cn <- colnames(mm)
             cx <- cn[x]
-            
+
             # all rows
             rn <- rownames(mm)
             tx <- desI[rn]
-            
+
             cs <- lapply(
                 tx,
                 FUN = function(x) {
@@ -536,16 +536,16 @@ simData <- function(tree = NULL, data = NULL,
         },
         FUN.VALUE = numeric(nrow(mm))
     )
-    
+
     colnames(nm) <- colnames(mm)
     rownames(nm) <- rownames(mm)
-    
+
     dif <- abs(nm - ratio)
     wi <- which(dif == min(dif, na.rm = TRUE), arr.ind = TRUE)
     si <- sample(seq_len(nrow(wi)), 1)
     an <- rownames(nm)[wi[si, 1]]
     bn <- colnames(nm)[wi[si, 2]]
-    
+
     du <- cbind.data.frame(
         "A" = convertNode(tree = tree, node = an,
                         use.alias = FALSE, message = FALSE),
@@ -560,10 +560,10 @@ simData <- function(tree = NULL, data = NULL,
                          digits = 4),
         stringsAsFactors =  FALSE
     )
-    
+
     rownames(du) <- NULL
     return(du)
-    
+
     }
 
 #' Provide the information of two branches
@@ -581,7 +581,7 @@ simData <- function(tree = NULL, data = NULL,
 
 .infLoc <- function(tree = NULL, data = NULL,
                     from.A = NULL, from.B = NULL) {
-    
+
     # tip proportions estimated from real data
     # rename using the alias of node label
     pars <- parEstimate(obj = data)$pi
@@ -590,34 +590,34 @@ simData <- function(tree = NULL, data = NULL,
     nam2 <- convertNode(tree = tree, node = val1, use.alias = TRUE,
                       message = FALSE)
     names(pars) <- nam2
-    
+
     # nodes
     leaf <- setdiff(tree$edge[, 2], tree$edge[, 1])
     leaf <- sort(leaf)
     nodI <- setdiff(tree$edge[, 1], leaf)
     nodI <- sort(nodI)
     nodA <- c(leaf, nodI)
-    
+
     # find descendants
     desI <- findDescendant(tree = tree, node = nodI,
                    only.leaf = TRUE,
                    self.include = TRUE,
                    use.alias = TRUE)
     desI <- lapply(desI, FUN = function(x) {
-        convertNode(tree = tree, node = x, 
+        convertNode(tree = tree, node = x,
                   use.alias = TRUE, message = FALSE)})
-        
+
     nodP <- mapply(function(x, y) {
         sum(x[y])
     }, x = list(pars), y = desI)
-    
+
     # matrix: abundance proprotion & the number of descendant leaves
     lenI <- unlist(lapply(desI, length))
     tt <- cbind(nodP, lenI)
     rownames(tt) <- convertNode(tree = tree, node = nodI,
                               use.alias = TRUE,
                               message = FALSE)
-    
+
     # if both branches are given
     labA <- ifelse(is.character(from.A), from.A,
                    convertNode(tree = tree, node = from.A,
@@ -639,7 +639,7 @@ simData <- function(tree = NULL, data = NULL,
         "B_prop" = round(tt[labB, 1],
                          digits = 4),
         stringsAsFactors =  FALSE)
-    
+
     rownames(du) <- NULL
     return(du)
 }
@@ -680,38 +680,38 @@ simData <- function(tree = NULL, data = NULL,
     nodI <- setdiff(tree$edge[, 1], leaf)
     nodI <- sort(nodI)
     nodA <- c(leaf, nodI)
-    
+
     # beta
     beta <- rep(1, length(leaf))
     names(beta) <- convertNode(tree = tree, node = leaf,
                              use.alias = TRUE)
-    
+
     ## the label of nodes on branch A
     # leaves
     tip.A <- findDescendant(tree = tree, node = branchA,
                     only.leaf = TRUE, self.include = TRUE,
                     use.alias = TRUE)
-    tip.A <- convertNode(tree = tree, node = unlist(tip.A), 
+    tip.A <- convertNode(tree = tree, node = unlist(tip.A),
                        use.alias = TRUE, message = FALSE)
     # nodes
     nodA.A <- findDescendant(tree = tree, node = branchA,
                      only.leaf = FALSE, self.include = TRUE,
                      use.alias = TRUE)
-    nodA.A <- convertNode(tree = tree, node = unlist(nodA.A), 
+    nodA.A <- convertNode(tree = tree, node = unlist(nodA.A),
                         use.alias = TRUE, message = FALSE)
     # internal nodes
     nodI.A <- setdiff(nodA.A, tip.A)
-    
+
     # descendants of internal nodes
     des.IA <- findDescendant(tree = tree, node = nodI.A,
                      only.leaf = TRUE,
                      self.include = TRUE,
                      use.alias = TRUE)
     des.IA <- lapply(des.IA, FUN = function(x) {
-        convertNode(tree = tree, node = x, 
+        convertNode(tree = tree, node = x,
                   use.alias = TRUE, message = FALSE)
     })
-    
+
     # tip proportions estimated from real data
     # rename using the alias of node label
     pars <- parEstimate(obj = data)$pi
@@ -720,7 +720,7 @@ simData <- function(tree = NULL, data = NULL,
     nam2 <- convertNode(tree = tree, node = val1, use.alias = TRUE,
                       message = FALSE)
     names(pars) <- nam2
-    
+
     # swap proportion of two branches: tips in the same branch
     # have the same fold change
     if (scenario == "BS") {
@@ -728,12 +728,12 @@ simData <- function(tree = NULL, data = NULL,
         tip.B <- findDescendant(tree = tree, node = branchB,
                         only.leaf = TRUE, self.include = TRUE,
                         use.alias = TRUE)
-        tip.B <- convertNode(tree = tree, node = unlist(tip.B), 
+        tip.B <- convertNode(tree = tree, node = unlist(tip.B),
                            use.alias = TRUE, message = FALSE)
         beta[tip.A] <- ratio
         beta[tip.B] <- 1/ratio
     }
-    
+
     # swap proportion of two branches: tips in the same branch
     # have different fold changes but same direction (either
     # increase or decrease)
@@ -741,13 +741,13 @@ simData <- function(tree = NULL, data = NULL,
         tip.B <- findDescendant(tree = tree, node = branchB,
                         only.leaf = TRUE, self.include = TRUE,
                         use.alias = TRUE)
-        tip.B <- convertNode(tree = tree, node = unlist(tip.B), 
+        tip.B <- convertNode(tree = tree, node = unlist(tip.B),
                            use.alias = TRUE, message = FALSE)
-        
+
         # proportion on two branches
         propA <- sum(pars[tip.A])
         propB <- sum(pars[tip.B])
-        
+
         # make sure the ratio is above zero
         if (propB < propA) {
             rA <- 1-propB/propA
@@ -756,33 +756,33 @@ simData <- function(tree = NULL, data = NULL,
             rA <- 0
             rB <- 1-propA/propB
         }
-        
+
         # swap proportions on two branches and randomly assign a fold change
         # value to the the leaves on a branch (log fold change in the same
         # branch should have the same sign)
-        
+
         # a1 <- runif(length(tip.A))
         # sa <- sum(a1*pars[tip.A])
         # a2 <- (propB - propA)/sa
         # a3 <- a1 * a2 + 1
         # beta[tip.A] <- a3
-        # 
+        #
         # b1 <- runif(length(tip.B), probA/probB, 1)
         # sb <- sum(b1 * pars[tip.B])
         # b2 <- (propA - propB)/sb
         # b3 <- b1 * b2 + 1
-        # 
-        
+        #
+
         a1 <- runif(length(tip.A), rA, 1)
         sa <- sum(a1*pars[tip.A])
         a2 <- (propB - propA)/sa
         a3 <- a1 * a2 + 1
         beta[tip.A] <- a3
-        
+
         # b1 <- propB/propA
         # b2 <- runif(length(tip.B), 1 - b1)
         # b3 <- b1 + b2
-        
+
         # b3 <- propA/propB
         b1 <- runif(length(tip.B), rB, 1)
         sb <- sum(b1 * pars[tip.B])
@@ -790,11 +790,11 @@ simData <- function(tree = NULL, data = NULL,
         b3 <- b1 * b2 + 1
         beta[tip.B] <- b3
     }
-    
+
     # distribute signal randomly in one branch and evenly in
     # another branch
     # tip proportions estimated from real data
-    
+
     if (scenario == "SS") {
         iter <- 1
         while (iter <= 200) {
@@ -807,18 +807,18 @@ simData <- function(tree = NULL, data = NULL,
             })
             subA <- unlist(subA)
             sumA <- sum(pars[selA])
-            
+
             # the abundance proportion of the selected tips
             # are roughly equal to its number proportion in the branch
             # avoid (select all low or high abundance tips in the branch)
-            
+
             spr <- sumA/sum(pars[tip.A])
             ind.pr <- spr <= (pct + 0.05) & spr >= (pct - 0.05)
-            
+
             if(all(subA <= 0.6) & ind.pr){break}
             iter <- iter+1
         }
-        
+
         if (length(branchB) == 0) {
             stop("No suitable branches.
                  Try another branchA or another max of ratio... \n")
@@ -826,10 +826,10 @@ simData <- function(tree = NULL, data = NULL,
         tip.B <- findDescendant(tree = tree, node = branchB,
                         only.leaf = TRUE, self.include = TRUE,
                         use.alias = TRUE)
-        tip.B <- convertNode(tree = tree, node = unlist(tip.B), 
+        tip.B <- convertNode(tree = tree, node = unlist(tip.B),
                            use.alias = TRUE, message = FALSE)
         sumB <- sum(pars[tip.B])
-        
+
         if(is.null(adjB)){
             beta[selA] <- sumB/sumA
             beta[tip.B] <- sumA/sumB
@@ -841,7 +841,7 @@ simData <- function(tree = NULL, data = NULL,
             beta[selA] <- (sumB*(1-adjB)+sumA)/sumA
         }
         }
-    
+
     # rename beta with the node label instead of the alias of node label
     names(beta) <- convertNode(tree = tree, node = leaf,
                              use.alias = FALSE)
@@ -880,16 +880,16 @@ simData <- function(tree = NULL, data = NULL,
     pars <- parEstimate(obj = data)
     theta <- pars$theta
     gplus <- (1 - theta) / theta
-    
+
     # tip proportion
     pr <- pars$pi
     p.c1 <- pr
     p.c2 <- pr * FC[names(p.c1)]
-    
+
     # parameters for dirichlet distribution
     g.c1 <- p.c1 * gplus
     g.c2 <- p.c2 * gplus
-    
+
     resList <- lapply(seq_len(n), FUN = function(j) {
         # condition 1
         n1 <- nSam[1]
@@ -905,9 +905,9 @@ simData <- function(tree = NULL, data = NULL,
         for (i in seq_len(n1)) {
             Mp.c1[i, ] <- rdirichlet(1, g.c1)[1, ]
             Mobs.c1[i, ] <- rmultinom(1, nSeq1[i], prob = Mp.c1[i, ])[, 1]
-            
+
         }
-        
+
         # condition 2
         n2 <- nSam[2]
         Mp.c2 <- matrix(0, nrow = n2, ncol = length(g.c2))
@@ -919,23 +919,23 @@ simData <- function(tree = NULL, data = NULL,
         } else {
             nSeq2 <- rnbinom(n = n2, mu = mu, size = size)
         }
-        
+
         for (i in seq_len(n2)) {
             Mp.c2[i, ] <- rdirichlet(1, g.c2)[1, ]
             Mobs.c2[i, ] <- rmultinom(1, nSeq2[i], prob = Mp.c2[i, ])[, 1]
         }
-        
+
         cb <- t(rbind(Mobs.c1, Mobs.c2))
-        
+
         return(cb)}
     )
-    
+
     if (n == 1) {
         count <-  do.call(rbind, resList)
     } else {
         count <- resList
     }
-    
+
     return(count)
 }
 

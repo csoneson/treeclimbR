@@ -18,7 +18,7 @@
 #' via the argument \code{design}. More details about the calculation of
 #' normalization factor could be found from
 #' \code{\link[edgeR]{calcNormFactors}}.
-#' 
+#'
 #' @param TSE A TreeSummarizedExperiment object.
 #' @param feature_on_row A logical value, TRUE or FALSE. If TRUE (default),
 #'   features or entities (e.g. genes, OTUs) are in rows of the \code{assays}
@@ -29,7 +29,7 @@
 #'   \code{\link[edgeR]{glmFit}} and \code{\link[edgeR]{glmLRT}} are used;
 #'   otherwise, \code{\link[edgeR]{glmQLFit}} and
 #'   \code{\link[edgeR]{glmQLFTest}} are used. Details about the difference
-#'   between two options are in the help page of \code{\link[edgeR]{glmQLFit}}.  
+#'   between two options are in the help page of \code{\link[edgeR]{glmQLFit}}.
 #' @param design A numeric matrix. It must be of full column rank. Defaults to
 #'   use all columns of sample annotation data to create the design matrix. The
 #'   sample annotation data is stored in the \code{colData} of \code{tse} when
@@ -54,7 +54,7 @@
 #'   \code{\link[edgeR]{calcNormFactors}} for more details.
 #'   It could be "bonferroni", "holm", "hochberg", "hommel", "BH", or "BY". This
 #'   is passed to \code{adjust.method} of \code{\link[edgeR]{topTags}}
-#' @param group_column The column name of group 
+#' @param group_column The column name of group
 #' @param design_terms The names of columns from \code{colData} (if samples in
 #'   columns) that are used to generate design matrix. This is ignored if
 #'   \strong{design} is provided.
@@ -75,16 +75,17 @@
 #'      \code{\link[edgeR]{glmLRT}} depends on the specified \code{option}.}
 #'   \item{tree}{The hiearchical structure of entities that was stored in the
 #'      input \code{tse}}
-#'   \item{nodes_drop}{A vector storing the alias node labels of entities. 
+#'   \item{nodes_drop}{A vector storing the alias node labels of entities.
 #'      These entities are filtered before analysis due to low counts. }
 #' }
-#' 
+#'
 #' @examples
 #' library(TreeSummarizedExperiment)
 #' library(treeclimbR)
 #' set.seed(1)
 #' count <- matrix(rnbinom(300,size=1,mu=10),nrow=10)
-#' colnames(count) <- paste(rep(LETTERS[1:3], each = 10), rep(1:10,3), sep = "_")
+#' colnames(count) <- paste(rep(LETTERS[1:3], each = 10),
+#'                          rep(1:10, 3), sep = "_")
 #' rownames(count) <- tinyTree$tip.label
 #' count[1, ] <- 0
 #' rowInf <- DataFrame(var1 = sample(letters[1:3], 10, replace = TRUE),
@@ -97,75 +98,75 @@
 #'                                 rowTree = tinyTree)
 #' nodes <- showNode(tree = tinyTree, only.leaf = FALSE)
 #' tse <- aggTSE(x = lse, rowLevel = nodes)
-#' 
+#'
 #' dd <- model.matrix( ~ group, data = colInf)
 #' out <- runDA(TSE = tse, feature_on_row = TRUE,
 #'              assay = 1, option = "glmQL",
-#'              design = dd, contrast = NULL, 
-#'              normalize = TRUE, 
+#'              design = dd, contrast = NULL,
+#'              normalize = TRUE,
 #'              group_column = "group")
 
 runDA <- function(TSE, feature_on_row = TRUE, assay = NULL,
                   option = c("glm", "glmQL"),
-                  design = NULL, contrast = NULL, 
-                  filter_min_count = 10, 
+                  design = NULL, contrast = NULL,
+                  filter_min_count = 10,
                   filter_min_total_count = 15,
                   filter_large_n = 10,
-                  filter_min_prop = 0.7, 
+                  filter_min_prop = 0.7,
                   normalize = TRUE, normalize_method = "TMM",
-                  group_column = "group", 
+                  group_column = "group",
                   design_terms = "group", ...) {
-    
+
     # require a TreeSummarizedExperiment object
     if (!is(TSE, "TreeSummarizedExperiment")) {
         stop("TSE should be a TreeSummarizedExperiment.")
     }
-    
+
     # If not specified, the first assays is used
     if (is.null(assay)) {
         assay <- 1
     }
-    
+
     # decide the model to use
     option <- match.arg(option)
-    
+
     # extract: count, sample information, node information
     if (feature_on_row) {
         # count
         count <- assays(TSE)[[assay]]
-        
+
         # node information
         ld <- rowLinks(TSE)
-        
+
         # sample information
         sp_info <- colData(TSE)
-        
+
         # tree
         tree <- rowTree(TSE)
     } else {
         # the count table
         count <- t(assays(TSE)[[assayNum]])
-        
+
         # extract link data
         ld <- colLinks(TSE)
-        
+
         # sample information
         sp_info <- rowData(TSE)
-        
+
         # tree
         tree <- colTree(TSE)
     }
-    
+
     # add rownames
     rownames(ld) <- rownames(count) <- ld$nodeLab_alias
-    
-    
+
+
     # ---------------------------- design matrix -----------------------
     if (is.null(design)) {
         formula <- as.formula(paste("~", paste(design_terms, collapse = "+")))
         design <- model.matrix(formula, data = data.frame(sp_info))
     }
-    
+
     ### ------------ filter lowly expressed features --------------------------
     # This is from (https://f1000research.com/articles/5-1438/v2).
     # The filtering is on count-per-million (CPM)
@@ -174,23 +175,23 @@ runDA <- function(TSE, feature_on_row = TRUE, assay = NULL,
     # the cutoff
     tip_count <- count[ld$isLeaf, ]
     lib_size <- apply(tip_count, 2, sum)
-    keep <- filterByExpr(count, design = design, 
+    keep <- filterByExpr(count, design = design,
                          lib.size = lib_size,
-                         min.count = filter_min_count, 
+                         min.count = filter_min_count,
                          min.total.count = filter_min_total_count,
                          large.n = filter_large_n,
                          min.prop = filter_min_prop)
-     
+
     count_keep <- count[keep, ]
     isLow <- !keep
     feature_drop <- rownames(count)[isLow]
     # ---------------------------- run edgeR -----------------------
-    lrt <- edgerWrp(count = count_keep, lib_size = lib_size , 
+    lrt <- edgerWrp(count = count_keep, lib_size = lib_size ,
                     option = option,
                     design = design, contrast = contrast,
-                    normalize = normalize, 
+                    normalize = normalize,
                     normalize_method = normalize_method, ...)
-    
+
     # -------------------------- output  ---------------------------------
     if (sum(isLow)) {
         out <- list(edgeR_results = lrt,
@@ -201,9 +202,9 @@ runDA <- function(TSE, feature_on_row = TRUE, assay = NULL,
                     nodes_drop = NULL,
                     tree = tree)
     }
-    
+
    return(out)
-    
+
 }
 
 
