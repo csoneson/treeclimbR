@@ -14,8 +14,8 @@
 #'   heatmap is the same as the width of the tree.
 #' @param cell_line_color A color for the lines among cells of the heatmap. The
 #'   default is NA.
-#' @param cell_line_size A value to specify the size of lines among cells of the heatmap. The
-#'   default is 0.
+#' @param cell_line_size A value to specify the size of lines among cells of
+#'   the heatmap. The default is 0.
 #' @param column_order A character vector that includes the column name of
 #'   \strong{hm_data} to specify the display order of the heatmap. It's ignored
 #'   when \strong{column_split} is provided.
@@ -40,7 +40,8 @@
 #'   split along y-axis. The defaut is 2.
 #' @param split_label_hjust The hjust for the labels of the column split: 0
 #'   (left aligned); 0.5 (centered); 1 (right aligned). The default is 0.5
-#' @param split_label_vjust Similar to \code{split_label_hjust}, but control vertical justification.
+#' @param split_label_vjust Similar to \code{split_label_hjust}, but control
+#'   vertical justification.
 #' @param column_anno A named vector to specify labels that are used to
 #'   annotate columns of heatmap.
 #' @param column_anno_size A numeric value to specify the size of the annotation
@@ -65,7 +66,8 @@
 #' @param show_rownames A logical value to specify whether row names should
 #'   be displayed. The default is FALSE.
 #' @param rownames_position "right" or "left".
-#' @param rownames_label A named vector to annotate the rows of heatmap instead the row names of \strong{hm_data}.
+#' @param rownames_label A named vector to annotate the rows of heatmap instead
+#'   the row names of \strong{hm_data}.
 #' @param rownames_angle A numeric value. The angle of row names.
 #' @param rownames_offset_x A numeric value to shift row names on x-axis. The
 #'   defaut is 0.

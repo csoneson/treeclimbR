@@ -79,8 +79,8 @@ heatmap is the same as the width of the tree.}
 \item{cell_line_color}{A color for the lines among cells of the heatmap. The
 default is NA.}
 
-\item{cell_line_size}{A value to specify the size of lines among cells of the heatmap. The
-default is 0.}
+\item{cell_line_size}{A value to specify the size of lines among cells of
+the heatmap. The default is 0.}
 
 \item{column_order}{A character vector that includes the column name of
 \strong{hm_data} to specify the display order of the heatmap. It's ignored
@@ -117,7 +117,8 @@ split along y-axis. The defaut is 2.}
 \item{split_label_hjust}{The hjust for the labels of the column split: 0
 (left aligned); 0.5 (centered); 1 (right aligned). The default is 0.5}
 
-\item{split_label_vjust}{Similar to \code{split_label_hjust}, but control vertical justification.}
+\item{split_label_vjust}{Similar to \code{split_label_hjust}, but control
+vertical justification.}
 
 \item{column_anno}{A named vector to specify labels that are used to
 annotate columns of heatmap.}
@@ -171,7 +172,8 @@ defaut is 0.}
 \item{rownames_hjust}{The hjust for row names: 0 (left aligned); 0.5
 (centered); 1 (right aligned).}
 
-\item{rownames_label}{A named vector to annotate the rows of heatmap instead the row names of \strong{hm_data}.}
+\item{rownames_label}{A named vector to annotate the rows of heatmap instead
+the row names of \strong{hm_data}.}
 
 \item{show_title}{A logical value to specify whether the title should
 be displayed. The default is FALSE.}

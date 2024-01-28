@@ -15,8 +15,8 @@
 #' @param from.A,from.B The branch node labels of branches A and B for which the
 #'   signal is swapped. Default, both are NULL. In simulation, we select two
 #'   branches (A & B) to have differential abundance under different conditions.
-#'   One could specify these two branches or let \code{simData} choose. (Note: If
-#'   \code{from.A} is NULL, \code{from.B} is set to NULL).
+#'   One could specify these two branches or let \code{simData} choose. (Note:
+#'   If \code{from.A} is NULL, \code{from.B} is set to NULL).
 #' @param minTip.A The minimum number of leaves in branch A
 #' @param maxTip.A The maximum number of leaves in branch A
 #' @param minTip.B The minimum number of leaves in branch B
@@ -108,20 +108,20 @@
 #' @author Ruizhu Huang
 #'
 #' @examples
-#' 
+#'
 #' library(TreeSummarizedExperiment)
 #' library(ggtree)
-#' 
+#'
 #' data("tinyTree")
-#' 
+#'
 #' set.seed(1)
 #' n <- 10
 #' prob <- runif(n = 10)
 #' prob <- prob/sum(prob)
 #' names(prob) <- tinyTree$tip.label
-#' 
+#'
 #' tse <- simMult(pr = prob, libSize = 500, tree = tinyTree)
-#' 
+#'
 
 
 simMult <- function(pr, libSize, tree, scenario = "BS",
@@ -132,25 +132,25 @@ simMult <- function(pr, libSize, tree, scenario = "BS",
                     ratio = 2, adjB = NULL,
                     pct = 0.6, nSam = c(50, 50),
                     n = 1, message = FALSE) {
-    
+
     if (length(libSize) == 1) {
         libSize <- rep(libSize, 2)
     }
-    
+
     # select branches
-    data = list(pi = pr, theta = NULL)
-    
+    data <- list(pi = pr, theta = NULL)
+
     leaf <- unique(setdiff(tree$edge[, 2], tree$edge[, 1]))
     leaf <- sort(leaf)
     if (message) {
         message("prepare branches ...")
     }
     if (scenario == "S0") {
-        
+
         if (message) {
             message("calculate the fold change ...")
         }
-        
+
         beta <- rep(1, length(leaf))
         names(beta) <- convertNode(tree = tree, node = leaf, use.alias = FALSE)
         pk <- NULL
@@ -160,13 +160,13 @@ simMult <- function(pr, libSize, tree, scenario = "BS",
             pk <- .infLoc(tree = tree, data = data,
                           from.A = from.A, from.B = from.B)
         } else {
-            pk <- .pickLoc(tree = tree, data = data, 
+            pk <- .pickLoc(tree = tree, data = data,
                            from.A  = from.A, minTip.A = minTip.A,
                            maxTip.A = maxTip.A, minTip.B = minTip.B,
                            maxTip.B = maxTip.B, minPr.A = minPr.A,
                            maxPr.A = maxPr.A, ratio = ratio)
         }
-        
+
         if (message) {
             message("calculate the fold change ...")
         }
@@ -176,12 +176,12 @@ simMult <- function(pr, libSize, tree, scenario = "BS",
                       branchA = pk$A,
                       branchB = pk$B,
                       ratio = pk$`ratio`,
-                      adjB = adjB, pct = pct) 
+                      adjB = adjB, pct = pct)
     }
-    
-    
-    
-    
+
+
+
+
     # generate counts
     if (message) {
         message("generate counts ...")
@@ -204,7 +204,7 @@ simMult <- function(pr, libSize, tree, scenario = "BS",
         # Mp.c2 <- rmultinom(n = nSam[2], size = libSize, prob = p.c2)
         Mp <- cbind(Mp.c1, Mp.c2)
         rownames(Mp) <- names(pr)
-        colnames(Mp) <- c(paste0("C1_", seq_len(nSam[1])), 
+        colnames(Mp) <- c(paste0("C1_", seq_len(nSam[1])),
                           paste0("C2_", seq_len(nSam[2])))
         return(Mp)
     })
@@ -213,7 +213,7 @@ simMult <- function(pr, libSize, tree, scenario = "BS",
     } else {
         count <- resList
     }
-    
+
     # output as a TreeSummarizedExperiment object
     if (message) {
         message("output the TreeSummarizedExperiment object ...")
@@ -226,10 +226,10 @@ simMult <- function(pr, libSize, tree, scenario = "BS",
                                             branch = pk,
                                             scenario = scenario),
                                         colData = grpDat,
-                                        rowTree = tree, 
+                                        rowTree = tree,
                                         rowNodeLab = rownames(count[[1]]))
     }
-    
+
     if(is.matrix(count)) {
         grpDat <- data.frame(group = substr(colnames(count), 1, 2))
         lse <- TreeSummarizedExperiment(assays = list(count),
@@ -242,7 +242,7 @@ simMult <- function(pr, libSize, tree, scenario = "BS",
                                         rowNodeLab = rownames(count))
     }
     return(lse)
-    
+
 }
 
 

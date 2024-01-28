@@ -47,8 +47,8 @@ in the row and samples in the column. Only use when \code{obj} is NULL.}
 \item{from.A, from.B}{The branch node labels of branches A and B for which the
 signal is swapped. Default, both are NULL. In simulation, we select two
 branches (A & B) to have differential abundance under different conditions.
-One could specify these two branches or let \code{simData} choose. (Note: If
-\code{from.A} is NULL, \code{from.B} is set to NULL).}
+One could specify these two branches or let \code{simData} choose. (Note:
+If \code{from.A} is NULL, \code{from.B} is set to NULL).}
 
 \item{minTip.A}{The minimum number of leaves in branch A}
 

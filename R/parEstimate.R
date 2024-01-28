@@ -3,12 +3,11 @@
 # If data is a list, we confirme this list includes two elements pi and theta,
 # and directly return data as output
 .estimateA <- function(obj) {
-    
+
     if (is.list(obj)) {
         ind <- setequal(names(obj), c("pi", "theta"))
         if (!ind) {
-            stop("Error: obj is a list;
-                 it should provide pi and theta")
+            stop("obj is a list; it should provide pi and theta")
         }
         parList <- obj
         } else {
@@ -17,16 +16,16 @@
             }
             estP <- rep(0, nrow(obj))
             names(estP) <- rownames(obj)
-            
+
             DirMultOutput <- dirmult(data = t(obj))
             # tip proportion
             estP[names(DirMultOutput$pi)] <- DirMultOutput$pi
-            
+
             # parameter alpha for dirichlet distribution
             theta <- DirMultOutput$theta
             parList <-  list(pi = estP, theta = theta)
         }
-    
+
     return(parList)
 }
 
@@ -35,29 +34,28 @@
 .estimateB <- function(obj) {
     ind <- setequal(names(obj), c("pi", "theta"))
     if (!ind) {
-        stop("Error: obj is a list;
-             it should provide pi and theta")
+        stop("obj is a list; it should provide pi and theta")
     }
     parList <- obj
-    
-    
+
+
     return(parList)
     }
 
 # If obj is a TreeSummarizedExperiment, the estimated parameters pi and theta
 # is organized as a list and store in metadata with name assays.par
-.estimateC<- function(obj) {
-    
+.estimateC <- function(obj) {
+
     # node label
     nodeLab <- rowLinks(obj)$nodeLab
     if (is.null(nodeLab)) {
         nodeLab <- rownames(obj)
     }
-    
+
     # estimate parameters
     pars <- metadata(obj)$assays.par
     ind <- setequal(names(pars), c("pi", "theta"))
-    
+
     if (!ind) {
         tdat <- t(assays(obj)[[1]])
         colnames(tdat) <- nodeLab
@@ -66,15 +64,15 @@
         DirMultOutput <- dirmult(data = tdat)
         # tip proportion
         estP[names(DirMultOutput$pi)] <- DirMultOutput$pi
-        
-        
+
+
         # parameter alpha for dirichlet distribution
         theta <- DirMultOutput$theta
         metadata(obj)$assays.par <-  list(pi = estP, theta = theta)
     }
-    
+
     return(obj)
-    
+
 }
 
 #' Parameter estimation in Dirichlet-multinomial distribution
@@ -92,7 +90,7 @@
 #' @importFrom dirmult dirmult
 #' @importFrom methods is
 #' @import TreeSummarizedExperiment
-#' @importFrom SummarizedExperiment assays 
+#' @importFrom SummarizedExperiment assays
 #' @importFrom S4Vectors metadata
 #' @export
 #' @return A list including \dQuote{pi} and \dQuote{theta}
@@ -100,7 +98,7 @@
 #' @author Ruizhu Huang
 #' @examples
 #'
-#' 
+#'
 #' set.seed(1)
 #' y <- matrix(rnbinom(100,size=1,mu=10),nrow=10)
 #' colnames(y) <- paste("S", 1:10, sep = "")
@@ -114,18 +112,18 @@
 #' metadata(res)$assays.par
 #'
 parEstimate <- function(obj) {
-    
+
     stopifnot(any(class(obj) %in% c("matrix", "list",
                                  "TreeSummarizedExperiment")))
-    
+
     if (is.matrix(obj)) {
         out <- .estimateA(obj = obj)
     }
-    
+
     if (is.list(obj)) {
         out <- .estimateB(obj = obj)
     }
-    
+
     if (is(obj, "TreeSummarizedExperiment")) {
         out <- .estimateC(obj = obj)
     }

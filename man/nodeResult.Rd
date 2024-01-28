@@ -48,7 +48,8 @@ library(TreeSummarizedExperiment)
 library(treeclimbR)
 set.seed(1)
 count <- matrix(rnbinom(300,size=1,mu=10),nrow=10)
-colnames(count) <- paste(rep(LETTERS[1:3], each = 10), rep(1:10,3), sep = "_")
+colnames(count) <- paste(rep(LETTERS[1:3], each = 10),
+                         rep(1:10, 3), sep = "_")
 rownames(count) <- tinyTree$tip.label
 count[1, ] <- 0
 rowInf <- DataFrame(var1 = sample(letters[1:3], 10, replace = TRUE),
@@ -65,10 +66,10 @@ tse <- aggTSE(x = lse, rowLevel = nodes)
 dd <- model.matrix( ~ group, data = colInf)
 out <- runDA(TSE = tse, feature_on_row = TRUE,
              assay = 1, option = "glmQL",
-             design = dd, contrast = NULL, 
-             normalize = TRUE, 
+             design = dd, contrast = NULL,
+             normalize = TRUE,
              group_column = "group")
-             
+
 topOut <- nodeResult(out, n = 10)
 
 }

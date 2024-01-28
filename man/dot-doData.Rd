@@ -38,8 +38,8 @@ entities corresponding to tree leaves in the row and samples in the column.}
 \item{from.A, from.B}{The branch node labels of branches A and B for which the
 signal is swapped. Default, both are NULL. In simulation, we select two
 branches (A & B) to have differential abundance under different conditions.
-One could specify these two branches or let \code{.doData} choose. (Note: If
-\code{from.A} is NULL, \code{from.B} is set to NULL).}
+One could specify these two branches or let \code{.doData} choose. (Note:
+If \code{from.A} is NULL, \code{from.B} is set to NULL).}
 
 \item{minTip.A}{The minimum number of leaves in branch A}
 
@@ -81,8 +81,8 @@ generate the library size for each simulated sample.}
 
 \item{n}{A numeric value to specify how many count tables would be generated
 with the same settings. Default is one and one count table would be
-obtained at the end. If above one, the output of \code{.doData} is a list of
-matrices (count tables). This is useful, when one needs multiple
+obtained at the end. If above one, the output of \code{.doData} is a list
+of matrices (count tables). This is useful, when one needs multiple
 simulations.}
 
 \item{FUN}{A function to derive the count at each internal node based on its

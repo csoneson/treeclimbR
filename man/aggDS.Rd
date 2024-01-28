@@ -31,7 +31,9 @@ aggDS(
 \item{message}{TRUE or FALSE. If TRUE, the running process is shown.}
 }
 \value{
-A singleCellExperiment object. In \code{assays}, each matrix is data of a node on the tree. Rows of matrix represent genes and columns represent samples.
+A singleCellExperiment object. In \code{assays}, each matrix is
+    data of a node on the tree. Rows of matrix represent genes and columns
+    represent samples.
 }
 \description{
 aggregate data
@@ -50,7 +52,7 @@ cd <- data.frame(sid = rep(1:2, each = 5),
                  cid = sample(LETTERS[1:3], size = 10, replace = TRUE),
                  stringsAsFactors = FALSE)
 tse <- TreeSummarizedExperiment(assays = list(cc),
-                                colTree = tr, 
+                                colTree = tr,
                                 colNodeLab = cd$cid,
                                 colData = cd)
 
