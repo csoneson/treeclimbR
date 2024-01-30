@@ -44,8 +44,10 @@ Imports:
 Suggests:
     knitr,
     rmarkdown,
-    scales
+    scales,
+    testthat (>= 3.0.0)
 RoxygenNote: 7.3.1
 VignetteBuilder: knitr
 URL: https://github.com/csoneson/treeclimbR
 BugReports: https://github.com/csoneson/treeclimbR/issues
+Config/testthat/edition: 3
