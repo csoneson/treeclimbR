@@ -39,7 +39,7 @@ each cell.}
 
 \item{FUN}{The aggregation function.}
 
-\item{message}{A logical value, indicating whether progress messages
+\item{message}{A logical scalar, indicating whether progress messages
 should be printed to the console.}
 }
 \value{

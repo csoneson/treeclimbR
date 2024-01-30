@@ -29,12 +29,13 @@
 #'     \code{colData(TSE)} that corresponds to the initial cluster ID for
 #'     each cell.
 #' @param FUN The aggregation function.
-#' @param message A logical value, indicating whether progress messages
+#' @param message A logical scalar, indicating whether progress messages
 #'     should be printed to the console.
 #'
 #' @importFrom SummarizedExperiment SummarizedExperiment colData assays assayNames
 #' @importFrom TreeSummarizedExperiment findDescendant convertNode showNode colTree
 #' @importFrom dplyr select distinct mutate
+#' @importFrom utils flush.console
 #'
 #' @return A \code{SummarizedExperiment} object. Each assay represents the
 #'     aggregated values for one node in the tree.
@@ -163,7 +164,7 @@ aggDS <- function(TSE, assay = "counts", sample_id = "sample_id",
         if (message) {
             message(i, " out of ", length(dat_list),
                     " nodes finished", "\r", appendLF = FALSE)
-            flush.console()
+            utils::flush.console()
         }
     }
 
