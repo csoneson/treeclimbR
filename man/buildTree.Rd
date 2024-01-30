@@ -2,32 +2,37 @@
 % Please edit documentation in R/diffcyt_buildTree.R
 \name{buildTree}
 \alias{buildTree}
-\title{build a tree from clusters 
-\code{treeBuild} creates a tree (\code{phylo} class)}
+\title{Build a tree from diffcyt high-resolution cell clusters}
 \usage{
 buildTree(d_se, dist_method = "euclidean", hclust_method = "average")
 }
 \arguments{
-\item{d_se}{the data object output from
-\code{\link[diffcyt]{generateClusters}}}
+\item{d_se}{A \code{SummarizedExperiment} object, with cells as rows and
+features as columns. This should be the output
+from \code{\link[diffcyt]{generateClusters}}. The \code{colData} is
+assumed to contain a factor named \code{marker_class}.}
 
-\item{dist_method}{the distance measure to be used. This must be one of
+\item{dist_method}{The distance measure to be used. This must be one of
 "euclidean", "maximum", "manhattan", "canberra", "binary" or "minkowski".
 Any unambiguous substring can be given. Please refer to \code{method} in
-\code{\link[stats]{dist}}}
+\code{\link[stats]{dist}} for more information.}
 
-\item{hclust_method}{the agglomeration method to be used. This should be (an
+\item{hclust_method}{The agglomeration method to be used. This should be (an
 unambiguous abbreviation of) one of "ward.D", "ward.D2", "single",
 "complete", "average" (= UPGMA), "mcquitty" (= WPGMA), "median" (= WPGMC)
 or "centroid" (= UPGMC). Please refer to \code{method} in
-\code{\link[stats]{hclust}}}
+\code{\link[stats]{hclust}} for more information.}
 }
 \value{
-A phylo object
+A \code{phylo} object representing the hierarchical clustering of
+the initial high-resolution clusters.
 }
 \description{
-build a tree from clusters 
-\code{treeBuild} creates a tree (\code{phylo} class)
+Apply hierarchical clustering to build a tree starting from a high-resolution
+clustering created by the \code{\link[diffcyt]{generateClusters}} function
+from the \code{diffcyt} package. The function calculates the median
+abundance for each (ID type) marker and cluster, and uses this data to
+further aggregate the initial clusters using hierarchical clustering.
 }
 \examples{
 # For a complete workflow example demonstrating each step in the 'diffcyt'
@@ -44,24 +49,20 @@ d_random <- function(n = 20000, mean = 0, sd = 1, ncol = 20, cofactor = 5) {
 # Create random data (without differential signal)
 set.seed(123)
 d_input <- list(
-    sample1 = d_random(), 
-    sample2 = d_random(), 
-    sample3 = d_random(), 
-    sample4 = d_random()
+    sample1 = d_random(), sample2 = d_random(),
+    sample3 = d_random(), sample4 = d_random()
 )
 
 experiment_info <- data.frame(
-    sample_id = factor(paste0("sample", 1:4)), 
-    group_id = factor(c("group1", "group1", "group2", "group2")), 
-    stringsAsFactors = FALSE
+    sample_id = factor(paste0("sample", seq_len(4))),
+    group_id = factor(c("group1", "group1", "group2", "group2"))
 )
 
 marker_info <- data.frame(
-    channel_name = paste0("channel", sprintf("\%03d", 1:20)), 
-    marker_name = paste0("marker", sprintf("\%02d", 1:20)), 
-    marker_class = factor(c(rep("type", 10), rep("state", 10)), 
-                          levels = c("type", "state", "none")), 
-    stringsAsFactors = FALSE
+    channel_name = paste0("channel", sprintf("\%03d", seq_len(20))),
+    marker_name = paste0("marker", sprintf("\%02d", seq_len(20))),
+    marker_class = factor(c(rep("type", 10), rep("state", 10)),
+                          levels = c("type", "state", "none"))
 )
 
 # Prepare data
@@ -73,7 +74,10 @@ d_se <- transformData(d_se)
 # Generate clusters
 d_se <- generateClusters(d_se)
 
-# build a tree
+# Build a tree
 tr <- buildTree(d_se)
 
+}
+\author{
+Ruizhu Huang
 }
