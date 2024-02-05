@@ -39,18 +39,24 @@ test_that("aggDS works", {
                  "[[cluster_id]] %in% TreeSummarizedExperiment::colTree(TSE)$tip.label) is not TRUE",
                  fixed = TRUE)
     ## assay
-    expect_error(aggDS(TSE = tse, assay = 1, sample_id = "sid",
-                       group_id = "gid", cluster_id = "cid", FUN = sum,
-                       message = FALSE),
-                 "'assay' must be of class 'character'")
     expect_error(aggDS(TSE = tse, assay = c("counts", "counts"),
                        sample_id = "sid", group_id = "gid", cluster_id = "cid",
                        FUN = sum, message = FALSE),
-                 "'assay' must have length 1")
+                 "length(assay) == 1 is not TRUE", fixed = TRUE)
     expect_error(aggDS(TSE = tse, assay = "missing", sample_id = "sid",
                        group_id = "gid", cluster_id = "cid", FUN = sum,
                        message = FALSE),
                  "assay %in% SummarizedExperiment::assayNames(TSE)",
+                 fixed = TRUE)
+    expect_error(aggDS(TSE = tse, assay = TRUE, sample_id = "sid",
+                       group_id = "gid", cluster_id = "cid", FUN = sum,
+                       message = FALSE),
+                 "is.numeric(assay)",
+                 fixed = TRUE)
+    expect_error(aggDS(TSE = tse, assay = 42, sample_id = "sid",
+                       group_id = "gid", cluster_id = "cid", FUN = sum,
+                       message = FALSE),
+                 "assay %in% seq_len(length(SummarizedExperiment::assays(TSE)))",
                  fixed = TRUE)
     ## sample_id
     expect_error(aggDS(TSE = tse, assay = "counts", sample_id = 1,

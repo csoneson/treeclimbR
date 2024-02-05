@@ -5,7 +5,7 @@
 #' abundance matrix for each node in the tree, with columns corresponding
 #' to sample IDs and rows corresponding to the same features as the rows of
 #' the input object. The nodes correspond to
-#' either the original cell clusters, or larger metaclusters encompassing
+#' either the original sample clusters, or larger metaclusters encompassing
 #' several of the original clusters (defined by the provided column tree).
 #'
 #' @author Ruizhu Huang, Charlotte Soneson
@@ -18,7 +18,8 @@
 #'     these clusters a cell belongs to). The internal nodes represent
 #'     increasingly coarse partitions of the cells obtained by successively
 #'     merging the original clusters according to the provided column tree.
-#' @param assay The name of the assay from \code{TSE} to aggregate values from.
+#' @param assay The name or index of the assay from \code{TSE} to aggregate
+#'     values from.
 #' @param sample_id A character scalar indicating the column of
 #'     \code{colData(TSE)} that corresponds to the sample ID. These will be the
 #'     columns of the output object.
@@ -32,8 +33,10 @@
 #' @param message A logical scalar, indicating whether progress messages
 #'     should be printed to the console.
 #'
-#' @importFrom SummarizedExperiment SummarizedExperiment colData assays assayNames
-#' @importFrom TreeSummarizedExperiment findDescendant convertNode showNode colTree
+#' @importFrom SummarizedExperiment SummarizedExperiment colData assays
+#'     assayNames
+#' @importFrom TreeSummarizedExperiment findDescendant convertNode showNode
+#'     colTree
 #' @importFrom dplyr select distinct mutate
 #' @importFrom utils flush.console
 #'
@@ -72,8 +75,14 @@ aggDS <- function(TSE, assay = "counts", sample_id = "sample_id",
     ## Check arguments
     ## -------------------------------------------------------------------------
     .assertVector(x = TSE, type = "TreeSummarizedExperiment")
-    .assertScalar(x = assay, type = "character")
-    stopifnot(assay %in% SummarizedExperiment::assayNames(TSE))
+    stopifnot(length(assay) == 1)
+    if (is.character(assay)) {
+        stopifnot(assay %in% SummarizedExperiment::assayNames(TSE))
+    } else {
+        stopifnot(
+            is.numeric(assay) &&
+                assay %in% seq_len(length(SummarizedExperiment::assays(TSE))))
+    }
     .assertScalar(x = sample_id, type = "character")
     .assertScalar(x = group_id, type = "character")
     .assertScalar(x = cluster_id, type = "character")

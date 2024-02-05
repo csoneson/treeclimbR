@@ -23,7 +23,8 @@ these clusters a cell belongs to). The internal nodes represent
 increasingly coarse partitions of the cells obtained by successively
 merging the original clusters according to the provided column tree.}
 
-\item{assay}{The name of the assay from \code{TSE} to aggregate values from.}
+\item{assay}{The name or index of the assay from \code{TSE} to aggregate
+values from.}
 
 \item{sample_id}{A character scalar indicating the column of
 \code{colData(TSE)} that corresponds to the sample ID. These will be the
@@ -52,7 +53,7 @@ differential state analysis. The returned object will contain one
 abundance matrix for each node in the tree, with columns corresponding
 to sample IDs and rows corresponding to the same features as the rows of
 the input object. The nodes correspond to
-either the original cell clusters, or larger metaclusters encompassing
+either the original sample clusters, or larger metaclusters encompassing
 several of the original clusters (defined by the provided column tree).
 }
 \examples{
