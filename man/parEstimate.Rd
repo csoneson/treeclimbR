@@ -29,7 +29,7 @@ the input \code{obj} to be either a \code{matrix} or a
 \examples{
 
 library(TreeSummarizedExperiment)
-set.seed(1)
+set.seed(1L)
 y <- matrix(rnbinom(200, size = 1, mu = 10), nrow = 10)
 colnames(y) <- paste("S", seq_len(20), sep = "")
 rownames(y) <- tinyTree$tip.label

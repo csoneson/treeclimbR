@@ -16,12 +16,13 @@
         parList <- obj
     } else {
         if (is.null(rownames(obj))) {
-            stop("obj must have rownames.")
+            stop("obj must have rownames")
         }
         estP <- rep(0, nrow(obj))
         names(estP) <- rownames(obj)
 
         DirMultOutput <- dirmult::dirmult(data = t(obj))
+
         ## Tip proportion
         estP[names(DirMultOutput$pi)] <- DirMultOutput$pi
 
@@ -118,7 +119,7 @@
 #' @examples
 #'
 #' library(TreeSummarizedExperiment)
-#' set.seed(1)
+#' set.seed(1L)
 #' y <- matrix(rnbinom(200, size = 1, mu = 10), nrow = 10)
 #' colnames(y) <- paste("S", seq_len(20), sep = "")
 #' rownames(y) <- tinyTree$tip.label
