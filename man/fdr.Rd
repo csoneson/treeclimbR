@@ -7,48 +7,52 @@
 fdr(tree, truth, found, only.leaf = TRUE)
 }
 \arguments{
-\item{tree}{A phylo object}
+\item{tree}{A \code{phylo} object.}
 
-\item{truth}{Nodes that have signals (eg. differentally abundant at different
-experimental conditions.). \strong{Note:} when TPR is required at leaf
-level (\code{only.leaf = TRUE}), the descendant leaves of the given nodes
-will be found out and the TPR is calculated on the leaf level;}
+\item{truth}{True signal nodes (e.g., nodes that are truly differentially
+abundant between experimental conditions). \strong{Note:} when the
+FDR is requested at the leaf level (\code{only.leaf = TRUE}), the
+descendant leaves of the given nodes will be found and the FDR will be
+estimated on the leaf level.}
 
-\item{found}{Nodes that have been found to have signal (eg. differentally
-abundant at different experimental conditions). \strong{Note:} when TPR is
-required at leaf level (\code{only.leaf = TRUE}), the descendant leaves of
-the given nodes will be found out and the TPR is calculated on the leaf
-level;}
+\item{found}{Detected signal nodes (e.g., nodes that have been found to be
+differentially abundant via a statistical testing procedure).
+\strong{Note:} when the FDR is requested at the leaf level
+(\code{only.leaf = TRUE}), the descendant leaves of the given nodes will
+be found out and the FDR will be estimated on the leaf level.}
 
-\item{only.leaf}{A logical value, TRUE or FALSE. If TRUE, true positive rate
-is calculated at the leaf (tip) level; otherwise it is calculated at node
-level. The default is TRUE}
+\item{only.leaf}{A logical scalar. If \code{TRUE}, the false discovery rate
+is calculated at the leaf (tip) level; otherwise it is calculated at
+the node level.}
 }
 \value{
-A true positive rate
+The estimated false discovery rate.
 }
 \description{
-\code{FDR} calculates the false discovery rate on a tree structure at leaf or
+Calculate the false discovery rate on a tree structure, at either leaf or
 node level.
 }
 \examples{
-library(ggtree)
-library(TreeSummarizedExperiment)
+suppressPackageStartupMessages({
+    library(ggtree)
+    library(TreeSummarizedExperiment)
+})
+
 data("tinyTree")
-ggtree(tinyTree) + 
-   geom_text2(aes(label = node)) + 
+
+## Two branches are truly differential
+ggtree(tinyTree) +
+   geom_text2(aes(label = node)) +
    geom_hilight(node = 16, fill = "orange", alpha = 0.3) +
    geom_hilight(node = 13, fill = "blue", alpha = 0.3)
 
-# Truth: two branches have differential
-# abundance under different conditions.
+## FDR at the leaf level (1/8)
+fdr(tree = tinyTree, truth = c(16, 13),
+    found = c(15, 14), only.leaf = TRUE)
 
-fdr1 <- fdr(tree = tinyTree, truth = c(16, 13),
-            found = c(17, 14), only.leaf = TRUE)
- # fdr at the node level
-fdr2 <- fdr(tree = tinyTree, truth = c(16, 13),
-            found = c("Node_15", "Node_14"), only.leaf = FALSE)
-
+## FDR at the node level (2/14)
+fdr(tree = tinyTree, truth = c(16, 13),
+    found = c(15, 14), only.leaf = FALSE)
 
 }
 \author{
