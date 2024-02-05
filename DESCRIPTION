@@ -45,7 +45,8 @@ Suggests:
     knitr,
     rmarkdown,
     scales,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    BiocStyle
 RoxygenNote: 7.3.1
 VignetteBuilder: knitr
 URL: https://github.com/csoneson/treeclimbR
