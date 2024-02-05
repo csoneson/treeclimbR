@@ -413,7 +413,7 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
     # heatmap: x
     hm_dt <- hm_dt %>%
         mutate(variable = factor(variable, levels = column_order)) %>%
-        mutate(column_order = as.numeric(variable) -1) %>%
+        mutate(column_order = as.numeric(variable) - 1) %>%
         mutate(split_level = split_level[variable]) %>%
         mutate(split_level = as.numeric(split_level) - 1) %>%
         mutate(x = max(df$x, na.rm = TRUE) +
@@ -479,7 +479,7 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
 
 
         p <- p +
-            new_scale_color()+
+            new_scale_color() +
             geom_segment(data = anno_df,
                          aes(x = x, y = y,
                              xend = xend,
@@ -504,7 +504,7 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
                 variable = as.character(variable),
                 y_top = max(hm_dt$y + 0.5 * hm_dt$height) +
                     column_anno_gap,
-                y_bottom = min(hm_dt$y - 0.5* hm_dt$height),
+                y_bottom = min(hm_dt$y - 0.5 * hm_dt$height),
                 y = ifelse(colnames_position == "top",
                            y_top, y_bottom))
         p <- p + geom_text(data = cn_df,
