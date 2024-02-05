@@ -1,5 +1,7 @@
 #' Build a tree from diffcyt high-resolution cell clusters
 #'
+#' This is a part of the suite of functions that can be applied downstream of
+#' a \code{diffcyt} analysis.
 #' Apply hierarchical clustering to build a tree starting from a high-resolution
 #' clustering created by the \code{\link[diffcyt]{generateClusters}} function
 #' from the \code{diffcyt} package. The function calculates the median
