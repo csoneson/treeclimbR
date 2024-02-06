@@ -397,7 +397,8 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
         split_level <- sort(column_split)
 
         if (!is.null(column_order)) {
-            warning("column_order is ignored when column_split is given")}
+            warning("column_order is ignored when column_split is given")
+        }
         column_order <- names(split_level)
     } else {
         ## column_split isn't given
@@ -411,13 +412,18 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
         names(split_level) <- colnames(hm_data)
         split_level <- factor(split_level)
         if (is.null(column_order) && !cluster_column) {
-            column_order <- colnames(hm_data)}
+            column_order <- colnames(hm_data)
+        }
+        if (!is.null(column_order) && cluster_column) {
+            ## This needs to be before the next check, since that will
+            ## create column_order by clustering and thus this would
+            ## always trigger
+            warning("cluster_column is ignored because column_order is given")
+        }
         if (is.null(column_order) && cluster_column) {
             hc <- hclust(dist(t(hm_data), method = dist_method),
                          method = hclust_method)
-            column_order <- colnames(hm_data)[hc$order]}
-        if (!is.null(column_order) && cluster_column) {
-            warning("cluster_column is ignored because column_order is given")
+            column_order <- colnames(hm_data)[hc$order]
         }
     }
 
