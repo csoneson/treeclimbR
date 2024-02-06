@@ -2,7 +2,7 @@
 % Please edit documentation in R/TreeHeatmap.R
 \name{TreeHeatmap}
 \alias{TreeHeatmap}
-\title{Heatmap at arbitary levels of a tree}
+\title{Generate a heatmap corresponding to an arbitrary level of a tree}
 \usage{
 TreeHeatmap(
   tree,
@@ -61,40 +61,40 @@ TreeHeatmap(
 )
 }
 \arguments{
-\item{tree}{A phylo object}
+\item{tree}{A \code{phylo} object.}
 
-\item{tree_fig}{A ggtree object that outputs from
-\code{\link[ggtree]{ggtree}}.}
+\item{tree_fig}{A \code{ggtree} object corresponding to \code{tree}. This
+will be used to represent the tree in the resulting figure.}
 
-\item{hm_data}{A data frame. Data to plot heatmap. Its rownames should be
-able to match to nodes of the \strong{tree}.}
+\item{hm_data}{A \code{data.frame} with the values to show in the heatmap.
+The row names should correspond to the nodes of \strong{tree}.}
 
-\item{tree_hm_gap}{A numeric value to specify the gap between the tree and
+\item{tree_hm_gap}{A numeric scalar specifying the gap between the tree and
 the heatmap.}
 
-\item{rel_width}{A numeric value to specify the width of heatmap relative to
-the width of the tree. For example, \code{rel_width = 1}, the width of
-heatmap is the same as the width of the tree.}
+\item{rel_width}{A numeric scalar specifying the width of heatmap relative to
+the width of the tree. For example, if \code{rel_width = 1}, the width of
+the heatmap is the same as the width of the tree.}
 
-\item{cell_line_color}{A color for the lines among cells of the heatmap. The
-default is NA.}
+\item{cell_line_color}{A color for the lines separating cells in the
+heatmap. The default is NA.}
 
-\item{cell_line_size}{A value to specify the size of lines among cells of
-the heatmap. The default is 0.}
+\item{cell_line_size}{A numeric scalar specifying the line width for lines
+separating cells in the heatmap. The default is 0.}
 
-\item{column_order}{A character vector that includes the column name of
-\strong{hm_data} to specify the display order of the heatmap. It's ignored
-when \strong{column_split} is provided.}
+\item{column_order}{A character vector specifying the display order of the
+columns in the heatmap. Should correspond to the column names of
+\code{hm_data}. Ignored when \strong{column_split} is provided.}
 
-\item{column_split}{A named character vector that gives the group information
-about columns to split the heatmap. It's named by the colnames of
-\strong{hm_data}.}
+\item{column_split}{A named character vector that provides the grouping
+information used to split the columns in the heatmap. The names should
+correspond to the column names of \code{hm_data}.}
 
-\item{column_split_gap}{A numeric value to specify the gap between the
-columns of heatmap that are split.}
+\item{column_split_gap}{A numeric scalar specifying the gap between the
+groups of split columns in the heatmap.}
 
 \item{column_split_label}{A named character vector to label the column split.
-It's named by the value or level of the \strong{column_split}.}
+The names should correspond to the values in \code{column_split}.}
 
 \item{split_label_fontface}{The fontface of the labels of the column split.
 The default is "bold".}
@@ -109,25 +109,26 @@ default is 3.}
 default is 0.}
 
 \item{split_label_offset_x}{A numeric value to shift the labels of the column
-split along x-axis. The defaut is 0.}
+split along the x-axis. The default is 0.}
 
 \item{split_label_offset_y}{A numeric value to shift the labels of the column
-split along y-axis. The defaut is 2.}
+split along the y-axis. The default is 2.}
 
-\item{split_label_hjust}{The hjust for the labels of the column split: 0
-(left aligned); 0.5 (centered); 1 (right aligned). The default is 0.5}
+\item{split_label_hjust}{The horizontal justification for the labels of the
+column split: 0 (left aligned); 0.5 (centered); 1 (right aligned).
+.The default is 0.5}
 
-\item{split_label_vjust}{Similar to \code{split_label_hjust}, but control
+\item{split_label_vjust}{Similar to \code{split_label_hjust}, but controls
 vertical justification.}
 
 \item{column_anno}{A named vector to specify labels that are used to
-annotate columns of heatmap.}
+annotate the columns of heatmap.}
 
 \item{column_anno_size}{A numeric value to specify the size of the annotation
-bar}
+bar.}
 
 \item{column_anno_color}{A named vector to specify colors that are used to
-annotate columns of heatmap.}
+annotate the columns of the heatmap.}
 
 \item{column_anno_gap}{A numeric value to specify the gap between the
 column annotation bar and the heatmap.}
@@ -139,46 +140,48 @@ column annotation bar and the heatmap.}
 \item{show_colnames}{A logical value to specify whether column names should
 be displayed. The default is FALSE.}
 
-\item{colnames_position}{The position of column names, "top" or "bottom".}
+\item{colnames_position}{The position of column names, either "top" or
+"bottom".}
 
-\item{colnames_angle}{A numeric value. The angle of column names.}
+\item{colnames_angle}{A numeric scalar specifying the angle of column names.}
 
-\item{colnames_offset_x}{A numeric value to shift column names on x-axis. The
-defaut is 0.}
+\item{colnames_offset_x}{A numeric value to shift column names on the x-axis.
+The default is 0.}
 
-\item{colnames_offset_y}{A numeric value to shift column names on y-axis. The
-defaut is 0.}
+\item{colnames_offset_y}{A numeric value to shift column names on the y-axis.
+The default is 0.}
 
 \item{colnames_size}{A numeric value to specify the size of column names.}
 
-\item{colnames_hjust}{The hjust for column names: 0 (left aligned); 0.5
-(centered); 1 (right aligned).}
+\item{colnames_hjust}{The horizontal justification for column names:
+0 (left aligned); 0.5 (centered); 1 (right aligned).}
 
 \item{show_rownames}{A logical value to specify whether row names should
 be displayed. The default is FALSE.}
 
-\item{rownames_position}{"right" or "left".}
+\item{rownames_position}{The position of the row names, either "right" or
+"left".}
 
-\item{rownames_angle}{A numeric value. The angle of row names.}
+\item{rownames_angle}{A numeric value specifying the angle of row names.}
 
-\item{rownames_offset_x}{A numeric value to shift row names on x-axis. The
-defaut is 0.}
+\item{rownames_offset_x}{A numeric value to shift row names on the x-axis.
+The default is 0.}
 
-\item{rownames_offset_y}{A numeric value to shift row names on y-axis. The
-defaut is 0.}
+\item{rownames_offset_y}{A numeric value to shift row names on the y-axis.
+The default is 0.}
 
 \item{rownames_size}{A numeric value to specify the size of row names.}
 
-\item{rownames_hjust}{The hjust for row names: 0 (left aligned); 0.5
-(centered); 1 (right aligned).}
+\item{rownames_hjust}{The horizontal justification for row names:
+0 (left aligned); 0.5 (centered); 1 (right aligned).}
 
-\item{rownames_label}{A named vector to annotate the rows of heatmap instead
-the row names of \strong{hm_data}.}
+\item{rownames_label}{A named vector to annotate the rows of the heatmap
+instead of the row names of \strong{hm_data}.}
 
 \item{show_title}{A logical value to specify whether the title should
 be displayed. The default is FALSE.}
 
-\item{title_hm}{The title of heatmap}
+\item{title_hm}{The title of the heatmap.}
 
 \item{title_fontface}{The fontface of the title. The default is "bold".}
 
@@ -188,30 +191,30 @@ be displayed. The default is FALSE.}
 
 \item{title_angle}{The angle of the title. The default is 0.}
 
-\item{title_offset_x}{A numeric value to shift title along x-axis. The
-defaut is 0.}
+\item{title_offset_x}{A numeric value to shift the title along the x-axis.
+The default is 0.}
 
-\item{title_offset_y}{A numeric value to shift title along y-axis. The
-defaut is 2.}
+\item{title_offset_y}{A numeric value to shift the title along the y-axis.
+The default is 2.}
 
-\item{title_hjust}{The hjust for title: 0 (left aligned); 0.5
-(centered); 1 (right aligned). The default is 0.5}
+\item{title_hjust}{The horizontal justification for the title:
+0 (left aligned); 0.5 (centered); 1 (right aligned). The default is 0.5.}
 
-\item{cluster_column}{A logical value, TRUE or FALSE. It specifies whether
-columns of the heatmap should be ordered by similarity. The default is
-TRUE. This is ignored when \strong{column_order} is given.}
+\item{cluster_column}{A logical scalar, specifying whether
+columns of the heatmap should be clustered by similarity. The default is
+\code{TRUE}. This is ignored when \strong{column_order} is given.}
 
 \item{dist_method}{See \strong{method} in \code{\link[stats]{dist}}. The
-distance method used in clustering columns. The default is "euclidean".}
+distance method used for clustering columns. The default is "euclidean".}
 
 \item{hclust_method}{See \strong{method} in \code{\link[stats]{hclust}}. The
-clustering method used in clustering columns. The default is "ave".}
+clustering method used for clustering columns. The default is "ave".}
 
-\item{show_row_tree}{TRUE or FALSE. Default is TRUE. If FALSE, the figure
-provied in \code{tree_fig} wouldn't be shown.}
+\item{show_row_tree}{A logical scalar (default \code{TRUE}). If \code{FALSE},
+the figure provided in \code{tree_fig} is not shown.}
 }
 \description{
-\code{TreeHeatmap} displays a heatmap at a arbitary level of a tree.
+Generate a heatmap corresponding to an arbitrary level of a tree.
 }
 \examples{
 
@@ -220,104 +223,97 @@ library(ggtree)
 library(ggplot2)
 library(scales)
 
-data(tinyTree)
+## Load example data (tiny tree with corresponding count matrix)
+tse <- readRDS(system.file("extdata", "tinytree_counts.rds",
+                           package = "treeclimbR"))
 
-p1 <- c(rep(0.1/3, 3), rep(0.4/2, 2), rep(0.1, 5))
-p2 <- c(rep(0.4/3, 3), rep(0.1/2, 2), rep(0.1, 5))
-set.seed(1)
-ct0 <- cbind(rmultinom(n = 5, size = 50, prob = p1),
-             rmultinom(n = 5, size =50, prob = p2))
-colnames(ct0) <- paste("S", 1:10, sep = "")
-rownames(ct0) <- convertNode(tree = tinyTree, node = 1:10)
-oo <- sample(1:10)
-ct0 <- ct0[, oo]
-
-ct <- rbind(colSums(ct0[1:3, ]),
-            colSums(ct0[4:5, ]),
-            ct0[6:10, ])
-colnames(ct) <- paste("S", 1:10, sep = "")
-rownames(ct) <- convertNode(tree = tinyTree, node = c(13, 18, 6:10))
-
-
-
-# prepare the tree figure
-tree_fig <- ggtree(tinyTree,
-                   branch.length = "none",
+## Prepare the tree figure
+tree_fig <- ggtree(rowTree(tse), branch.length = "none",
                    layout = "rectangular", open.angle = 100) +
-    #geom_text2(aes(label = label)) +
     geom_hilight(node = 18, fill = "orange", alpha = 0.3) +
     geom_hilight(node = 13, fill = "blue", alpha = 0.3)
+tree_fig
 
-# figure 0
-TreeHeatmap(tree = tinyTree, tree_fig = tree_fig, hm_data = ct0[, oo])
+## Simple heatmap with tree
+TreeHeatmap(tree = rowTree(tse), tree_fig = tree_fig,
+            hm_data = SummarizedExperiment::assay(tse, "counts"))
 
-# figure 1
-TreeHeatmap(tree = tinyTree, tree_fig = tree_fig, hm_data = ct)
+## Aggregate counts for each of the highlighted subtrees
+tseagg <- aggTSE(
+    tse,
+    rowLevel = c(13, 18,
+                 setdiff(showNode(tinyTree, only.leaf = TRUE),
+                         unlist(findDescendant(tinyTree, node = c(13, 18),
+                                               only.leaf = TRUE)))))
 
-# figure 2: order column by similarity
-TreeHeatmap(tree = tinyTree, tree_fig = tree_fig,
-            hm_data = ct, cluster_column = TRUE)
+## Visualize aggregated heatmap with tree
+TreeHeatmap(tree = rowTree(tseagg), tree_fig = tree_fig,
+            hm_data = SummarizedExperiment::assay(tseagg, "counts"))
 
- # figure 3: split columns
-col_split <- ifelse(colnames(ct) \%in\% paste0("S", 1:5),
-                    "A", "B")
-names(col_split) <- colnames(ct)
-TreeHeatmap(tree = tinyTree, tree_fig = tree_fig,
-            hm_data = ct, cluster_column = TRUE,
-            column_split = col_split)
-# figure 4: annotate columns
+## Cluster columns
+TreeHeatmap(tree = rowTree(tseagg), tree_fig = tree_fig,
+            hm_data = SummarizedExperiment::assay(tseagg, "counts"),
+            cluster_column = TRUE)
+
+## Split columns
+col_split <- ifelse(colnames(tseagg) \%in\% paste0("S", seq_len(5)), "A", "B")
+names(col_split) <- colnames(tseagg)
+TreeHeatmap(tree = rowTree(tseagg), tree_fig = tree_fig,
+            hm_data = SummarizedExperiment::assay(tseagg, "counts"),
+            cluster_column = TRUE, column_split = col_split)
+
+## Annotate columns
 col_anno <- col_split
-TreeHeatmap(tree = tinyTree, tree_fig = tree_fig,
-            hm_data = ct, cluster_column = TRUE,
-            column_split = col_split,
-            column_anno = col_anno,
-            column_anno_gap = 0.5)
-# figure 5: change annotation colors
-TreeHeatmap(tree = tinyTree, tree_fig = tree_fig,
-            hm_data = ct, cluster_column = TRUE,
-            column_split = col_split,
-            column_anno = col_anno,
-            column_anno_gap = 0.6,
-            column_anno_color = c("A" = "red", "B"= "blue"))
+TreeHeatmap(tree = rowTree(tseagg), tree_fig = tree_fig,
+            hm_data = SummarizedExperiment::assay(tseagg, "counts"),
+            cluster_column = TRUE, column_split = col_split,
+            column_anno = col_anno, column_anno_gap = 1)
 
-# figure 6: add colnames
-TreeHeatmap(tree = tinyTree, tree_fig = tree_fig,
-            hm_data = ct, cluster_column = TRUE,
-            column_split = col_split,
-            column_anno = col_anno,
-            column_anno_gap = 0.6,
-            column_anno_color = c("A" = "red", "B"= "blue"),
-            show_colnames = TRUE,
-            colnames_position = "bottom",
-            colnames_angle = 90, colnames_size = 2,
-            colnames_offset_y = -0.2)
+## Change annotation colors
+TreeHeatmap(tree = rowTree(tseagg), tree_fig = tree_fig,
+            hm_data = SummarizedExperiment::assay(tseagg, "counts"),
+            cluster_column = TRUE, column_split = col_split,
+            column_anno = col_anno, column_anno_gap = 1,
+            column_anno_color = c(A = "red", B = "blue"))
 
-# figure 7: add title
- fig <- TreeHeatmap(tree = tinyTree, tree_fig = tree_fig,
-            hm_data = ct, cluster_column = TRUE,
-            column_split = col_split,
-            column_anno = col_anno,
-            column_anno_gap = 0.6,
-            column_anno_color = c("A" = "red", "B"= "blue"),
-            show_colnames = TRUE,
-            colnames_position = "bottom",
+## Add column names
+TreeHeatmap(tree = rowTree(tseagg), tree_fig = tree_fig,
+            hm_data = SummarizedExperiment::assay(tseagg, "counts"),
+            cluster_column = TRUE, column_split = col_split,
+            column_anno = col_anno, column_anno_gap = 1,
+            column_anno_color = c(A = "red", B = "blue"),
+            show_colnames = TRUE, colnames_position = "bottom",
             colnames_angle = 90, colnames_size = 2,
-            colnames_offset_y = -0.2,
-            show_title = TRUE,
-            title_offset_y = 1.5,
+            colnames_offset_y = -0.4)
+
+## Add title
+TreeHeatmap(tree = rowTree(tseagg), tree_fig = tree_fig,
+            hm_data = SummarizedExperiment::assay(tseagg, "counts"),
+            cluster_column = TRUE, column_split = col_split,
+            column_anno = col_anno, column_anno_gap = 1,
+            column_anno_color = c(A = "red", B = "blue"),
+            show_colnames = TRUE, colnames_position = "bottom",
+            colnames_angle = 90, colnames_size = 2,
+            colnames_offset_y = -0.4,
+            show_title = TRUE, title_offset_y = 2,
             title_color = "blue")
-fig
-# use expand_limits to display the missing part of row names
-(fig <- fig + expand_limits(x = c(0, 15)))
 
-# change colors
-fig +
-scale_fill_viridis_c(option = "D")
+## Change colors
+TreeHeatmap(tree = rowTree(tseagg), tree_fig = tree_fig,
+            hm_data = SummarizedExperiment::assay(tseagg, "counts"),
+            cluster_column = TRUE, column_split = col_split,
+            column_anno = col_anno, column_anno_gap = 1,
+            column_anno_color = c(A = "red", B = "blue"),
+            show_colnames = TRUE, colnames_position = "bottom",
+            colnames_angle = 90, colnames_size = 2,
+            colnames_offset_y = -0.4,
+            show_title = TRUE, title_offset_y = 2,
+            title_color = "blue") +
+            scale_fill_gradientn(
+                colours = c("blue", "yellow", "red"),
+                values = scales::rescale(c(5, 8, 10)),
+                guide = "colorbar", limits = c(5, 10))
 
-fig +
- scale_fill_gradientn(colours = c("blue","yellow","red"),
-                      values = scales::rescale(c(5, 8, 10)),
-                      guide = "colorbar", limits=c(5, 10))
 }
 \author{
 Ruizhu Huang
