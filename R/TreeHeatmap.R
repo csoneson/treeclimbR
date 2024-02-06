@@ -453,7 +453,7 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
                   aes(x = x, y = y, height = height,
                       fill = value, width = width),
                   color = cell_line_color,
-                  size = cell_line_size,
+                  linewidth = cell_line_size,
                   inherit.aes = FALSE) +
         labs(fill = legend_title_hm)
 
@@ -497,7 +497,7 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
                              yend = yend,
                              color = anno_group),
                          inherit.aes = FALSE,
-                         size = column_anno_size) +
+                         linewidth = column_anno_size) +
             scale_color_manual(values = anno_color) +
             labs(color = legend_title_column_anno)
     } else {
