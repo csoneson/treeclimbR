@@ -2,34 +2,42 @@
 % Please edit documentation in R/tree_isConnect.R
 \name{isConnect}
 \alias{isConnect}
-\title{test whether nodes are connected}
+\title{Check whether nodes are contained in the same path from a leaf to the root
+in a tree}
 \usage{
 isConnect(tree, node_a, node_b, connect = "any")
 }
 \arguments{
-\item{tree}{A phylo object}
+\item{tree}{A \code{phylo} object.}
 
-\item{node_a}{A vector of nodes.}
+\item{node_a, node_b}{The two vectors of nodes (either node numbers or
+node labels) to check for connections. The vectors should have the same
+length (if not, the shorter one will be recycled), as the check for
+connectivity is done elementwise.}
 
-\item{node_b}{A vector of nodes.}
-
-\item{connect}{It is choosen among "any", "direct", "indirect" and defines
-how two (vectors of ) nodes are connected.}
+\item{connect}{One of "any", "direct", "indirect", the type of connections
+to search for.}
 }
 \description{
-\code{isConnect} tests whether two (vectors of) nodes are connected.
+Perform an elementwise check of whether two vectors of nodes are "connected"
+in specific ways in a tree. A pair of nodes are considered to be connected
+if they are part of the same path from a leaf to the root of the tree.
+They are considered directly connected if one node is the parent of the
+other, and indirectly connected otherwise.
 }
 \examples{
+library(ggtree)
+data(tinyTree)
+ggtree(tinyTree, branch.length = "none") +
+    geom_text2(aes(label = node))
 
-data("tinyTree")
 node_a <- c(4, 18, 19, 2)
 node_b <- c(4, 5, 6, 3)
 
 isConnect(tree = tinyTree, node_a = node_a,
           node_b = node_b, connect = "any")
 
-
 }
 \author{
-Ruizhu Huang
+Ruizhu Huang, Charlotte Soneson
 }
