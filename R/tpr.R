@@ -98,12 +98,12 @@ tpr <- function(tree, truth, found, only.leaf = TRUE) {
     ## Check inputs
     ## -------------------------------------------------------------------------
     if (!is.null(truth) && !(is.character(truth) || is.numeric(truth))) {
-        stop("'truth' should be either a character vector or a numeric",
+        stop("'truth' should be either a character vector or a numeric ",
              "vector")
     }
 
     if (!is.null(found) && !(is.character(found) || is.numeric(found))) {
-        stop("'found' should be either a character vector or a numeric",
+        stop("'found' should be either a character vector or a numeric ",
              "vector")
     }
 
