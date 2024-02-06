@@ -26,6 +26,8 @@ library(TreeSummarizedExperiment)
 library(ggtree)
 library(ggplot2)
 library(scales)
+library(dplyr)
+library(ggnewscale)
 
 ## Load example data (tiny tree with corresponding count matrix)
 tse <- readRDS(system.file("extdata", "tinytree_counts.rds",
@@ -64,7 +66,7 @@ df_hm <- getData(tree_hm = fig, type = "heatmap")
 ## Generate data to add a column annotation
 ct <- df_hm |>
     dplyr::select(x, width, variable) |>
-    distinct()
+    dplyr::distinct()
 set.seed(1)
 ann <- matrix(sample(LETTERS[seq_len(2)], size = 3 * ncol(df_hm),
                      replace = TRUE),
