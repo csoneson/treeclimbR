@@ -25,26 +25,20 @@ Extract different elements of the data shown in a figure generated with
 library(TreeSummarizedExperiment)
 library(ggtree)
 library(ggplot2)
-library(ggnewscale)
-library(viridis)
-library(dplyr)
+library(scales)
 
-data(tinyTree)
+## Load example data (tiny tree with corresponding count matrix)
+tse <- readRDS(system.file("extdata", "tinytree_counts.rds",
+                           package = "treeclimbR"))
 
-## Simulate data with 10 features and 10 samples (5 from each of 2 groups)
-p1 <- c(rep(0.1/3, 3), rep(0.4/2, 2), rep(0.1, 5))
-p2 <- c(rep(0.4/3, 3), rep(0.1/2, 2), rep(0.1, 5))
-set.seed(1)
-ct0 <- cbind(rmultinom(n = 5, size = 50, prob = p1),
-             rmultinom(n = 5, size = 50, prob = p2))
-colnames(ct0) <- paste("S", seq_len(10), sep = "")
-rownames(ct0) <- convertNode(tree = tinyTree, node = seq_len(10))
-oo <- sample(seq_len(10))
-ct0 <- ct0[, oo]
-ct <- rbind(colSums(ct0[seq(1, 3), ]), colSums(ct0[seq(4, 5), ]),
-            ct0[seq(6, 10), ])
-colnames(ct) <- paste("S", seq_len(10), sep = "")
-rownames(ct) <- convertNode(tree = tinyTree, node = c(13, 18, seq(6, 10)))
+## Aggregate counts for each of the highlighted subtrees
+tseagg <- aggTSE(
+    tse,
+    rowLevel = c(13, 18,
+                 setdiff(showNode(tinyTree, only.leaf = TRUE),
+                         unlist(findDescendant(tinyTree, node = c(13, 18),
+                                               only.leaf = TRUE)))))
+ct <- SummarizedExperiment::assay(tseagg, "counts")
 col_split <- ifelse(colnames(ct) \%in\% paste0("S", seq_len(5)), "A", "B")
 names(col_split) <- colnames(ct)
 
