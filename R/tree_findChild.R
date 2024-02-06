@@ -44,6 +44,8 @@
 #' findChild(tree = tinyTree, node = "t4")
 #'
 findChild <- function(tree, node, use.alias = FALSE) {
+    ## Check input arguments
+    ## -------------------------------------------------------------------------
     .assertVector(x = tree, type = "phylo")
     .assertScalar(x = use.alias, type = "logical")
     if (!(is.character(node) || is.numeric(node))) {
