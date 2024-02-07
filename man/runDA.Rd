@@ -66,7 +66,7 @@ normalization factors (using \code{\link[edgeR]{calcNormFactors}}).}
 \code{\link[edgeR]{calcNormFactors}} for more details.}
 
 \item{group_column}{The name of the column in the sample annotation
-providing group labels for samples.}
+providing group labels for samples (currently not used).}
 
 \item{design_terms}{The names of columns from the sample annotation
 that will be used to generate the design matrix. This is ignored if
@@ -125,8 +125,7 @@ dd <- model.matrix(~ group, data = colData(tse))
 out <- runDA(TSE = tse, feature_on_row = TRUE,
              assay = 1, option = "glmQL",
              design = dd, contrast = NULL,
-             normalize = TRUE, filter_min_count = 2,
-             group_column = "group")
+             normalize = TRUE, filter_min_count = 2)
 names(out)
 out$nodes_drop
 edgeR::topTags(out$edgeR_results, sort.by = "PValue")
