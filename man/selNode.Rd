@@ -2,11 +2,12 @@
 % Please edit documentation in R/selNode.R
 \name{selNode}
 \alias{selNode}
-\title{Select branches}
+\title{Select branches meeting certain criteria}
 \usage{
 selNode(
   pr = NULL,
   obj = NULL,
+  assay = 1,
   data = NULL,
   tree = NULL,
   minTip = 0,
@@ -18,17 +19,27 @@ selNode(
 )
 }
 \arguments{
-\item{pr}{A named numeric vector to provide proportions of entities.}
+\item{pr}{A named numeric vector to provide proportions of entities. If
+this is provided, \code{obj} and \code{data} will be ignored.}
 
-\item{obj}{A TreeSummarizedExperiment object.}
+\item{obj}{A \code{TreeSummarizedExperiment} object. Only used if \code{pr}
+is \code{NULL}.}
 
-\item{data}{A count table with entities in rows and samples in columns.}
+\item{assay}{The index or name of the assay of \code{obj} to use for
+estimating node count proportions. Only used if \code{obj} is not
+\code{NULL}.}
 
-\item{tree}{A phylo object}
+\item{data}{Either a count table with entities in rows and samples in
+columns, or a list with \code{pi} and \code{theta} estimates (the
+output of \code{\link{parEstimate}}). Only used if \code{pr} and
+\code{obj} are \code{NULL}.}
 
-\item{minTip}{the minimum number of leaves in the selected branch}
+\item{tree}{A \code{phylo} object. If \code{obj} is used as input, the tree
+will be extracted from the \code{rowTree} of \code{obj}.}
 
-\item{maxTip}{The maximum number of leaves in the selected branch}
+\item{minTip}{the minimum number of leaves in the selected branch.}
+
+\item{maxTip}{The maximum number of leaves in the selected branch.}
 
 \item{minPr}{The minimum count proportion of the selected branch in a sample.
 A value between 0 and 1.}
@@ -36,44 +47,55 @@ A value between 0 and 1.}
 \item{maxPr}{The maximum count proportion of the selected branch in a sample.
 A value between 0 and 1.}
 
-\item{skip}{A character vector of node labels. These nodes are not the
+\item{skip}{A character vector of node labels. These nodes can not be
 descendants or the ancestors of the selected branch.}
 
-\item{all}{TRUE or FALSE. Default is FALSE. If FALSE, the branch node of a
-branch, which meet the requirements and has the minimum count proportion,
-is returned; otherwise branch nodes of all branches meeting the
-requirements are returned.}
+\item{all}{A logical scalar. If \code{FALSE} (default), the branch node of a
+single branch, which meets the requirements and has the minimum count
+proportion of branches meeting the requirements, is returned; otherwise
+branch nodes of all branches meeting the requirements are returned.}
 }
 \value{
-The node whose descendant branch has the lowest proportion
+A \code{data.frame} with node information for the selected
+    internal node(s).
 }
 \description{
-\code{selNode} selects branches meeting the specified criteria in the number
-of leaves and the count proportion.
+Select branches in a tree meeting the specified criteria in terms of number
+of leaves and the count proportion. Note that only internal branch nodes
+are considered - no individual leaves will be returned.
 }
 \examples{
+## Generate example data
+library(TreeSummarizedExperiment)
 set.seed(1)
-data("tinyTree")
+data(tinyTree)
 toyTable <- matrix(rnbinom(40, size = 1, mu = 10), nrow = 10)
-colnames(toyTable) <- paste(rep(LETTERS[1:2], each = 2),
-rep(1:2, 2), sep = "_")
+colnames(toyTable) <- paste(rep(LETTERS[seq_len(2)], each = 2),
+                            rep(seq_len(2), 2), sep = "_")
 rownames(toyTable) <- tinyTree$tip.label
 
-
+## Estimate entity proportions from count matrix under a Dirichlet
+## Multinomial framework, and use this as the input for selNode
 dat <- parEstimate(obj = toyTable)
-(out1 <- selNode(tree = tinyTree, data = dat, all = TRUE))
-(out2 <- selNode(tree = tinyTree, data = dat, 
-                 minTip = 4, maxTip = 9,
-                 minPr = 0, maxPr = 0.8, all = TRUE))
+selNode(tree = tinyTree, data = dat, all = TRUE)
+selNode(tree = tinyTree, data = dat,
+        minTip = 4, maxTip = 9, minPr = 0, maxPr = 0.8, all = TRUE)
 
-## provide obj
+## Alternatively, directly provide the proportions vector
+selNode(tree = tinyTree, pr = dat$pi, all = TRUE)
+
+## Return only branch with lowest proportion among valid ones
+selNode(tree = tinyTree, pr = dat$pi, all = FALSE)
+
+## Start instead from a TreeSummarizedExperiment object
 lse <- TreeSummarizedExperiment(rowTree = tinyTree,
-                                assays = list(toyTable))
-(out3 <- selNode(obj = lse, all = TRUE))
-# All nodes except node 1
-(out4 <- selNode(obj = lse, skip = 1, all = TRUE))
+                                assays = list(counts = toyTable))
+selNode(obj = lse, assay = "counts", all = TRUE)
+
+## Don't allow node 1 to be included
+selNode(obj = lse, assay = "counts", skip = 1, all = TRUE)
 
 }
 \author{
-Ruizhu Huang
+Ruizhu Huang, Charlotte Soneson
 }
