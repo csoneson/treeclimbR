@@ -2,7 +2,7 @@
 % Please edit documentation in R/getCand.R
 \name{getCand}
 \alias{getCand}
-\title{search candidates under different thresholds}
+\title{Generate candidates for different thresholds}
 \usage{
 getCand(
   tree,
@@ -17,42 +17,57 @@ getCand(
 )
 }
 \arguments{
-\item{tree}{A phylo object.}
+\item{tree}{A \code{phylo} object.}
 
-\item{t}{A sequence of values with the range between 0 and 1. Thresholds used
-to search candidates. The default is to use a sequence \code{c(seq(0, 0.04,
-by = 0.01), seq(0.05, 1, by = 0.05))}}
+\item{t}{A vector of threshold values used to search for candidates,
+in the range [0, 1]. The default (\code{NULL}) uses a sequence
+\code{c(seq(0, 0.04, by = 0.01), seq(0.05, 1, by = 0.05))}}
 
-\item{score_data}{A data frame includes at least one column about the nodes,
-one column about the p value (\code{p_column}) and one column about the
-direction of change (\code{sign_column}).}
+\item{score_data}{A data.frame including at least one column with node IDs
+(specified with the \code{node_column} argument),
+one column with p-values (specified with the \code{p_column} argument)
+and one column with directions of change (specified with the
+\code{sign_column} argument).}
 
-\item{node_column}{The name of the column that gives the node information.}
+\item{node_column}{The name of the column of \code{score_data} that
+contains the node information.}
 
-\item{p_column}{The name of the column that gives p values of nodes.}
+\item{p_column}{The name of the column of \code{score_data} that
+contains p-values for nodes.}
 
-\item{sign_column}{The name of the column that gives the direction of the
-difference.}
+\item{sign_column}{The name of the column of \code{score_data} that
+contains the direction of change (e.g., the sign of the log-fold change).}
 
-\item{threshold}{Default is 0.05. A value to hinder an internal to be picked
-due to randomness.}
+\item{threshold}{Numeric scalar; any internal node where the value of
+the p-value column is above this value will not be returned. The default
+is 0.05. The aim of this threshold is to avoid internal nodes without
+true signal to be picked up arbitrarily.}
 
-\item{pct_na}{A numeric value. Default is 0.5. Internal nodes that are 
-finally selected should have more than half of direct children (> 0.5) 
-without missing p values.}
+\item{pct_na}{Numeric scalar. In order for an internal node to be eligible
+for selection, more than \code{pct_na} of its direct child nodes must
+have a valid (i.e., non-missing) value in the \code{p_column} column.
+Hence, increasing this number implies a more strict selection (in terms
+of presence of explicit values).}
 
-\item{message}{A logical value, TRUE or FALSE. Default is FALSE. If TRUE, the
-message about running process is printed out.}
+\item{message}{A logical scalar, indicating whether progress messages
+should be printed to the console.}
 }
 \value{
-A list includes \code{candidate_list} and \code{score_data}. 
-\item{condidate_list}{A list of candidates under different thresholds.}
-\item{score_data}{a data frame that includes columns from the input
-    \code{score_data} and additional columns to store score U and s under
+A list with two elements: \code{candidate_list} and
+\code{score_data}.
+\itemize{
+    \item{condidate_list}{A list of candidates obtained for the different
+    thresholds.}
+    \item{score_data}{A \code{data.frame} that includes columns from the
+    input \code{score_data} and additional columns with q-scores for
     different thresholds.}
 }
+}
 \description{
-\code{getCand} search candidates under different thresholds
+Generate candidates for different thresholds (t). A candidate consists of
+a disjoint collection of leaves and internal branches, that collectively
+cover all leaves in the tree, and represents a specific aggregation pattern
+along the tree.
 }
 \examples{
 library(TreeSummarizedExperiment)
@@ -63,21 +78,31 @@ ggtree(tinyTree, branch.length = "none") +
    geom_text2(aes(label = node)) +
    geom_hilight(node = 13, fill = "blue", alpha = 0.5) +
    geom_hilight(node = 18, fill = "orange", alpha = 0.5)
-set.seed(2)
+
+## Simulate p-values and directions of change for nodes
+## (Nodes 1, 2, 3, 4, 5, 13, 14, 18 have a true signal)
+set.seed(1)
 pv <- runif(19, 0, 1)
-pv[c(1:5, 13, 14, 18)] <- runif(8, 0, 0.001)
+pv[c(seq_len(5), 13, 14, 18)] <- runif(8, 0, 0.001)
 
 fc <- sample(c(-1, 1), 19, replace = TRUE)
-fc[c(1:3, 13, 14)] <- 1
+fc[c(seq_len(3), 13, 14)] <- 1
 fc[c(4, 5, 18)] <- -1
-df <- data.frame(node = 1:19,
+df <- data.frame(node = seq_len(19),
                  pvalue = pv,
                  foldChange = fc)
 
 ll <- getCand(tree = tinyTree, score_data = df,
-              node_column = "node", 
-              p_column = "pvalue", 
+              t = c(0.01, 0.05, 0.1, 0.25, 0.75),
+              node_column = "node", p_column = "pvalue",
               sign_column = "foldChange")
+
+## Candidates
+ll$candidate_list
+
+## Score table
+ll$score_data
+
 }
 \author{
 Ruizhu Huang
