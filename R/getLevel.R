@@ -49,7 +49,7 @@
 #' pv[c(16, 13, 17)] <- c(0.01, 0.05, 0.005)
 #' out <- data.frame(node = 1:19, pvalue = pv)
 #'
-#' ## search nodes
+#' ## Search nodes
 #' final <- getLevel(tree = tinyTree,
 #'                   score_data = out,
 #'                   drop =  pvalue > 0.05,
@@ -59,7 +59,7 @@
 #'                   parent_first = TRUE,
 #'                   message = FALSE)
 #'
-#' Nodes to keep
+#' ## Nodes to keep
 #' final$node[final$keep]
 #'
 getLevel <- function(tree, score_data, drop, score_column,
