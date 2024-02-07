@@ -165,7 +165,8 @@ test_that("runDA works", {
                  filter_min_count = 0, filter_min_total_count = 0,
                  filter_large_n = 0, filter_min_prop = 0,
                  normalize = TRUE, normalize_method = "TMM",
-                 group_column = "group", design_terms = "group")
+                 group_column = "group", design_terms = "group",
+                 legacy = TRUE)
     expect_s4_class(out$edgeR_results, "DGELRT")
     ## Check that truly differential features are high in the results list
     pos <- sort(match(truede, rownames(edgeR::topTags(out$edgeR_results,
@@ -179,7 +180,8 @@ test_that("runDA works", {
                  filter_min_count = 0, filter_min_total_count = 10,
                  filter_large_n = 0, filter_min_prop = 0,
                  normalize = TRUE, normalize_method = "TMM",
-                 group_column = "group", design_terms = "group")
+                 group_column = "group", design_terms = "group",
+                 legacy = TRUE)
     expect_s4_class(out$edgeR_results, "DGELRT")
     expect_type(out$nodes_drop, "character")
     expect_length(out$nodes_drop, 5)
@@ -201,7 +203,8 @@ test_that("runDA works", {
                  filter_min_count = 0, filter_min_total_count = 0,
                  filter_large_n = 0, filter_min_prop = 0,
                  normalize = TRUE, normalize_method = "TMM",
-                 group_column = "group", design_terms = "group")
+                 group_column = "group", design_terms = "group",
+                 legacy = TRUE)
     expect_s4_class(out$edgeR_results, "DGELRT")
     ## Check that truly differential features are high in the results list
     pos <- sort(match(truede, rownames(edgeR::topTags(out$edgeR_results,

@@ -107,7 +107,8 @@ test_that("edgerWrp works", {
     ## With the QL framework
     out <- edgerWrp(count = mat, lib_size = colSums(mat),
                     option = "glmQL", design = des, contrast = c(0, 1),
-                    normalize = TRUE, normalize_method = "TMM")
+                    normalize = TRUE, normalize_method = "TMM",
+                    legacy =  TRUE)
     expect_s4_class(out, "DGELRT")
     ## Check that truly differential features are high in the results list
     pos <- sort(match(truede, rownames(edgeR::topTags(out, n = Inf))))
