@@ -106,10 +106,10 @@ edgerWrp <- function(count, lib_size = NULL, option = c("glm", "glmQL"),
     ## -------------------------------------------------------------------------
     option <- match.arg(option)
     if (option == "glm") {
-        fit <- edgeR::glmFit(y, design = design)
+        fit <- edgeR::glmFit(y, design = design, ...)
         lrt <- edgeR::glmLRT(fit, contrast = contrast)
     } else {
-        fit <- edgeR::glmQLFit(y, design = design)
+        fit <- edgeR::glmQLFit(y, design = design, ...)
         lrt <- edgeR::glmQLFTest(fit, contrast = contrast)
     }
 
