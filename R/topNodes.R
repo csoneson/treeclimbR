@@ -79,6 +79,7 @@ topNodes <- function(object, n = 10, sort_by = NULL,
     ## Get the result table from the object, sort and subset
     ## -------------------------------------------------------------------------
     res <- object$output
+    n <- min(nrow(res), n)
 
     if (is.null(sort_by)) {
         res <- res |>
