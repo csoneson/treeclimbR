@@ -1,6 +1,5 @@
 test_that("infoCand works", {
     library(TreeSummarizedExperiment)
-    library(ggtree)
     ## Generate example data
     data(tinyTree)
     set.seed(2L)
@@ -28,7 +27,7 @@ test_that("infoCand works", {
     obj <- cc
     obj$level_info <- NULL
     expect_error(infoCand(object = obj),
-                 "object needs to have a 'level_info' slot")
+                 "Object needs to have a 'level_info' slot")
 
     ## Test that infoCand works
     ## -------------------------------------------------------------------------

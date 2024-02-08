@@ -47,16 +47,21 @@
 #' out
 #'
 infoCand <- function(object) {
+
+    ## Check arguments
+    ## -------------------------------------------------------------------------
     .assertVector(x = object, type = "list")
 
+    ## Extract level_info from list
+    ## -------------------------------------------------------------------------
     info <- object$level_info
-
     if (is.null(info)) {
-        stop("object needs to have a 'level_info' slot - make sure that you ",
+        stop("Object needs to have a 'level_info' slot - make sure that you ",
              "are using output from 'evalCand()'")
     }
 
     ## Remove rej_pseudo_leaf and rej_pseudo_node columns if all values are NA
+    ## -------------------------------------------------------------------------
     allNA <- all(is.na(info$rej_pseudo_leaf))
     if (allNA) {
         info <- subset(info, select = -c(rej_pseudo_leaf, rej_pseudo_node))
