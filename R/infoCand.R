@@ -5,7 +5,7 @@
 #' @author Ruizhu Huang
 #' @export
 #'
-#' @param object The output of \link{evalCand} (a list).
+#' @param object An output object from \link{evalCand}.
 #'
 #' @return A \code{data.frame} with information about candidates.
 #'

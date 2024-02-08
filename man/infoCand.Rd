@@ -7,7 +7,7 @@
 infoCand(object)
 }
 \arguments{
-\item{object}{The output of \link{evalCand} (a list).}
+\item{object}{An output object from \link{evalCand}.}
 }
 \value{
 A \code{data.frame} with information about candidates.
