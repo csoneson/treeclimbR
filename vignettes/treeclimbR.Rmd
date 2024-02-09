@@ -332,7 +332,11 @@ ds_tse <- readRDS(system.file("extdata", "ds_sim_20_500_8de.rds",
                               package = "treeclimbR"))
 ds_tse
 head(colData(ds_tse))
-plot(colTree(ds_tse))
+ggtree(colTree(ds_tse)) +
+    geom_text2(aes(label = node), color = "darkblue",
+               hjust = -0.5, vjust = 0.7) +
+    geom_text2(aes(label = label), color = "darkorange",
+               hjust = -0.1, vjust = -0.7)
 ```
 
 The data set contains 8 genes that are simulated to be differentially 
