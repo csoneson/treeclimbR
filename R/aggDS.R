@@ -55,7 +55,8 @@
 #' colnames(cc) <- paste0("cell", seq_len(10))
 #' cd <- data.frame(sid = rep(seq_len(2), each = 5),
 #'                  gid = rep(letters[seq_len(2)], each = 5),
-#'                  cid = sample(LETTERS[seq_len(3)], size = 10, replace = TRUE),
+#'                  cid = sample(LETTERS[seq_len(3)], size = 10,
+#'                               replace = TRUE),
 #'                  stringsAsFactors = FALSE)
 #' tse <- TreeSummarizedExperiment(assays = list(counts = cc),
 #'                                 colTree = tr,

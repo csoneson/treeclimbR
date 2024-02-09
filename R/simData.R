@@ -82,7 +82,8 @@
 #'         \itemize{
 #'             \item \strong{A} The branch node label (or number) of branch A.
 #'             \item \strong{B} The branch node label (or number) of branch B.
-#'             \item \strong{ratio} The count proportion ratio of branch B to branch A.
+#'             \item \strong{ratio} The count proportion ratio of branch B to
+#'             branch A.
 #'             \item \strong{A_tips} The number of leaves on branch A.
 #'             \item \strong{B_tips} The number of leaves on branch B.
 #'             \item \strong{A_prop} The count proportion of branch A.

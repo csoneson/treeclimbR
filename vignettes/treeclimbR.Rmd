@@ -1,5 +1,5 @@
 ---
-title: "Finding the optimal resolution of hierarchical hypotheses with treeclimbR"
+title: "Finding optimal resolution of hierarchical hypotheses with treeclimbR"
 author: "Charlotte Soneson and Ruizhu Huang"
 date: "`r Sys.Date()`"
 package: "treeclimbR"
@@ -200,10 +200,10 @@ names(da_res)
 
 Again, note that any differential abundance method can be used, as long as it 
 produces a data frame with at least columns corresponding to the node number, 
-the p-value, and the sign of the inferred change. For the `runDA` output, we can 
-generate such a table with the `nodeResult` function (where the `PValue` column
-contains the p-value, and the `logFC` column provides information about the 
-sign of the inferred change):
+the p-value, and the sign of the inferred change. For the `runDA` output, we 
+can generate such a table with the `nodeResult` function (where the `PValue` 
+column contains the p-value, and the `logFC` column provides information 
+about the sign of the inferred change):
 
 ```{r da-node-results}
 da_tbl <- nodeResult(da_res, n = Inf, type = "DA")
@@ -226,8 +226,8 @@ da_cand <- getCand(tree = rowTree(da_tse), score_data = da_tbl,
 ```
 
 For a given $t$-value, we can indicate the corresponding candidate in the tree.
-Note that at this point, we have not yet selected the optimal aggregation level, 
-nor are we making conclusions about which of the retained nodes show a 
+Note that at this point, we have not yet selected the optimal aggregation 
+level, nor are we making conclusions about which of the retained nodes show a 
 significant difference between the conditions. The visualization thus simply 
 illustrates which leaves would be aggregated together if this candidate were to 
 be chosen.
@@ -417,13 +417,14 @@ ds_tbl_list <- split(ds_tbl, f = ds_tbl$feature)
 ## Find candidates for each gene separately
 ds_cand_list <- lapply(seq_along(ds_tbl_list), 
                        FUN = function(x) {
-                           xx <- getCand(tree = colTree(ds_tse),
-                                         t = seq(from = 0.05, to = 1, by = 0.05),
-                                         score_data = ds_tbl_list[[x]], 
-                                         node_column = "node", 
-                                         p_column = "PValue", 
-                                         sign_column = "logFC",
-                                         message = FALSE)
+                           xx <- getCand(
+                               tree = colTree(ds_tse),
+                               t = seq(from = 0.05, to = 1, by = 0.05),
+                               score_data = ds_tbl_list[[x]], 
+                               node_column = "node", 
+                               p_column = "PValue", 
+                               sign_column = "logFC",
+                               message = FALSE)
                            xx$candidate_list})
 names(ds_cand_list) <- names(ds_tbl_list)
 ```
@@ -455,7 +456,8 @@ node 13, and features 7 and 8 to nodes 5 and 9. Let's see which leaves these
 internal nodes correspond to.
 
 ```{r ds-check-cand}
-lapply(findDescendant(colTree(ds_tse), node = c(11, 13, 5, 9), self.include = TRUE, 
+lapply(findDescendant(colTree(ds_tse), node = c(11, 13, 5, 9), 
+                      self.include = TRUE, 
                       use.alias = FALSE, only.leaf = TRUE), 
        function(x) convertNode(colTree(ds_tse), node = x))
 ```
