@@ -153,7 +153,7 @@ runDS <- function(SE, tree, option = c("glm", "glmQL"),
         }
 
         ## Extract count matrix, sample information, node information
-        count <- SummarizedExperiment::assays(SE)[[i]]
+        count <- SummarizedExperiment::assays(SE)[[alias[i]]]
         sp_info <- SummarizedExperiment::colData(SE)
 
         ## Check whether sufficient data is available
@@ -167,23 +167,23 @@ runDS <- function(SE, tree, option = c("glm", "glmQL"),
 
         if (length(sp_gr) == 1) {
             ## Only one group is available -> return NULL
-            res[[i]] <- NULL
-            nodes_list[[i]] <- alias[i]
+            res[[alias[i]]] <- NULL
+            nodes_list[[alias[i]]] <- alias[i]
         } else {
             ## More than one group is available -> run analysis
-            res[[i]] <- .DS(SE = SE,
-                            assay = alias[i],
-                            option = option,
-                            design = design, contrast = contrast,
-                            filter_min_count = filter_min_count,
-                            filter_min_total_count =
-                                filter_min_total_count,
-                            filter_large_n = filter_large_n,
-                            filter_min_prop = filter_min_prop,
-                            normalize = normalize,
-                            normalize_method = normalize_method,
-                            group_column = group_column,
-                            design_terms = design_terms)
+            res[[alias[i]]] <- .DS(SE = SE,
+                                   assay = alias[i],
+                                   option = option,
+                                   design = design, contrast = contrast,
+                                   filter_min_count = filter_min_count,
+                                   filter_min_total_count =
+                                       filter_min_total_count,
+                                   filter_large_n = filter_large_n,
+                                   filter_min_prop = filter_min_prop,
+                                   normalize = normalize,
+                                   normalize_method = normalize_method,
+                                   group_column = group_column,
+                                   design_terms = design_terms)
         }
     }
     out <- list(edgeR_results = res,
