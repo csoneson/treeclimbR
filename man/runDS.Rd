@@ -125,7 +125,7 @@ ds_res <- runDS(SE = ds_se, tree = colTree(ds_tse), option = "glmQL",
                 design = model.matrix(~ group, data = colData(ds_se)),
                 filter_min_prop = 0, min_cells = 5, message = FALSE)
 ## Top differential features (across nodes)
-nodeResult(res, type = "DS")
+nodeResult(ds_res, type = "DS")
 
 }
 \author{

@@ -97,8 +97,8 @@ calcTreeMedians <- function(d_se, tree, message = FALSE) {
     ## Column data
     cd <- SummarizedExperiment::rowData(d_se) |>
         data.frame() |>
-        select(group_id, sample_id) |>
-        distinct()
+        select(dplyr::all_of(c("group_id", "sample_id"))) |>
+        dplyr::distinct()
     cd <- cd[match(cd$sample_id, sid), , drop = FALSE]
 
     ## Metadata

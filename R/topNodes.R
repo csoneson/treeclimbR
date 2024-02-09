@@ -22,6 +22,7 @@
 #'     column stores the node number for each entity.
 #'
 #' @importFrom dplyr arrange slice filter desc
+#' @importFrom rlang .data
 #'
 #' @examples
 #' library(TreeSummarizedExperiment)
@@ -83,30 +84,30 @@ topNodes <- function(object, n = 10, sort_by = NULL,
 
     if (is.null(sort_by)) {
         res <- res |>
-            dplyr::filter(adj.p <= p_value) |>
+            dplyr::filter(.data$adj.p <= p_value) |>
             dplyr::slice(seq_len(n))
     } else if (!sort_decreasing) {
         if (sort_by_absolute) {
             res <- res |>
                 dplyr::arrange(abs(.data[[sort_by]])) |>
-                dplyr::filter(adj.p <= p_value) |>
+                dplyr::filter(.data$adj.p <= p_value) |>
                 dplyr::slice(seq_len(n))
         } else {
             res <- res |>
                 dplyr::arrange(.data[[sort_by]]) |>
-                dplyr::filter(adj.p <= p_value) |>
+                dplyr::filter(.data$adj.p <= p_value) |>
                 dplyr::slice(seq_len(n))
         }
     } else if (sort_decreasing) {
         if (sort_by_absolute) {
             res <- res |>
                 dplyr::arrange(dplyr::desc(abs(.data[[sort_by]]))) |>
-                dplyr::filter(adj.p <= p_value) |>
+                dplyr::filter(.data$adj.p <= p_value) |>
                 dplyr::slice(seq_len(n))
         } else {
             res <- res |>
                 dplyr::arrange(dplyr::desc(.data[[sort_by]])) |>
-                dplyr::filter(adj.p <= p_value) |>
+                dplyr::filter(.data$adj.p <= p_value) |>
                 dplyr::slice(seq_len(n))
         }
     }

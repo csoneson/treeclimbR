@@ -95,7 +95,7 @@
 #'                 design = model.matrix(~ group, data = colData(ds_se)),
 #'                 filter_min_prop = 0, min_cells = 5, message = FALSE)
 #' ## Top differential features (across nodes)
-#' nodeResult(res, type = "DS")
+#' nodeResult(ds_res, type = "DS")
 #'
 runDS <- function(SE, tree, option = c("glm", "glmQL"),
                   design = NULL, contrast = NULL,
@@ -119,6 +119,7 @@ runDS <- function(SE, tree, option = c("glm", "glmQL"),
     .assertScalar(x = min_cells, type = "numeric")
     .assertScalar(x = normalize, type = "logical")
     .assertScalar(x = normalize_method, type = "character")
+    .assertVector(x = group_column, type = "character")
     .assertVector(x = design_terms, type = "character", allowNULL = TRUE)
     .assertScalar(x = message, type = "logical")
 

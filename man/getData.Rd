@@ -17,6 +17,10 @@ getData(
 extract. Should be one of \code{"heatmap", "row_name", "column_name",
 "title", "column_anno", "column_order"}.}
 }
+\value{
+A \code{data.frame} (if \code{type} is not "column_order"), or a
+vector of column names (if \code{type} is "column_order").
+}
 \description{
 Extract different elements of the data shown in a figure generated with
 \code{TreeHeatmap}, such as the heatmap itself, or the row and column names.

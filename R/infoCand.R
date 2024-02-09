@@ -9,6 +9,8 @@
 #'
 #' @return A \code{data.frame} with information about candidates.
 #'
+#' @importFrom rlang .data
+#'
 #' @examples
 #' library(TreeSummarizedExperiment)
 #' library(ggtree)
@@ -64,7 +66,9 @@ infoCand <- function(object) {
     ## -------------------------------------------------------------------------
     allNA <- all(is.na(info$rej_pseudo_leaf))
     if (allNA) {
-        info <- subset(info, select = -c(rej_pseudo_leaf, rej_pseudo_node))
+        info <- info |>
+            dplyr::select(-dplyr::all_of(c("rej_pseudo_leaf",
+                                           "rej_pseudo_node")))
     }
 
     return(info)

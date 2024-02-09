@@ -70,7 +70,7 @@
 #' @importFrom stats p.adjust
 #' @importFrom dplyr select mutate filter
 #' @importFrom data.table rbindlist
-#' @importFrom TreeSummarizedExperiment findDescendant showNode matTree
+#' @importFrom TreeSummarizedExperiment findDescendant showNode matTree isLeaf
 #'
 #' @examples
 #' library(TreeSummarizedExperiment)
@@ -297,7 +297,7 @@ evalCand <- function(tree, type = c("single", "multiple"),
             sn <- split(xs[[node_column]], sign(xs[[sign_column]]))
 
             is_L <- lapply(sn, FUN = function(x) {
-                isLeaf(tree = tree, node = x)})
+                TreeSummarizedExperiment::isLeaf(tree = tree, node = x)})
             rej_L <- mapply(FUN = function(x, y) {
                 unique(x[y])}, sn, is_L)
             rej_I <- mapply(FUN = function(x, y) {
@@ -350,14 +350,14 @@ evalCand <- function(tree, type = c("single", "multiple"),
     ## candidates: levels that fulfill the requirement to control FDR on the
     ## (pseudo) leaf level when multiple hypothesis correction is performed
     isB <- level_info |>
-        dplyr::filter(is_valid) |>
-        dplyr::filter(rej_leaf == max(rej_leaf)) |>
-        dplyr::filter(rej_node == min(rej_node)) |>
-        dplyr::select(level_name) |>
+        dplyr::filter(.data$is_valid) |>
+        dplyr::filter(.data$rej_leaf == max(.data$rej_leaf)) |>
+        dplyr::filter(.data$rej_node == min(.data$rej_node)) |>
+        dplyr::select("level_name") |>
         unlist() |>
         as.character()
     level_info <- level_info |>
-        dplyr::mutate(best = level_name %in% isB)
+        dplyr::mutate(best = .data$level_name %in% isB)
     level_b <- lapply(levels, FUN = function(x) {
         x[[isB[1]]]
     })

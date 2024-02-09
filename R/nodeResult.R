@@ -33,6 +33,7 @@
 #' @importFrom TreeSummarizedExperiment convertNode
 #' @importFrom stats p.adjust
 #' @importFrom data.table rbindlist
+#' @importFrom rlang .data
 #'
 #' @examples
 #' library(TreeSummarizedExperiment)
@@ -96,17 +97,17 @@ nodeResult <- function(object, n = 10, type = c("DA", "DS"),
         if (sort_by == "PValue") {
             ct <- ct |>
                 dplyr::arrange(.data$PValue) |>
-                dplyr::filter(FDR <= p_value) |>
+                dplyr::filter(.data$FDR <= p_value) |>
                 dplyr::slice(seq_len(n))
         } else if (sort_by == "logFC") {
             ct <- ct |>
                 dplyr::arrange(dplyr::desc(abs(.data$logFC))) |>
-                dplyr::filter(FDR <= p_value) |>
+                dplyr::filter(.data$FDR <= p_value) |>
                 dplyr::slice(seq_len(n))
         } else {
             ## No sorting
             ct <- ct |>
-                dplyr::filter(FDR <= p_value) |>
+                dplyr::filter(.data$FDR <= p_value) |>
                 dplyr::slice(seq_len(n))
         }
     }
