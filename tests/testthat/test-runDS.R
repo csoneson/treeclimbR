@@ -2,8 +2,10 @@ test_that("runDS works", {
     ## Load example data
     ds_tse <- readRDS(system.file("extdata", "ds_sim_20_500_8de.rds",
                                   package = "treeclimbR"))
-    ds_se <- aggDS(TSE = ds_tse, assay = "counts", sample_id = "sample_id",
-                   group_id = "group", cluster_id = "cluster_id", FUN = sum)
+    expect_warning({
+        ds_se <- aggDS(TSE = ds_tse, assay = "counts", sample_id = "sample_id",
+                       group_id = "group", cluster_id = "cluster_id", FUN = sum)
+    })
     des <- model.matrix(~ group, data = SummarizedExperiment::colData(ds_se))
 
     ## Check that function returns error for invalid input
@@ -13,7 +15,7 @@ test_that("runDS works", {
                   filter_min_count = 1, filter_min_total_count = 15,
                   filter_large_n = 10, filter_min_prop = 1,
                   min_cells = 10, normalize = TRUE, normalize_method = "TMM",
-                  group_column = "group_id", design_terms = "group_id",
+                  group_column = "group", design_terms = "group",
                   message = TRUE)
 
     args <- .args
@@ -128,7 +130,7 @@ test_that("runDS works", {
                     filter_min_prop = 0, min_cells = 5, message = FALSE)
     expect_type(ds_res, "list")
     expect_named(ds_res, c("edgeR_results", "tree", "nodes_drop"))
-    expect_null(ds_res$nodes_drop)
+    expect_equal(ds_res$nodes_drop, character(0))
     expect_type(ds_res$edgeR_results, "list")
     expect_length(ds_res$edgeR_results, 19)
     expect_s4_class(ds_res$edgeR_results[[1]], "DGELRT")
@@ -163,7 +165,7 @@ test_that("runDS works", {
                     filter_min_prop = 0, min_cells = 5, message = FALSE)
     expect_type(ds_res, "list")
     expect_named(ds_res, c("edgeR_results", "tree", "nodes_drop"))
-    expect_null(ds_res$nodes_drop)
+    expect_equal(ds_res$nodes_drop, character(0))
     expect_type(ds_res$edgeR_results, "list")
     expect_length(ds_res$edgeR_results, 19)
     expect_s4_class(ds_res$edgeR_results[[1]], "DGELRT")

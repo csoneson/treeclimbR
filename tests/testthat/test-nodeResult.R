@@ -17,13 +17,11 @@ test_that("nodeResult works", {
         ds_se <- aggDS(TSE = ds_tse, assay = "counts", sample_id = "sample_id",
                        group_id = "group", cluster_id = "cluster_id", FUN = sum)
     })
-    expect_warning({
-        ds_res <- runDS(SE = ds_se, tree = colTree(ds_tse), option = "glmQL",
-                        group_column = "group", contrast = c(0, 1),
-                        filter_min_count = 0, filter_min_total_count = 1,
-                        design = model.matrix(~ group, data = colData(ds_se)),
-                        filter_min_prop = 0, min_cells = 5, message = FALSE)
-    })
+    ds_res <- runDS(SE = ds_se, tree = colTree(ds_tse), option = "glmQL",
+                    group_column = "group", contrast = c(0, 1),
+                    filter_min_count = 0, filter_min_total_count = 1,
+                    design = model.matrix(~ group, data = colData(ds_se)),
+                    filter_min_prop = 0, min_cells = 5, message = FALSE)
 
     ## Check that function returns error with invalid input
     ## -------------------------------------------------------------------------
