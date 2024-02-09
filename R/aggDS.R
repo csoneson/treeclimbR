@@ -33,15 +33,15 @@
 #' @param message A logical scalar, indicating whether progress messages
 #'     should be printed to the console.
 #'
+#' @returns A \code{SummarizedExperiment} object. Each assay represents the
+#'     aggregated values for one node in the tree.
+#'
 #' @importFrom SummarizedExperiment SummarizedExperiment colData assays
 #'     assayNames
 #' @importFrom TreeSummarizedExperiment findDescendant convertNode showNode
 #'     colTree
 #' @importFrom dplyr select distinct mutate
 #' @importFrom utils flush.console
-#'
-#' @return A \code{SummarizedExperiment} object. Each assay represents the
-#'     aggregated values for one node in the tree.
 #'
 #' @examples
 #' library(treeclimbR)

@@ -50,11 +50,11 @@
 #'     (if \code{option = "glm"} or \code{\link[edgeR]{glmQLFit}}
 #'     (if \code{option = "glmQL"}).
 #'
+#' @returns The output of \code{\link[edgeR]{glmQLFTest}} or
+#'     \code{\link[edgeR]{glmLRT}} depending on the specified \code{option}.
+#'
 #' @importFrom edgeR DGEList calcNormFactors estimateDisp glmFit glmLRT
 #'     glmQLFit glmQLFTest
-#'
-#' @return The output of \code{\link[edgeR]{glmQLFTest}} or
-#'     \code{\link[edgeR]{glmLRT}} depending on the specified \code{option}.
 #'
 #' @examples
 #' ## Read example data

@@ -101,7 +101,6 @@ cluster-sample-marker combination. This is a tree version of
 }
 }
 \examples{
-
 ## For a complete workflow example demonstrating each step in the 'diffcyt'
 ## pipeline, please see the diffcyt vignette.
 library(diffcyt)

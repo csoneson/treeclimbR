@@ -66,7 +66,7 @@
 #' @param message A logical scalar, indicating whether progress messages
 #'     should be printed to the console.
 #'
-#' @return a TreeSummarizedExperiment object.
+#' @returns a TreeSummarizedExperiment object.
 #' \itemize{
 #'     \item \strong{assays} A list of count matrices, with entities in rows and
 #'     samples in columns. Each row can be mapped to a node of the tree.

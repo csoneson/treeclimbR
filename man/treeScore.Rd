@@ -37,7 +37,6 @@ The generation starts from the leaves and the new generated scores are used
 to update those in higher level of the tree until the root is reached.
 }
 \examples{
-
 library(TreeSummarizedExperiment)
 library(ggtree)
 library(dplyr)

@@ -80,7 +80,6 @@
 #' @importFrom stats model.matrix
 #'
 #' @examples
-#'
 #' ## Load example data
 #' ds_tse <- readRDS(system.file("extdata", "ds_sim_20_500_8de.rds",
 #'                               package = "treeclimbR"))

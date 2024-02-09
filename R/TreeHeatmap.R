@@ -118,7 +118,6 @@
 #' @importFrom stats hclust dist
 #'
 #' @examples
-#'
 #' library(TreeSummarizedExperiment)
 #' library(ggtree)
 #' library(ggplot2)

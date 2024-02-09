@@ -21,7 +21,7 @@
 #'     is calculated at the leaf (tip) level; otherwise it is calculated at
 #'     the node level.
 #'
-#' @return The estimated false discovery rate.
+#' @returns The estimated false discovery rate.
 #'
 #' @importFrom TreeSummarizedExperiment convertNode
 #'

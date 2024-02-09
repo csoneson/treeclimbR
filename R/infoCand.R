@@ -7,7 +7,7 @@
 #'
 #' @param object An output object from \link{evalCand}.
 #'
-#' @return A \code{data.frame} with information about candidates.
+#' @returns A \code{data.frame} with information about candidates.
 #'
 #' @importFrom rlang .data
 #'

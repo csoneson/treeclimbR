@@ -13,7 +13,7 @@
 #'     used. The alias of the node label is created by adding a prefix
 #'     \code{"alias_"} to the node number.
 #'
-#' @return A vector of nodes. The numeric value is the node number, and the
+#' @returns A vector of nodes. The numeric value is the node number, and the
 #'     vector name is the corresponding node label. If a node has no label, it
 #'     would have NA as name when \code{use.alias = FALSE}, and have the alias
 #'     of the node label as name when \code{use.alias = TRUE}.

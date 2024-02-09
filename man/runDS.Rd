@@ -110,7 +110,6 @@ in \code{colData}. The tree that stores the hierarchical relation between
 the \code{assays} is provided via the argument \code{tree}.
 }
 \examples{
-
 ## Load example data
 ds_tse <- readRDS(system.file("extdata", "ds_sim_20_500_8de.rds",
                               package = "treeclimbR"))

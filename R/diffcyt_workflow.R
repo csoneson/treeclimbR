@@ -60,7 +60,7 @@
 #' @param message A logical scalar indicating whether progress messages
 #'     should be printed.
 #'
-#' @return
+#' @returns
 #' \itemize{
 #' \item For \code{buildTree}, a \code{phylo} object representing the
 #' hierarchical clustering of the initial high-resolution clusters.
@@ -79,7 +79,6 @@
 #' }
 #'
 #' @examples
-#'
 #' ## For a complete workflow example demonstrating each step in the 'diffcyt'
 #' ## pipeline, please see the diffcyt vignette.
 #' library(diffcyt)

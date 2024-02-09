@@ -29,7 +29,6 @@
 #' @importFrom TreeSummarizedExperiment printNode matTree findDescendant
 #'
 #' @examples
-#'
 #' library(TreeSummarizedExperiment)
 #' library(ggtree)
 #' library(dplyr)

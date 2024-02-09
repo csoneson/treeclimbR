@@ -21,7 +21,7 @@
 #'     is calculated at the leaf (tip) level; otherwise it is calculated at
 #'     the node level.
 #'
-#' @return The estimated true positive rate.
+#' @returns The estimated true positive rate.
 #'
 #' @importFrom TreeSummarizedExperiment convertNode
 #'

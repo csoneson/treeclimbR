@@ -19,13 +19,13 @@
 #'     \code{SE} to the markers that should be retained. If \code{NULL}
 #'     (default), all markers are used.
 #'
+#' @returns A \code{\link[SummarizedExperiment]{SummarizedExperiment}} object
+#'     containing the median value of each marker in each cluster.
+#'
 #' @importFrom dplyr mutate summarize_all group_by
 #' @importFrom tibble column_to_rownames
 #' @importFrom SummarizedExperiment assays rowData colData SummarizedExperiment
 #'     assayNames
-#'
-#' @return A \code{\link[SummarizedExperiment]{SummarizedExperiment}} object
-#'     containing the median value of each marker in each cluster.
 #'
 #' @examples
 #' library(SummarizedExperiment)

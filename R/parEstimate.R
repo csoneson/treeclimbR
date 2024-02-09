@@ -111,10 +111,10 @@
 #'     or index of the assay to use to estimate Dirichlet multinomial
 #'     parameters. If \code{NULL}, the first assay will be used.
 #'
-#' @importFrom methods is
-#'
-#' @return A list including the estimates of \dQuote{pi} (a vector with one
+#' @returns A list including the estimates of \dQuote{pi} (a vector with one
 #' element per row in \code{obj}) and \dQuote{theta} (a scalar).
+#'
+#' @importFrom methods is
 #'
 #' @examples
 #'

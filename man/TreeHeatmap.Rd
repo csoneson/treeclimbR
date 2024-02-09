@@ -220,7 +220,6 @@ A \code{ggtree} object.
 Generate a heatmap corresponding to an arbitrary level of a tree.
 }
 \examples{
-
 library(TreeSummarizedExperiment)
 library(ggtree)
 library(ggplot2)
