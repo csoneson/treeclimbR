@@ -213,6 +213,9 @@ clustering method used for clustering columns. The default is "ave".}
 \item{show_row_tree}{A logical scalar (default \code{TRUE}). If \code{FALSE},
 the figure provided in \code{tree_fig} is not shown.}
 }
+\value{
+A \code{ggtree} object.
+}
 \description{
 Generate a heatmap corresponding to an arbitrary level of a tree.
 }

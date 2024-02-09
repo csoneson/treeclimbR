@@ -11,6 +11,8 @@
 #' @param use.alias A logical scalar. If \code{TRUE}, the alias name is
 #'     used to name the output vector.
 #'
+#' @returns A vector of node numbers
+#'
 #' @importFrom TreeSummarizedExperiment convertNode
 #'
 #' @examples

@@ -14,6 +14,9 @@ findExcl(tree, node, use.alias = FALSE)
 \item{use.alias}{A logical scalar. If \code{TRUE}, the alias name is
 used to name the output vector.}
 }
+\value{
+A vector of node numbers
+}
 \description{
 Find all branches whose leaves do not overlap with those of the specified
 branches.

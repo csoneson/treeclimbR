@@ -11,6 +11,9 @@
 #'     extract. Should be one of \code{"heatmap", "row_name", "column_name",
 #'     "title", "column_anno", "column_order"}.
 #'
+#' @returns A \code{data.frame} (if \code{type} is not "column_order"), or a
+#' vector of column names (if \code{type} is "column_order").
+#'
 #' @examples
 #' library(TreeSummarizedExperiment)
 #' library(ggtree)

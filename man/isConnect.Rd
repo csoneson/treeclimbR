@@ -18,6 +18,12 @@ connectivity is done elementwise.}
 \item{connect}{One of "any", "direct", "indirect", the type of connections
 to search for.}
 }
+\value{
+A logical vector of the same length as \code{node_a} and
+\code{node_b}, where each element indicates whether the corresponding
+elements of \code{node_a} and \code{node_b} are connected in the
+specified way.
+}
 \description{
 Perform an elementwise check of whether two vectors of nodes are "connected"
 in specific ways in a tree. A pair of nodes are considered to be connected

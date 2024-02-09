@@ -105,6 +105,8 @@
 #' @param show_row_tree A logical scalar (default \code{TRUE}). If \code{FALSE},
 #'     the figure provided in \code{tree_fig} is not shown.
 #'
+#' @returns A \code{ggtree} object.
+#'
 #' @importFrom TreeSummarizedExperiment convertNode findDescendant
 #' @importFrom ggtree ggtree
 #' @importFrom tidyr gather

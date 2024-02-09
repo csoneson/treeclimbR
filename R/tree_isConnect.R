@@ -18,6 +18,11 @@
 #' @param connect One of "any", "direct", "indirect", the type of connections
 #'     to search for.
 #'
+#' @returns A logical vector of the same length as \code{node_a} and
+#' \code{node_b}, where each element indicates whether the corresponding
+#' elements of \code{node_a} and \code{node_b} are connected in the
+#' specified way.
+#'
 #' @importFrom TreeSummarizedExperiment convertNode matTree
 #'
 #' @examples

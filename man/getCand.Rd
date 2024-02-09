@@ -54,14 +54,10 @@ should be printed to the console.}
 }
 \value{
 A list with two elements: \code{candidate_list} and
-\code{score_data}.
-\itemize{
-    \item{condidate_list}{A list of candidates obtained for the different
-    thresholds.}
-    \item{score_data}{A \code{data.frame} that includes columns from the
-    input \code{score_data} and additional columns with q-scores for
-    different thresholds.}
-}
+\code{score_data}. \code{condidate_list} is a list of candidates obtained
+for the different thresholds. \code{score_data} is a \code{data.frame}
+that includes columns from the input \code{score_data} and additional
+columns with q-scores for different thresholds.
 }
 \description{
 Generate candidates for different thresholds (t). A candidate consists of
