@@ -35,7 +35,8 @@ be passed to \code{\link[edgeR]{topTags}}. Only entities
 with adjusted p-values equal or lower than specified are returned.}
 }
 \value{
-A data frame. The columns \strong{logFC}, \strong{logCPM},
+A data frame with results for all nodes passing the imposed
+    thresholds. The columns \strong{logFC}, \strong{logCPM},
     \strong{PValue}, \strong{FDR}, \strong{F} (or \strong{LR}) are from (the
     output table of) \code{\link[edgeR]{topTags}}. The \strong{node} column
     stores the node number for each entity. Note: \strong{FDR} is corrected
@@ -47,7 +48,6 @@ Extract a table with the top-ranked nodes from a DA/DS analysis output
 }
 \examples{
 library(TreeSummarizedExperiment)
-set.seed(1)
 lse <- readRDS(system.file("extdata", "da_sim_100_30_18de.rds",
                            package = "treeclimbR"))
 tse <- aggTSE(lse, rowLevel = showNode(tree = rowTree(lse),
