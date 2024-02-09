@@ -41,7 +41,8 @@ Imports:
     viridis,
     ggtree,
     stats,
-    utils
+    utils,
+    rlang
 Suggests:
     knitr,
     rmarkdown,
