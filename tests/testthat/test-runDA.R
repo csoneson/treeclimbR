@@ -141,7 +141,8 @@ test_that("runDA works", {
     ## Check that truly differential features are high in the results list
     ## (these should be the same as in the tests for edgerWrp, as in this
     ## case we're only testing the tips)
-    pos <- sort(match(truede, rownames(edgeR::topTags(out$edgeR_results, n = Inf))))
+    pos <- sort(match(truede, rownames(edgeR::topTags(out$edgeR_results,
+                                                      n = Inf))))
     expect_equal(pos, c(1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15,
                         16, 17, 30, 47))
 
