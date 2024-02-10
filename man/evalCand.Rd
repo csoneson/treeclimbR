@@ -114,14 +114,14 @@ fc[c(seq_len(3), 13, 14)] <- 1
 fc[c(4, 5, 18)] <- -1
 df <- data.frame(node = seq_len(19),
                  pvalue = pv,
-                 foldChange = fc)
+                 logFoldChange = fc)
 ll <- getCand(tree = tinyTree, score_data = df,
                node_column = "node",
                p_column = "pvalue",
-               sign_column = "foldChange")
+               sign_column = "logFoldChange")
 cc <- evalCand(tree = tinyTree, levels = ll$candidate_list,
                score_data = ll$score_data, node_column = "node",
-               p_column = "pvalue", sign_column = "foldChange",
+               p_column = "pvalue", sign_column = "logFoldChange",
                limit_rej = 0.05)
 
 ## Best candidate

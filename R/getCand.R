@@ -67,12 +67,12 @@
 #' fc[c(4, 5, 18)] <- -1
 #' df <- data.frame(node = seq_len(19),
 #'                  pvalue = pv,
-#'                  foldChange = fc)
+#'                  logFoldChange = fc)
 #'
 #' ll <- getCand(tree = tinyTree, score_data = df,
 #'               t = c(0.01, 0.05, 0.1, 0.25, 0.75),
 #'               node_column = "node", p_column = "pvalue",
-#'               sign_column = "foldChange")
+#'               sign_column = "logFoldChange")
 #'
 #' ## Candidates
 #' ll$candidate_list
