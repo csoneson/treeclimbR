@@ -15,11 +15,14 @@
 #' vector of column names (if \code{type} is "column_order").
 #'
 #' @examples
-#' library(TreeSummarizedExperiment)
-#' library(ggtree)
-#' library(ggplot2)
-#' library(scales)
-#' library(dplyr)
+#' suppressPackageStartupMessages({
+#'     library(TreeSummarizedExperiment)
+#'     library(ggtree)
+#'     library(ggplot2)
+#'     library(scales)
+#'     library(dplyr)
+#'     library(ggnewscale)
+#' })
 #'
 #' ## Load example data (tiny tree with corresponding count matrix)
 #' tse <- readRDS(system.file("extdata", "tinytree_counts.rds",

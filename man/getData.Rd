@@ -26,11 +26,14 @@ Extract different elements of the data shown in a figure generated with
 \code{TreeHeatmap}, such as the heatmap itself, or the row and column names.
 }
 \examples{
-library(TreeSummarizedExperiment)
-library(ggtree)
-library(ggplot2)
-library(scales)
-library(dplyr)
+suppressPackageStartupMessages({
+    library(TreeSummarizedExperiment)
+    library(ggtree)
+    library(ggplot2)
+    library(scales)
+    library(dplyr)
+    library(ggnewscale)
+})
 
 ## Load example data (tiny tree with corresponding count matrix)
 tse <- readRDS(system.file("extdata", "tinytree_counts.rds",
