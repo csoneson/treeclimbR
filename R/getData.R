@@ -65,7 +65,7 @@
 #'               nrow = 3)
 #' rownames(ann) <- paste0("g", seq_len(3))
 #' colnames(ann) <- ct$variable
-#' ann <- data.frame(ann) %>%
+#' ann <- data.frame(ann) |>
 #'        mutate(y = min(df_hm$y) - seq_len(nrow(ann)),
 #'        label = rownames(ann))
 #' df_ann <- tidyr::pivot_longer(

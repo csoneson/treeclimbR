@@ -308,38 +308,34 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
     ## -------------------------------------------------------------------------
     df <- tree_fig$data
 
-    ## Heatmap
+    ## Heatmap - build up hm_df
     ## -------------------------------------------------------------------------
-    ## data
+    ## Data
     hm_df <- data.frame(hm_data, check.names = FALSE)
 
-    ## Node
-    rnam_hm <- rownames(hm_df)
-    node_hm <- TreeSummarizedExperiment::convertNode(
-        tree = tree, node = rnam_hm)
-    hm_df$node <- node_hm
+    ## Nodes
+    hm_df$node <- TreeSummarizedExperiment::convertNode(
+        tree = tree, node = rownames(hm_df))
 
     ## Row labels
     if (is.null(rownames_label)) {
-        rownames_label <- rnam_hm
+        hm_df$row_label <- rownames(hm_df)
     } else {
-        rownames_label <- rownames_label[rnam_hm]
+        hm_df$row_label <- rownames_label[rownames(hm_df)]
     }
-    hm_df$row_label <- rownames_label
 
     ## y position for each row
     desd_hm <- TreeSummarizedExperiment::findDescendant(
-        tree = tree, node = node_hm, only.leaf = FALSE, self.include = TRUE)
-    y_hm <- lapply(desd_hm, FUN = function(x) {
+        tree = tree, node = hm_df$node, only.leaf = FALSE, self.include = TRUE)
+    hm_df$y <- vapply(desd_hm, FUN = function(x) {
         xx <- match(x, df$node)
         y <- df$y[xx]
-        ## the middle point
+        ## Get the middle point of the range defined by the nodes
         mean(range(y, na.rm = TRUE))
-    })
-    hm_df$y <- unlist(y_hm)
+    }, NA_real_)
 
     ## Height of each row
-    h_hm <- lapply(desd_hm, FUN = function(x) {
+    hm_df$height <- vapply(desd_hm, FUN = function(x) {
         xx <- match(x, df$node)
         y <- df$y[xx]
 
@@ -352,24 +348,24 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
         } else {
             dt <- 1
         }
-        ## the distance
+        ## Size of range spanned by nodes
         diff(range(y, na.rm = TRUE)) + dt
-    })
-    hm_df$height <- unlist(h_hm)
+    }, NA_real_)
 
-    ## Width of a column
-    width_hm <- rel_width * (df$x |>
-                                 range(na.rm = TRUE) |>
-                                 diff()) / ncol(hm_data)
-    hm_df$width <- width_hm
+    ## Width of each column in the heatmap
+    hm_df$width <- rel_width * (df$x |>
+                                    range(na.rm = TRUE) |>
+                                    diff()) / ncol(hm_data)
 
     ## Convert to long form
+    ## -------------------------------------------------------------------------
     hm_dt <- tidyr::pivot_longer(hm_df, names_to = "variable",
                                  values_to = "value",
                                  cols = -c("node", "row_label", "y",
                                            "height", "width"))
 
-    ## Column order
+    ## Determine column order
+    ## -------------------------------------------------------------------------
     if (!is.null(column_split)) {
         # 1. column_split is given, ignore column order. The order within the
         #    same slice is determined by the input order of column split
@@ -427,26 +423,28 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
         }
     }
 
-    ## x
-    hm_dt <- hm_dt %>%
-        mutate(variable = factor(variable, levels = column_order)) |>
-        mutate(column_order = as.numeric(variable) - 1) |>
-        mutate(split_level = split_level[variable]) |>
-        mutate(split_level = as.numeric(split_level) - 1) |>
-        mutate(x = max(df$x, na.rm = TRUE) +
-                   tree_hm_gap + width_hm/2 +
-                   column_order  * width_hm +
-                   split_level * column_split_gap) |>
-        select(node, row_label, x, y,
-               height, width, variable,
-               value, column_order, split_level)
+    ## Get x coordinate and prepare for plotting
+    ## -------------------------------------------------------------------------
+    hm_dt <- hm_dt |>
+        dplyr::mutate(variable = factor(.data$variable,
+                                        levels = column_order)) |>
+        dplyr::mutate(column_order = as.numeric(.data$variable) - 1) |>
+        dplyr::mutate(split_level = split_level[.data$variable]) |>
+        dplyr::mutate(split_level = as.numeric(.data$split_level) - 1) |>
+        dplyr::mutate(x = max(df$x, na.rm = TRUE) +
+                          tree_hm_gap + .data$width/2 +
+                          .data$column_order * .data$width +
+                          .data$split_level * column_split_gap) |>
+        dplyr::select("node", "row_label", "x", "y",
+                      "height", "width", "variable",
+                      "value", "column_order", "split_level")
 
-    ## Tree + heatmap
+    ## Plot tree + heatmap
     ## -------------------------------------------------------------------------
     if (!show_row_tree) {
         tree_fig <- ggplot2::ggplot() + ggplot2::theme_void()
         hm_dt <- hm_dt |>
-            mutate(x = x - min(hm_dt$x))
+            dplyr::mutate(x = .data$x - min(.data$x))
     }
     p <- tree_fig +
         ggplot2::geom_tile(data = hm_dt,
@@ -472,34 +470,29 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
             names(column_anno_color) <- anno_uc
         }
         ## column annotations
-        xend <- yend <- anno_group <- anno_color <- NULL
         anno_df <- hm_dt |>
-            select(variable, x, width) |>
-            distinct() |>
-            mutate(
-                variable = as.character(variable),
-                x = x - 0.5 * width,
-                xend = x + width,
-                y = max(df$y, na.rm = TRUE) +
-                    column_anno_gap,
-                yend = max(df$y, na.rm = TRUE) +
-                    column_anno_gap,
-                anno_group = column_anno[variable],
-                anno_color = column_anno_color[anno_group])
+            dplyr::select("variable", "x", "width") |>
+            dplyr::distinct() |>
+            dplyr::mutate(
+                variable = as.character(.data$variable),
+                x = .data$x - 0.5 * .data$width,
+                xend = .data$x + .data$width,
+                y = max(df$y, na.rm = TRUE) + column_anno_gap,
+                yend = max(df$y, na.rm = TRUE) + column_anno_gap,
+                anno_group = column_anno[.data$variable],
+                anno_color = column_anno_color[.data$anno_group])
         anno_color <- anno_df$anno_color
         names(anno_color) <- anno_df$anno_group
 
         p <- p +
-            new_scale_color() +
-            geom_segment(data = anno_df,
-                         aes(x = x, y = y,
-                             xend = xend,
-                             yend = yend,
-                             color = anno_group),
-                         inherit.aes = FALSE,
-                         linewidth = column_anno_size) +
-            scale_color_manual(values = anno_color) +
-            labs(color = legend_title_column_anno)
+            ggnewscale::new_scale_color() +
+            ggplot2::geom_segment(
+                data = anno_df,
+                aes(x = x, y = y, xend = xend, yend = yend, color = anno_group),
+                inherit.aes = FALSE,
+                linewidth = column_anno_size) +
+            ggplot2::scale_color_manual(values = anno_color) +
+            ggplot2::labs(color = legend_title_column_anno)
     } else {
         anno_df <- NULL
     }
@@ -507,46 +500,41 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
     ## Heatmap column and row names
     ## -------------------------------------------------------------------------
     if (show_colnames) {
-        y_top <- y_bottom <- NULL
         cn_df <- hm_dt |>
-            select(variable, x, width) |>
-            distinct() |>
-            mutate(
-                variable = as.character(variable),
-                y_top = max(hm_dt$y + 0.5 * hm_dt$height) +
-                    column_anno_gap,
+            dplyr::select("variable", "x", "width") |>
+            dplyr::distinct() |>
+            dplyr::mutate(
+                variable = as.character(.data$variable),
+                y_top = max(hm_dt$y + 0.5 * hm_dt$height) + column_anno_gap,
                 y_bottom = min(hm_dt$y - 0.5 * hm_dt$height),
                 y = ifelse(colnames_position == "top",
-                           y_top, y_bottom))
-        p <- p + geom_text(data = cn_df,
-                           aes(x = x, y = y,
-                               label = variable),
-                           size = colnames_size, inherit.aes = FALSE,
-                           angle = colnames_angle,
-                           nudge_x = colnames_offset_x,
-                           nudge_y = colnames_offset_y,
-                           hjust = colnames_hjust)
+                           .data$y_top, .data$y_bottom))
+        p <- p + ggplot2::geom_text(data = cn_df,
+                                    aes(x = x, y = y, label = variable),
+                                    size = colnames_size, inherit.aes = FALSE,
+                                    angle = colnames_angle,
+                                    nudge_x = colnames_offset_x,
+                                    nudge_y = colnames_offset_y,
+                                    hjust = colnames_hjust)
     } else {
         cn_df <- NULL
     }
 
     if (show_rownames) {
-        x_right <- x_left <- NULL
         rn_df <- hm_dt |>
-            select(y, width, row_label) |>
-            distinct() |>
-            mutate(x_right = max(hm_dt$x + 0.5*hm_dt$width),
-                   x_left = min(hm_dt$x - 0.5*hm_dt$width),
-                   x = ifelse(rownames_position == "right",
-                              x_right, x_left))
-        p <- p + geom_text(data = rn_df,
-                           aes(x = x, y = y,
-                               label = row_label),
-                           size = rownames_size, inherit.aes = FALSE,
-                           angle = rownames_angle,
-                           nudge_x = rownames_offset_x,
-                           nudge_y = rownames_offset_y,
-                           hjust = rownames_hjust)
+            dplyr::select("y", "width", "row_label") |>
+            dplyr::distinct() |>
+            dplyr::mutate(x_right = max(hm_dt$x + 0.5 * hm_dt$width),
+                          x_left = min(hm_dt$x - 0.5 * hm_dt$width),
+                          x = ifelse(rownames_position == "right",
+                                     .data$x_right, .data$x_left))
+        p <- p + ggplot2::geom_text(data = rn_df,
+                                    aes(x = x, y = y, label = row_label),
+                                    size = rownames_size, inherit.aes = FALSE,
+                                    angle = rownames_angle,
+                                    nudge_x = rownames_offset_x,
+                                    nudge_y = rownames_offset_y,
+                                    hjust = rownames_hjust)
     } else {
         rn_df <- NULL
     }
@@ -554,50 +542,48 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
     ## Heatmap title
     ## -------------------------------------------------------------------------
     if (show_title) {
-        label <- NULL
         title_df <- data.frame(x = mean(range(hm_dt$x, na.rm = TRUE)),
                                y = max(hm_dt$y),
                                label = title_hm)
-        p <- p + geom_text(data = title_df,
-                           aes(x = x, y = y,
-                               label = label),
-                           inherit.aes = FALSE,
-                           fontface = title_fontface,
-                           colour = title_color,
-                           size = title_size,
-                           angle = title_angle,
-                           nudge_x = title_offset_x,
-                           nudge_y = title_offset_y,
-                           hjust = title_hjust)
+        p <- p + ggplot2::geom_text(data = title_df,
+                                    aes(x = x, y = y, label = label),
+                                    inherit.aes = FALSE,
+                                    fontface = title_fontface,
+                                    colour = title_color,
+                                    size = title_size,
+                                    angle = title_angle,
+                                    nudge_x = title_offset_x,
+                                    nudge_y = title_offset_y,
+                                    hjust = title_hjust)
     } else {
         title_df <- NULL
     }
 
     ## Split title
     ## -------------------------------------------------------------------------
-    split_label <- NULL
     split_df <- hm_dt |>
-        select(x, y, split_level) |>
-        group_by(split_level) %>%
-        summarise(x = mean(range(x, na.rm = TRUE)),
-                  y = max(range(y, na.rm = TRUE))) |>
-        arrange(split_level) |>
-        mutate(column_split = levels(column_split))
+        dplyr::select("x", "y", "split_level") |>
+        dplyr::group_by(.data$split_level) |>
+        dplyr::summarise(x = mean(range(.data$x, na.rm = TRUE)),
+                         y = max(range(.data$y, na.rm = TRUE))) |>
+        dplyr::arrange(.data$split_level) |>
+        dplyr::mutate(column_split = levels(column_split))
     if (!is.null(column_split_label)) {
-        split_df <- split_df %>%
-            mutate(split_label = column_split_label[as.character(column_split)])
-        p <- p + geom_text(data = split_df,
-                           aes(x = x, y = y,
-                               label = split_label),
-                           inherit.aes = FALSE,
-                           fontface = split_label_fontface,
-                           colour = split_label_color,
-                           size = split_label_size,
-                           angle = split_label_angle,
-                           nudge_x = split_label_offset_x,
-                           nudge_y = split_label_offset_y,
-                           hjust = split_label_hjust,
-                           vjust = split_label_vjust)
+        split_df <- split_df |>
+            dplyr::mutate(
+                split_label =
+                    column_split_label[as.character(.data$column_split)])
+        p <- p + ggplot2::geom_text(data = split_df,
+                                    aes(x = x, y = y, label = split_label),
+                                    inherit.aes = FALSE,
+                                    fontface = split_label_fontface,
+                                    colour = split_label_color,
+                                    size = split_label_size,
+                                    angle = split_label_angle,
+                                    nudge_x = split_label_offset_x,
+                                    nudge_y = split_label_offset_y,
+                                    hjust = split_label_hjust,
+                                    vjust = split_label_vjust)
 
     }
 

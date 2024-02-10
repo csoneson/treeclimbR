@@ -31,7 +31,6 @@ library(ggtree)
 library(ggplot2)
 library(scales)
 library(dplyr)
-library(ggnewscale)
 
 ## Load example data (tiny tree with corresponding count matrix)
 tse <- readRDS(system.file("extdata", "tinytree_counts.rds",
@@ -77,7 +76,7 @@ ann <- matrix(sample(LETTERS[seq_len(2)], size = 3 * ncol(df_hm),
               nrow = 3)
 rownames(ann) <- paste0("g", seq_len(3))
 colnames(ann) <- ct$variable
-ann <- data.frame(ann) \%>\%
+ann <- data.frame(ann) |>
        mutate(y = min(df_hm$y) - seq_len(nrow(ann)),
        label = rownames(ann))
 df_ann <- tidyr::pivot_longer(

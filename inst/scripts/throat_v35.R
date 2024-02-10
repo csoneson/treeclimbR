@@ -22,7 +22,7 @@ names(xt)
 names(xt)[16]
 # [1] "Throat"
 
-throat <- w %>%
+throat <- w |>
     subset(select = HMP_BODY_SUBSITE == names(xt)[16])
 throat
 # class: SummarizedExperiment
