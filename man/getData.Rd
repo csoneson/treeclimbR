@@ -80,7 +80,9 @@ colnames(ann) <- ct$variable
 ann <- data.frame(ann) \%>\%
        mutate(y = min(df_hm$y) - seq_len(nrow(ann)),
        label = rownames(ann))
-df_ann <- tidyr::gather(ann, variable, value, -c(y, label)) |>
+df_ann <- tidyr::pivot_longer(
+    ann, names_to = "variable",
+    values_to = "value", cols = -c("y", "label")) |>
     left_join(ct)
 
 ## Add new column annotation

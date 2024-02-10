@@ -109,8 +109,8 @@
 #'
 #' @importFrom TreeSummarizedExperiment convertNode findDescendant
 #' @importFrom ggtree ggtree
-#' @importFrom tidyr gather
-#' @importFrom dplyr mutate select distinct "%>%" group_by summarise arrange
+#' @importFrom tidyr pivot_longer
+#' @importFrom dplyr mutate select distinct group_by summarise arrange
 #' @importFrom ggplot2 geom_tile geom_segment scale_color_manual labs
 #'     geom_text scale_fill_viridis_c aes scale_fill_viridis_d theme_void ggplot
 #' @importFrom ggnewscale new_scale_color
@@ -364,11 +364,10 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
     hm_df$width <- width_hm
 
     ## Convert to long form
-    variable <- node <- row_label <- NULL
-    value <- x <- y <- height <- width <- NULL
-    hm_dt <- tidyr::gather(hm_df, variable, value,
-                           -c(y, node, row_label,
-                              width, height))
+    hm_dt <- tidyr::pivot_longer(hm_df, names_to = "variable",
+                                 values_to = "value",
+                                 cols = -c("node", "row_label", "y",
+                                           "height", "width"))
 
     ## Column order
     if (!is.null(column_split)) {
@@ -445,23 +444,23 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
     ## Tree + heatmap
     ## -------------------------------------------------------------------------
     if (!show_row_tree) {
-        tree_fig <- ggplot() + theme_void()
+        tree_fig <- ggplot2::ggplot() + ggplot2::theme_void()
         hm_dt <- hm_dt |>
             mutate(x = x - min(hm_dt$x))
     }
     p <- tree_fig +
-        geom_tile(data = hm_dt,
-                  aes(x = x, y = y, height = height,
-                      fill = value, width = width),
-                  color = cell_line_color,
-                  linewidth = cell_line_size,
-                  inherit.aes = FALSE) +
-        labs(fill = legend_title_hm)
+        ggplot2::geom_tile(data = hm_dt,
+                           aes(x = x, y = y, height = height,
+                               fill = value, width = width),
+                           color = cell_line_color,
+                           linewidth = cell_line_size,
+                           inherit.aes = FALSE) +
+        ggplot2::labs(fill = legend_title_hm)
 
     if (is.numeric(hm_dt$value)) {
-        p <- p + scale_fill_viridis_c()
+        p <- p + ggplot2::scale_fill_viridis_c()
     } else {
-        p <- p + scale_fill_viridis_d()
+        p <- p + ggplot2::scale_fill_viridis_d()
     }
 
     ## Heatmap annotation
@@ -469,7 +468,7 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
     if (!is.null(column_anno)) {
         if (is.null(column_anno_color)) {
             anno_uc <- unique(column_anno)
-            column_anno_color <- viridis(length(anno_uc))
+            column_anno_color <- viridis::viridis(length(anno_uc))
             names(column_anno_color) <- anno_uc
         }
         ## column annotations
