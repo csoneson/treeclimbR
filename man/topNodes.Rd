@@ -32,7 +32,7 @@ absolute value of the \code{sort_by} column before sorting.}
 with adjusted p-values equal or lower than specified are returned.}
 }
 \value{
-A \code{data.table} with test results. The \strong{node}
+A \code{data.frame} with test results. The \strong{node}
     column stores the node number for each entity.
 }
 \description{

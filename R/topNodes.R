@@ -18,7 +18,7 @@
 #' @param p_value A numeric cutoff value for adjusted p-values. Only entities
 #'     with adjusted p-values equal or lower than specified are returned.
 #'
-#' @returns A \code{data.table} with test results. The \strong{node}
+#' @returns A \code{data.frame} with test results. The \strong{node}
 #'     column stores the node number for each entity.
 #'
 #' @importFrom dplyr arrange slice filter desc

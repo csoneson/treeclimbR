@@ -35,7 +35,6 @@ Imports:
     tidyr,
     ape,
     diffcyt,
-    data.table,
     ggnewscale,
     ggplot2 (>= 3.4.0),
     viridis,

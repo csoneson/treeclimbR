@@ -32,7 +32,6 @@
 #' @importFrom dplyr arrange slice filter
 #' @importFrom TreeSummarizedExperiment convertNode
 #' @importFrom stats p.adjust
-#' @importFrom data.table rbindlist
 #' @importFrom rlang .data
 #'
 #' @examples
@@ -88,7 +87,7 @@ nodeResult <- function(object, n = 10, type = c("DA", "DS"),
             cx <- cbind(xx, node = nod, feature = rownames(xx))
             return(cx)
         })
-        ct <- data.table::rbindlist(tt)
+        ct <- do.call(dplyr::bind_rows, tt)
 
         ## Estimate FDR across features
         ct$FDR <- stats::p.adjust(p = ct$PValue, method = adjust_method)

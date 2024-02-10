@@ -199,7 +199,7 @@ test_that("evalCand works", {
     expect_named(out, c("candidate_best", "output", "candidate_list",
                         "level_info", "FDR", "method", "column_info"))
     expect_type(out$candidate_best, "list")
-    expect_s3_class(out$output, "data.table")
+    expect_s3_class(out$output, "data.frame")
     expect_type(out$candidate_list, "list")
     expect_s3_class(out$level_info, "data.frame")
     expect_equal(out$FDR, 0.05)
@@ -234,7 +234,7 @@ test_that("evalCand works", {
     expect_named(out, c("candidate_best", "output", "candidate_list",
                         "level_info", "FDR", "method", "column_info"))
     expect_type(out$candidate_best, "list")
-    expect_s3_class(out$output, "data.table")
+    expect_s3_class(out$output, "data.frame")
     expect_type(out$candidate_list, "list")
     expect_s3_class(out$level_info, "data.frame")
     expect_equal(out$FDR, 0.05)
@@ -270,7 +270,7 @@ test_that("evalCand works", {
     expect_named(out, c("candidate_best", "output", "candidate_list",
                         "level_info", "FDR", "method", "column_info"))
     expect_type(out$candidate_best, "list")
-    expect_s3_class(out$output, "data.table")
+    expect_s3_class(out$output, "data.frame")
     expect_type(out$candidate_list, "list")
     expect_s3_class(out$level_info, "data.frame")
     expect_equal(out$FDR, 0.05)

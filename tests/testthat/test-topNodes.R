@@ -99,7 +99,7 @@ test_that("topNodes works", {
     out <- topNodes(object = cc, n = 10, sort_by = NULL,
                     sort_decreasing = FALSE, sort_by_absolute = FALSE,
                     p_value = 1)
-    expect_s3_class(out, "data.table")
+    expect_s3_class(out, "data.frame")
     expect_equal(nrow(out), 7)
     expect_named(out, c("node", "pvalue", "foldChange", "adj.p", "signal.node"))
     expect_equal(out$node, c(6, 7, 8, 9, 10, 13, 18))
@@ -109,7 +109,7 @@ test_that("topNodes works", {
     out <- topNodes(object = cc, n = 10, sort_by = NULL,
                     sort_decreasing = FALSE, sort_by_absolute = FALSE,
                     p_value = 0.35)
-    expect_s3_class(out, "data.table")
+    expect_s3_class(out, "data.frame")
     expect_equal(nrow(out), 3)
     expect_named(out, c("node", "pvalue", "foldChange", "adj.p", "signal.node"))
     expect_equal(out$node, c(7, 13, 18))
@@ -119,7 +119,7 @@ test_that("topNodes works", {
     out <- topNodes(object = cc, n = 10, sort_by = "pvalue",
                     sort_decreasing = FALSE, sort_by_absolute = FALSE,
                     p_value = 0.35)
-    expect_s3_class(out, "data.table")
+    expect_s3_class(out, "data.frame")
     expect_equal(nrow(out), 3)
     expect_named(out, c("node", "pvalue", "foldChange", "adj.p", "signal.node"))
     expect_equal(out$node, c(18, 13, 7))
@@ -129,7 +129,7 @@ test_that("topNodes works", {
     out <- topNodes(object = cc, n = 10, sort_by = "pvalue",
                     sort_decreasing = TRUE, sort_by_absolute = FALSE,
                     p_value = 0.35)
-    expect_s3_class(out, "data.table")
+    expect_s3_class(out, "data.frame")
     expect_equal(nrow(out), 3)
     expect_named(out, c("node", "pvalue", "foldChange", "adj.p", "signal.node"))
     expect_equal(out$node, c(7, 13, 18))
@@ -139,7 +139,7 @@ test_that("topNodes works", {
     out <- topNodes(object = cc, n = 2, sort_by = "pvalue",
                     sort_decreasing = TRUE, sort_by_absolute = FALSE,
                     p_value = 0.35)
-    expect_s3_class(out, "data.table")
+    expect_s3_class(out, "data.frame")
     expect_equal(nrow(out), 2)
     expect_named(out, c("node", "pvalue", "foldChange", "adj.p", "signal.node"))
     expect_equal(out$node, c(7, 13))
@@ -149,7 +149,7 @@ test_that("topNodes works", {
     out <- topNodes(object = cc, n = 10, sort_by = "foldChange",
                     sort_decreasing = TRUE, sort_by_absolute = TRUE,
                     p_value = 1)
-    expect_s3_class(out, "data.table")
+    expect_s3_class(out, "data.frame")
     expect_equal(nrow(out), 7)
     expect_named(out, c("node", "pvalue", "foldChange", "adj.p", "signal.node"))
     expect_equal(out$node, c(18, 8, 10, 7, 9, 13, 6))
@@ -160,7 +160,7 @@ test_that("topNodes works", {
     out <- topNodes(object = cc, n = 10, sort_by = "foldChange",
                     sort_decreasing = FALSE, sort_by_absolute = TRUE,
                     p_value = 1)
-    expect_s3_class(out, "data.table")
+    expect_s3_class(out, "data.frame")
     expect_equal(nrow(out), 7)
     expect_named(out, c("node", "pvalue", "foldChange", "adj.p", "signal.node"))
     expect_equal(out$node, c(6, 13, 9, 7, 10, 8, 18))

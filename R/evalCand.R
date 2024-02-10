@@ -69,7 +69,6 @@
 #' @importFrom utils flush.console
 #' @importFrom stats p.adjust
 #' @importFrom dplyr select mutate filter
-#' @importFrom data.table rbindlist
 #' @importFrom TreeSummarizedExperiment findDescendant showNode matTree isLeaf
 #'
 #' @examples
@@ -374,7 +373,7 @@ evalCand <- function(tree, type = c("single", "multiple"),
         score_data[[i]][si, , drop = FALSE]
     })
 
-    outB <- data.table::rbindlist(outB)
+    outB <- do.call(dplyr::bind_rows, outB)
     pv <- outB[[p_column]]
     apv <- stats::p.adjust(pv, method = method)
     outB$adj.p <- apv
