@@ -114,8 +114,6 @@ test_that("getLevel works", {
                           message = TRUE),
                  "'drop' must be or evaluate to logical")
 
-    ## TODO: Add tests where some p-values are NA
-
     ## Check that function works as expected for valid input
     ## -------------------------------------------------------------------------
     final <- getLevel(tree = tinyTree, score_data = out,

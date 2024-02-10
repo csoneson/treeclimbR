@@ -20,7 +20,6 @@
 #' library(ggplot2)
 #' library(scales)
 #' library(dplyr)
-#' library(ggnewscale)
 #'
 #' ## Load example data (tiny tree with corresponding count matrix)
 #' tse <- readRDS(system.file("extdata", "tinytree_counts.rds",

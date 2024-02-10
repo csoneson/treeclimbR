@@ -249,11 +249,12 @@ test_that("evalCand works", {
                             best = TRUE, rej_leaf = 10, rej_node = 6,
                             rej_pseudo_leaf = NA, rej_pseudo_node = NA),
                  ignore_attr = TRUE)
-    # expect_equal(nrow(out$output), length(ll$candidate_list$`0.01`))
-    # expect_equal(as.data.frame(out$output)[out$output$feature == "gene1", seq_len(7)],
-    #              ll$score_data[match(out$output$node[out$output$feature == "gene1"],
-    #                                  ll$score_data$node), seq_len(7)],
-    #              ignore_attr = TRUE)
+    expect_equal(nrow(out$output), length(ll$candidate_list$`0.01`) +
+                     length(llna$candidate_list$`0.01`))
+    expect_equal(out$output[out$output$feature == "gene1", seq_len(7)],
+                 ll$score_data[match(out$output$node[out$output$feature == "gene1"],
+                                     ll$score_data$node), seq_len(7)],
+                 ignore_attr = TRUE)
 
     ## Multiple - use pseudo leaf
     out <- evalCand(tree = tinyTree, type = "multiple",
@@ -285,11 +286,12 @@ test_that("evalCand works", {
                             best = TRUE, rej_leaf = 9, rej_node = 6,
                             rej_pseudo_leaf = 9, rej_pseudo_node = 5),
                  ignore_attr = TRUE)
-    # expect_equal(nrow(out$output), length(ll$candidate_list$`0.01`))
-    # expect_equal(as.data.frame(out$output)[out$output$feature == "gene1", seq_len(7)],
-    #              ll$score_data[match(out$output$node[out$output$feature == "gene1"],
-    #                                  ll$score_data$node), seq_len(7)],
-    #              ignore_attr = TRUE)
+    expect_equal(nrow(out$output), length(ll$candidate_list$`0.01`) +
+                     length(llna$candidate_list$`0.01`))
+    expect_equal(out$output[out$output$feature == "gene1", seq_len(7)],
+                 ll$score_data[match(out$output$node[out$output$feature == "gene1"],
+                                     ll$score_data$node), seq_len(7)],
+                 ignore_attr = TRUE)
 
     ## Multiple - different levels for different features
     ll1 <- ll
