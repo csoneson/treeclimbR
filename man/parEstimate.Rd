@@ -2,41 +2,43 @@
 % Please edit documentation in R/parEstimate.R
 \name{parEstimate}
 \alias{parEstimate}
-\title{Parameter estimation in Dirichlet-multinomial distribution}
+\title{Parameter estimation for Dirichlet-multinomial distribution}
 \usage{
-parEstimate(obj)
+parEstimate(obj, assay = NULL)
 }
 \arguments{
-\item{obj}{A matrix or leafSummarizedExperiment. Samples in the columns and
-entities in the rows.}
+\item{obj}{A matrix or \code{TreeSummarizedExperiment}, with samples in the
+columns and entities in the rows.}
+
+\item{assay}{If \code{obj} is a \code{TreeSummarizedExperiment}, the name
+or index of the assay to use to estimate Dirichlet multinomial
+parameters. If \code{NULL}, the first assay will be used.}
 }
 \value{
-A list including \dQuote{pi} and \dQuote{theta}
+A list including the estimates of \dQuote{pi} (a vector with one
+element per row in \code{obj}) and \dQuote{theta} (a scalar).
 }
 \description{
-\code{parEstimate} is a wrapper function generated from the function
-\code{\link[dirmult]{dirmult}} with default setting on \code{init},
+\code{parEstimate} is a wrapper of the function
+\code{\link[dirmult]{dirmult}} with default settings for \code{init},
 \code{initscalar}, \code{epsilon}, \code{trace} and \code{mode}. It allows
-the input \code{obj} to accept \code{matrix} or
-\code{leafSummarizedExperiment} and output the value \code{pi} and
-\code{theta}.
+the input \code{obj} to be either a \code{matrix} or a
+\code{TreeSummarizedExperiment} and outputs the estimated values of
+\code{pi} and \code{theta}.
 }
 \examples{
 
-
-set.seed(1)
-y <- matrix(rnbinom(100,size=1,mu=10),nrow=10)
-colnames(y) <- paste("S", 1:10, sep = "")
+library(TreeSummarizedExperiment)
+set.seed(1L)
+y <- matrix(rnbinom(200, size = 1, mu = 10), nrow = 10)
+colnames(y) <- paste("S", seq_len(20), sep = "")
 rownames(y) <- tinyTree$tip.label
-
-
 toy_tse <- TreeSummarizedExperiment(rowTree = tinyTree,
                                     assays = list(y))
 res <- parEstimate(obj = toy_tse)
-
 metadata(res)$assays.par
 
 }
 \author{
-Ruizhu Huang
+Ruizhu Huang, Charlotte Soneson
 }

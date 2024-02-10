@@ -2,7 +2,7 @@
 % Please edit documentation in R/getLevel.R
 \name{getLevel}
 \alias{getLevel}
-\title{search for a target level on the tree via a specified score}
+\title{Search for a target level on the tree via a specified score}
 \usage{
 getLevel(
   tree,
@@ -16,44 +16,44 @@ getLevel(
 )
 }
 \arguments{
-\item{tree}{a phylo object to provide the hierarchical structure of nodes.}
+\item{tree}{A \code{phylo} object.}
 
-\item{score_data}{a data frame to provide scores for all nodes of the tree.
-The data frame should have at least 2 columns, one stores information about
-nodes (the node number) and the other stores score for each node. These
-columns could be named freely.}
+\item{score_data}{A \code{data.frame} providing scores for all nodes in the
+tree. The data frame should have at least 2 columns, one with information
+about nodes (the node number) and the other with score for each node.}
 
-\item{drop}{a logical expression indicating elements or rows to keep:
-missing values are taken as false.}
+\item{drop}{A logical expression indicating elements or rows to keep.
+Missing values are taken as FALSE.}
 
-\item{score_column}{the name of the score column. The search is based on the
-score value.}
+\item{score_column}{The name of the column of \code{score_data} that
+contains the original scores of the nodes.}
 
-\item{node_column}{the name of the column that stores the node number.}
+\item{node_column}{The name of the column of \code{score_data} that contains
+the numbers of the nodes.}
 
-\item{get_max}{a logical value, TRUE or FALSE. If TRUE, search for nodes
+\item{get_max}{A logical scalar. If \code{TRUE}, search for nodes
 that has higher score value than its descendants; otherwise, search for
 nodes that has lower score value than its descendants.}
 
-\item{parent_first}{a logical value, TRUE or FALSE. If TRUE, the parent
+\item{parent_first}{A logical scalar. If \code{TRUE}, the parent
 node is selected if tied values occur on the parent node and some of the
-chidren nodes.}
+children nodes.}
 
-\item{message}{a logical value, TRUE or FALSE. The default is FALSE. If TRUE,
-the progress message is printed out.}
+\item{message}{A logical scalar indicating whether progress messages should
+be printed.}
 }
 \value{
-a value
+A \code{data.frame} similar to \code{score_data} but with an
+additional column named \code{keep} indicating which nodes to retain.
 }
 \description{
-\code{getLevel} searches for the target level of the tree via a specified
-score. The score value needs to be provided for each node of the tree.
+Search for the target level of the tree via a specified score. The score
+value needs to be provided for each node of the tree.
 }
 \examples{
-
 library(TreeSummarizedExperiment)
 library(ggtree)
-data("tinyTree")
+data(tinyTree)
 ggtree(tinyTree, size = 2, branch.length = "none") +
     geom_text2(aes(label = node), color = "darkblue",
            hjust = -0.5, vjust = 0.7, size = 4) +
@@ -62,18 +62,12 @@ ggtree(tinyTree, size = 2, branch.length = "none") +
     geom_hilight(node = 13, fill = "blue", alpha = 0.4) +
     geom_hilight(node = 16, fill = "orange", alpha = 0.4)
 
-# generate score for each node     
+## Generate score for each node
 pv <- rep(0.1, 19)
-# pv[c(3, 13:14)] <- 0.01
-# pv[1:2] <- NA
-pv[c(16, 13, 17)] <- 0.01
+pv[c(16, 13, 17)] <- c(0.01, 0.05, 0.005)
+out <- data.frame(node = 1:19, pvalue = pv)
 
-
-
-out <- data.frame(node = 1:19,
-                  pvalue = pv)
-
-# search nodes
+## Search nodes
 final <- getLevel(tree = tinyTree,
                   score_data = out,
                   drop =  pvalue > 0.05,
@@ -83,10 +77,10 @@ final <- getLevel(tree = tinyTree,
                   parent_first = TRUE,
                   message = FALSE)
 
-# No node is kept because there is no difference between two groups
+## Nodes to keep
 final$node[final$keep]
 
 }
 \author{
-Ruizhu huang
+Ruizhu Huang
 }

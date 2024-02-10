@@ -2,45 +2,54 @@
 % Please edit documentation in R/tree_findChild.R
 \name{findChild}
 \alias{findChild}
-\title{Find the children}
+\title{Find the children of an internal node in a tree}
 \usage{
 findChild(tree, node, use.alias = FALSE)
 }
 \arguments{
-\item{tree}{A phylo object.}
+\item{tree}{A \code{phylo} object.}
 
-\item{node}{An internal node. It could be the node number or the node
-label.}
+\item{node}{Either the node number or node label of an internal node of
+\code{tree}.}
 
-\item{use.alias}{A logical value, TRUE or FALSE. The default is FALSE, and
-the node label would be used to name the output; otherwise, the alias of
-node label would be used to name the output. The alias of node label is
-created by adding a prefix \code{"alia_"} to the node number.}
+\item{use.alias}{A logical scalar. If \code{FALSE} (default), the node label
+is used to name the output; otherwise, the alias of the node label is
+used. The alias of the node label is created by adding a prefix
+\code{"alias_"} to the node number.}
 }
 \value{
 A vector of nodes. The numeric value is the node number, and the
-  vector name is the corresponding node label. If a node has no label, it
-  would have NA as name when \code{use.alias = FALSE}, and have the alias of
-  node label as name when \code{use.alias = TRUE}.
+    vector name is the corresponding node label. If a node has no label, it
+    would have NA as name when \code{use.alias = FALSE}, and have the alias
+    of the node label as name when \code{use.alias = TRUE}.
 }
 \description{
-\code{findChild} finds children of an internal node.
+Find the direct children of an internal node in a tree.
 }
 \examples{
-data(tinyTree)
-
 library(ggtree)
-ggtree(tinyTree) +
-geom_text2(aes(label = node), color = "darkblue",
-               hjust = -0.5, vjust = 0.7) +
-geom_hilight(node = 17, fill = 'steelblue', alpha = 0.5) +
-geom_text2(aes(label = label), color = "darkorange",
-           hjust = -0.1, vjust = -0.7)
 
-(tips <- findChild(tree = tinyTree, 
-                   node = c(17, 12)))
+data(tinyTree)
+ggtree(tinyTree) +
+    geom_text2(aes(label = node), color = "darkblue",
+               hjust = -0.5, vjust = 0.7) +
+    geom_hilight(node = 17, fill = 'steelblue', alpha = 0.5) +
+    geom_text2(aes(label = label), color = "darkorange",
+               hjust = -0.1, vjust = -0.7)
+
+## Specify node numbers
+findChild(tree = tinyTree, node = c(17, 12))
+
+## Name return values using aliases
+findChild(tree = tinyTree, node = c(17, 12), use.alias = TRUE)
+
+## Specify node labels
+findChild(tree = tinyTree, node = c("Node_17", "Node_12"))
+
+## Tips have no children
+findChild(tree = tinyTree, node = "t4")
 
 }
 \author{
-Ruizhu Huang
+Ruizhu Huang, Charlotte Soneson
 }

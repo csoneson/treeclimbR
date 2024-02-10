@@ -2,10 +2,11 @@
 % Please edit documentation in R/medianByClusterMarker.R
 \name{medianByClusterMarker}
 \alias{medianByClusterMarker}
-\title{calculate median values of markers for each cluster}
+\title{Calculate median values of markers for each cluster}
 \usage{
 medianByClusterMarker(
   SE,
+  assay = 1,
   marker_in_column = TRUE,
   column_cluster = "cluster_id",
   use_marker = NULL
@@ -14,42 +15,56 @@ medianByClusterMarker(
 \arguments{
 \item{SE}{A \code{\link[SummarizedExperiment]{SummarizedExperiment}} object.}
 
-\item{marker_in_column}{A logical value, either TRUE or FALSE. The default is
-TRUE (markers are in columns)}
+\item{assay}{A numeric index or assay name indicating with assay of \code{SE}
+to use to calculate medians.}
 
-\item{column_cluster}{The name of the column that has information about
-cluster id.}
+\item{marker_in_column}{A logical scalar, indicating whether markers (genes,
+features) are in the columns of \code{SE} or not. The default is
+\code{TRUE} (markers are in columns).}
 
-\item{use_marker}{A logical vector including FALSE and TRUE to specify
-markers to be used. The default is NULL and all markers are used.}
+\item{column_cluster}{The name of the column of \code{colData(SE)} that
+contains the cluster assignment of each smaple.}
+
+\item{use_marker}{A logical or numeric vector such that
+\code{SE[use_marker, ]} (if \code{marker_in_column = FALSE}) or
+\code{SE[, use_marker]} (if \code{marker_in_column = TRUE}) subsets
+\code{SE} to the markers that should be retained. If \code{NULL}
+(default), all markers are used.}
 }
 \value{
-A \code{\link[SummarizedExperiment]{SummarizedExperiment}} object. It
-  includes clusters in rows and the median value of each marker in each
-  cluster in columns
+A \code{\link[SummarizedExperiment]{SummarizedExperiment}} object
+    containing the median value of each marker in each cluster.
 }
 \description{
-\code{medianByClusterMarker} calculates median value of each marker in each
-cluster. The input data should be a
-\code{\link[SummarizedExperiment]{SummarizedExperiment}} object. The markers
-could either be in columns or in rows of the \code{assays} slot.
+Calculate median value of each marker in each cluster.
 }
 \examples{
-library(TreeSummarizedExperiment)
+library(SummarizedExperiment)
+
+## Simulate data with 100 cells and 10 markers (5 type, 5 state markers)
 set.seed(1)
-count <- matrix(rpois(n = 1000, lambda = 10),
-                nrow = 100)
+count <- matrix(rpois(n = 1000, lambda = 10), nrow = 100)
 colnames(count) <- paste0("mk", 1:10)
-rowD <- data.frame("cluster" = sample(1:6, 100, replace = TRUE))
+rowD <- data.frame("cluster" = sample(seq_len(6), 100, replace = TRUE))
 colD <- data.frame(type_marker = rep(c(FALSE, TRUE), each = 5))
-d_se <- TreeSummarizedExperiment(assays = list(count),
-                                 rowData = rowD,
-                                 colData = colD)
-d_med <- medianByClusterMarker(SE = d_se, marker_in_column = TRUE,
-                               column_cluster = "cluster",
-                               use_marker = colData(d_se)$type_marker)
-d_med
+
+## SE with markers in columns
+d_se <- SummarizedExperiment(assays = list(counts = count),
+                             rowData = rowD,
+                             colData = colD)
+medianByClusterMarker(SE = d_se, marker_in_column = TRUE,
+                      column_cluster = "cluster",
+                      use_marker = colData(d_se)$type_marker)
+
+## SE with markers in rows
+d_se <- SummarizedExperiment(assays = list(counts = t(count)),
+                             rowData = colD,
+                             colData = rowD)
+medianByClusterMarker(SE = d_se, marker_in_column = FALSE,
+                      column_cluster = "cluster",
+                      use_marker = rowData(d_se)$type_marker)
+
 }
 \author{
-Ruizhu Huang
+Ruizhu Huang, Charlotte Soneson
 }

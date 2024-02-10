@@ -2,23 +2,28 @@
 % Please edit documentation in R/treeScore.R
 \name{treeScore}
 \alias{treeScore}
-\title{Generate weighted score accounting for the family effect}
+\title{Generate weighted tree score accounting for the family effect}
 \usage{
 treeScore(tree, score_data, node_column, score_column, new_score)
 }
 \arguments{
-\item{tree}{A phylo object}
+\item{tree}{A \code{phylo} object.}
 
 \item{score_data}{A data frame that includes at least two columns. One column
 stores the number of the node, and the other stores the original score of
 the corresponding node.}
 
-\item{node_column}{The name of the column that stores the number of the node.}
+\item{node_column}{The name of the column of \code{score_data} that contains
+the numbers of the nodes.}
 
-\item{score_column}{The name of the column that stores the original score of
-the node.}
+\item{score_column}{The name of the column of \code{score_data} that
+contains the original scores of the nodes.}
 
 \item{new_score}{The name of the column that stores the generated score.}
+}
+\value{
+A \code{data.frame} similar to \code{score_data}, but with an
+extra column (named \code{new_score}) containing the weighted scores.
 }
 \description{
 \code{treeScore} takes the tree structure into account when calculating the
@@ -27,43 +32,41 @@ score for an internal node. If an internal node A has two children B and C,
 weighted mean of the scores in the whole family (A, B and C). The weights are
 based on the number of descendant leaves. For example, if the node B has 2
 descendant leaves, and C has 3 descendant leaves, then A would have 5. The
-calculation would be \eqn{(Score\_A * 5 + Score\_B*2 +Score\_C*3)/10}. The
-generation starts from the leaves and the new generated scores are used to
-update those in higher level of the tree until the root is reached.
+calculation would be \eqn{(Score\_A * 5 + Score\_B * 2 +Score\_C * 3)/10}.
+The generation starts from the leaves and the new generated scores are used
+to update those in higher level of the tree until the root is reached.
 }
 \examples{
-
 library(TreeSummarizedExperiment)
 library(ggtree)
 library(dplyr)
 
-# tree
-data("tinyTree")
+## tree
+data(tinyTree)
 ggtree(tinyTree) + geom_text2(aes(label = node))
 
-# score
-exScore <- data.frame(nodeNum = 1:19, score = (1:19)/10)
+## score
+exScore <- data.frame(nodeNum = seq_len(19), score = (seq_len(19))/10)
 
-# update the score based on the family provided by the tree
+## Calculate new score based on the tree
 newScore <- treeScore(tree = tinyTree, score_data = exScore,
-                      node_column = "nodeNum", 
+                      node_column = "nodeNum",
                       score_column = "score",
                       new_score = "wScore")
 
-# visualize the result
-df <- newScore \%>\% 
-      rename(node = nodeNum) \%>\%    
-      mutate(score = round(score, 3)) \%>\%
-      mutate(wScore = round(wScore, 3))
-
-# the original scores are in black texts and the new ones in blue
-ggtree(tinyTree) \%<+\% 
-   df + 
+## Visualize the result
+## The original scores are in black texts and the new ones in blue
+df <- newScore |>
+      rename(node = nodeNum) |>
+      mutate(score = round(score, 3),
+             wScore = round(wScore, 3))
+ggtree(tinyTree) \%<+\%
+   df +
    geom_text2(aes(label = score), hjust = -0.05) +
-   geom_text2(aes(label = wScore, hjust = -1.2), 
-   color = "blue") +
-   xlim(0, 5)  
+   geom_text2(aes(label = wScore, hjust = -1.2),
+   color = "blue")
+
 }
 \author{
-Ruizhu HUANG
+Ruizhu Huang
 }

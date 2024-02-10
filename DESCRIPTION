@@ -1,7 +1,8 @@
 Package: treeclimbR
 Type: Package
-Title: An algorithm to find the signal level on the tree
+Title: An algorithm to find optimal signal levels in a tree
 Version: 0.1.5
+Date: 2024-02-07
 Authors@R: c(person("Ruizhu", "Huang", email = "ruizhuRH@gmail.com",
                     role = c("aut"), 
                     comment = c(ORCID = "0000-0003-3285-1945")),
@@ -11,17 +12,17 @@ Authors@R: c(person("Ruizhu", "Huang", email = "ruizhuRH@gmail.com",
                     comment = c(ORCID = "0000-0003-3833-2169")))
 Description: The arrangement of hypotheses in a hierarchical structure appears 
     in many research fields and often indicates different resolutions at which 
-    data can be viewed. On which resolution level should the signal be 
-    intepreted has arisen researchers' interest. A flexible method to select 
-    resolution level, instead of cutting the tree structure at arbitary levels,
-    is desired. Our package treeclimbR is such a tool that using a tuning 
-    parameter to generate candidate resolutions and further select the best 
-    resolution level.
+    data can be viewed. This raises the question of which resolution level 
+    the signal should best be interpreted on. treeclimbR provides a flexible 
+    method to select optimal resolution levels (potentially different levels 
+    in different parts of the tree), rather than cutting the tree at an 
+    arbitrary level. treeclimbR uses a tuning parameter to generate candidate 
+    resolutions and from these selects the optimal one.
 License: Artistic-2.0
 Encoding: UTF-8
 Depends: 
-    R(>= 4.3.0), 
-    TreeSummarizedExperiment(>= 1.99.0)
+    R (>= 4.3.0), 
+    TreeSummarizedExperiment (>= 1.99.0)
 biocViews: StatisticalMethod, CellBasedAssays
 Imports:
     edgeR,
@@ -34,18 +35,21 @@ Imports:
     tidyr,
     ape,
     diffcyt,
-    data.table,
     ggnewscale,
-    ggplot2,
+    ggplot2 (>= 3.4.0),
     viridis,
     ggtree,
     stats,
-    utils
+    utils,
+    rlang
 Suggests:
     knitr,
     rmarkdown,
-    scales
+    scales,
+    testthat (>= 3.0.0),
+    BiocStyle
 RoxygenNote: 7.3.1
 VignetteBuilder: knitr
 URL: https://github.com/csoneson/treeclimbR
 BugReports: https://github.com/csoneson/treeclimbR/issues
+Config/testthat/edition: 3

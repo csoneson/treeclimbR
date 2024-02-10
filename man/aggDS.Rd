@@ -2,8 +2,7 @@
 % Please edit documentation in R/aggDS.R
 \name{aggDS}
 \alias{aggDS}
-\title{aggregate data
-\code{aggDS} aggregate data based on the tree.}
+\title{Aggregate observed data based on a tree}
 \usage{
 aggDS(
   TSE,
@@ -16,46 +15,74 @@ aggDS(
 )
 }
 \arguments{
-\item{TSE}{A \code{TreeSummarizedExperiment} object}
+\item{TSE}{A \code{TreeSummarizedExperiment} object. Rows represent
+variables (e.g., genes) and columns represent observations (e.g., cells).
+The object must contain a column tree, whose tips represent initial
+cell clusters (the \code{cluster_id} annotation indicates which of
+these clusters a cell belongs to). The internal nodes represent
+increasingly coarse partitions of the cells obtained by successively
+merging the original clusters according to the provided column tree.}
 
-\item{assay}{A name or a numeric value to index a matrix in \code{assays}.}
+\item{assay}{The name or index of the assay from \code{TSE} to aggregate
+values from.}
 
-\item{sample_id}{The column name of sample id.}
+\item{sample_id}{A character scalar indicating the column of
+\code{colData(TSE)} that corresponds to the sample ID. These will be the
+columns of the output object.}
 
-\item{group_id}{The column name of group id.}
+\item{group_id}{A character scalar indicating the column of
+\code{colData(TSE)} that corresponds to the group/condition. This
+information will be propagated to the aggregated object.}
 
-\item{cluster_id}{The column name of clusters.}
+\item{cluster_id}{A character scalar indicating the column of
+\code{colData(TSE)} that corresponds to the initial cluster ID for
+each cell.}
 
-\item{FUN}{The function}
+\item{FUN}{The aggregation function.}
 
-\item{message}{TRUE or FALSE. If TRUE, the running process is shown.}
+\item{message}{A logical scalar, indicating whether progress messages
+should be printed to the console.}
 }
 \value{
-A singleCellExperiment object. In \code{assays}, each matrix is
-    data of a node on the tree. Rows of matrix represent genes and columns
-    represent samples.
+A \code{SummarizedExperiment} object. Each assay represents the
+    aggregated values for one node in the tree.
 }
 \description{
-aggregate data
-\code{aggDS} aggregate data based on the tree.
+Aggregate observed values based on a column (sample) tree, e.g. for
+differential state analysis. The returned object will contain one
+abundance matrix for each node in the tree, with columns corresponding
+to sample IDs and rows corresponding to the same features as the rows of
+the input object. The nodes correspond to
+either the original sample clusters, or larger metaclusters encompassing
+several of the original clusters (defined by the provided column tree).
 }
 \examples{
 library(treeclimbR)
 library(ape)
 
-tr <- rtree(3, tip.label = LETTERS[1:3])
-cc <- matrix(rpois(50, 10), nrow = 5)
-rownames(cc) <- paste0("gene", 1:5)
-colnames(cc) <- paste0("cell", 1:10)
-cd <- data.frame(sid = rep(1:2, each = 5),
-                 gid = rep(letters[1:2], each = 5),
-                 cid = sample(LETTERS[1:3], size = 10, replace = TRUE),
+set.seed(1L)
+tr <- rtree(3, tip.label = LETTERS[seq_len(3)])
+plot(tr)
+cc <- matrix(rpois(60, 10), nrow = 6)
+rownames(cc) <- paste0("gene", seq_len(6))
+colnames(cc) <- paste0("cell", seq_len(10))
+cd <- data.frame(sid = rep(seq_len(2), each = 5),
+                 gid = rep(letters[seq_len(2)], each = 5),
+                 cid = sample(LETTERS[seq_len(3)], size = 10,
+                              replace = TRUE),
                  stringsAsFactors = FALSE)
-tse <- TreeSummarizedExperiment(assays = list(cc),
+tse <- TreeSummarizedExperiment(assays = list(counts = cc),
                                 colTree = tr,
                                 colNodeLab = cd$cid,
                                 colData = cd)
 
-out <- aggDS(TSE = tse, assay = 1, sample_id = "sid",
+out <- aggDS(TSE = tse, assay = "counts", sample_id = "sid",
              group_id = "gid", cluster_id = "cid")
+
+## Aggregated counts for the node alias_4
+SummarizedExperiment::assay(out, "alias_4")
+
+}
+\author{
+Ruizhu Huang, Charlotte Soneson
 }

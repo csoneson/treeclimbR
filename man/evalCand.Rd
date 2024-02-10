@@ -2,16 +2,16 @@
 % Please edit documentation in R/evalCand.R
 \name{evalCand}
 \alias{evalCand}
-\title{evaluate candidate levels and select the best one}
+\title{Evaluate candidate levels and select the optimal one}
 \usage{
 evalCand(
   tree,
   type = c("single", "multiple"),
-  levels = cand_list,
+  levels,
   score_data = NULL,
   node_column,
   p_column,
-  sign_column = sign_column,
+  sign_column,
   feature_column = NULL,
   method = "BH",
   limit_rej = 0.05,
@@ -20,76 +20,81 @@ evalCand(
 )
 }
 \arguments{
-\item{tree}{A phylo object.}
+\item{tree}{A \code{phylo} object.}
 
-\item{type}{"single" or "multiple".}
+\item{type}{A character scalar indicating whether the evaluation is for a
+DA-type workflow (set \code{type="single"}) or a DS-type workflow
+(set \code{type="multiple"}).}
 
-\item{levels}{A list of candidate levels that are selected by
-\code{\link{getCand}}. If \code{type = "DA"}, elements in the list are
-candidate levels, and are named by values of tuning parameter that are
-used. If \code{type = "DS"}, a nested list is required and the list should
-be named by the feature (e.g., genes or antibodies). Each element is a list
-of candidate levels for a feature (e.g. gene or antibody) that are selected
-by \code{\link{getCand}}.}
+\item{levels}{A list of candidate levels that are returned by
+\code{\link{getCand}}. If \code{type = "single"}, elements in the list
+are candidate levels, and are named by the value of the tuning parameter.
+If \code{type = "multiple"}, a nested list is required and
+the list should be named by the feature (e.g., genes). In that case,
+each element is a list of candidate levels for that feature.}
 
-\item{score_data}{A data frame (\code{type = "DA"}) or a of data frame
-(\code{type = "DS"}). Each data frame includes at least one column about
-the nodes (\code{node_column}), one column about the p value
-(\code{p_column}), one column about the direction of change
-(\code{sign_column}) and one optional column about the feature
-(\code{feature_column}, this is to distinct the results from different
-features for \code{type = "DS"} in the final output.)}
+\item{score_data}{A \code{data.frame} (\code{type = "single"}) or a list of
+\code{data.frame}s (\code{type = "multiple"}). Each \code{data.frame}
+must have at least one column containing the node IDs
+(defined by \code{node_column}), one column with p-values
+(defined by \code{p_column}), one column with the direction of change
+(defined by \code{sign_column}) and one optional column with the feature
+(\code{feature_column}, for \code{type="multiple"}).}
 
-\item{node_column}{The name of the column that gives the node information.}
+\item{node_column}{The name of the column that contains the node information.}
 
-\item{p_column}{The name of the column that gives p values of nodes.}
+\item{p_column}{The name of the column that contains p-values of nodes.}
 
-\item{sign_column}{The name of the column that gives the direction of the
+\item{sign_column}{The name of the column that contains the direction of the
 (estimated) change.}
 
-\item{feature_column}{The name of the column that gives information about the
-feature.}
+\item{feature_column}{The name of the column that contains information about
+the feature ID.}
 
 \item{method}{method The multiple testing correction method. Please refer to
 the argument \code{method} in \code{\link[stats]{p.adjust}}. Default is
 "BH".}
 
-\item{limit_rej}{The FDR level. Default is 0.05.}
+\item{limit_rej}{The desired false discovery rate threshold.}
 
-\item{use_pseudo_leaf}{TRUE or FALSE. If FALSE, the FDR is
-calculated on the leaf level of the tree; If TRUE, the FDR is
-calculated on the pseudo leaf level. The pseudo-leaf level is the level on
-which entities have sufficient data to run analysis and the level that is
+\item{use_pseudo_leaf}{A logical scalar. If \code{FALSE}, the FDR is
+calculated on the leaf level of the tree; If \code{TRUE}, the FDR is
+calculated on the pseudo leaf level. The pseudo-leaf level is the level
+on which entities have sufficient data to run analysis and the that is
 closest to the leaf level.}
 
-\item{message}{A logical value, TRUE or FALSE. Default is FALSE. If TRUE, the
-message about running process is printed out.}
+\item{message}{A logical scalar, indicating whether progress messages should
+be printed.}
 }
 \value{
-a list.
-  \describe{
-  \item{\code{candidate_best}}{the best candidate level}
-  \item{\code{output}}{the result of best candidate level}
-  \item{\code{candidate_list}}{a list of candidates}
-  \item{\code{level_info}}{the information of all candidates}
-  \item{FDR}{the specified FDR level}
-  \item{method}{the method to perform multiple test correction.}
-  }
- More details about columns in \code{level_info}.
- \itemize{
- \item t the thresholds
- \item r the upper limit of T to control FDR on the leaf level
- \item is_valid whether the threshold is in the range to control leaf FDR
- \item \code{limit_rej} the specified FDR
- \item \code{level_name} the name of the candidate level
- \item \code{rej_leaf} the number of rejection on the leaf level
- \item \code{rej_pseudo_leaf} the number of rejected pseudo leaf nodes.
- \item \code{rej_node} the number of rejection on the tested candidate level
- }
+A list with the following components:
+\describe{
+    \item{\code{candidate_best}}{The best candidate level}
+    \item{\code{output}}{Node-level information for best candidate level}
+    \item{\code{candidate_list}}{A list of candidates}
+    \item{\code{level_info}}{Summary information of all candidates}
+    \item{\code{FDR}}{The specified FDR level}
+    \item{\code{method}}{The method to perform multiple test correction.}
+    \item{\code{column_info}}{A list with the specified node, p-value, sign
+    and feature column names}
+}
+More details about the columns in \code{level_info}:
+\itemize{
+    \item t The thresholds.
+    \item r The upper limit of t to control FDR on the leaf level.
+    \item is_valid Whether the threshold is in the range to control leaf FDR.
+    \item \code{limit_rej} The specified FDR.
+    \item \code{level_name} The name of the candidate level.
+    \item \code{rej_leaf} The number of rejections on the leaf level.
+    \item \code{rej_pseudo_leaf} The number of rejected pseudo leaf nodes.
+    \item \code{rej_node} The number of rejections on the tested candidate
+    level (leaves or internal nodes).
+}
 }
 \description{
-\code{evalCand} evaluate all candidate levels and select the one with best
-performance
+Evaluate all candidate levels proposed by \code{\link{getCand}} and select
+the one with best performance. For more details about how the scoring is
+done, see Huang et al (2021): https://doi.org/10.1186/s13059-021-02368-1.
 }
 \examples{
 library(TreeSummarizedExperiment)
@@ -100,26 +105,31 @@ ggtree(tinyTree, branch.length = "none") +
    geom_text2(aes(label = node)) +
    geom_hilight(node = 13, fill = "blue", alpha = 0.5) +
    geom_hilight(node = 18, fill = "orange", alpha = 0.5)
-set.seed(2)
+set.seed(1)
 pv <- runif(19, 0, 1)
-pv[c(1:5, 13, 14, 18)] <- runif(8, 0, 0.001)
+pv[c(seq_len(5), 13, 14, 18)] <- runif(8, 0, 0.001)
 
 fc <- sample(c(-1, 1), 19, replace = TRUE)
-fc[c(1:3, 13, 14)] <- 1
+fc[c(seq_len(3), 13, 14)] <- 1
 fc[c(4, 5, 18)] <- -1
-df <- data.frame(node = 1:19,
+df <- data.frame(node = seq_len(19),
                  pvalue = pv,
-                 foldChange = fc)
+                 logFoldChange = fc)
 ll <- getCand(tree = tinyTree, score_data = df,
-              #t = seq(0, 1, by = 0.05),
                node_column = "node",
                p_column = "pvalue",
-               sign_column = "foldChange")
+               sign_column = "logFoldChange")
 cc <- evalCand(tree = tinyTree, levels = ll$candidate_list,
-               score_data = df, node_column = "node",
-               p_column = "pvalue", sign_column = "foldChange",
-               limit_rej = 0.05 )
+               score_data = ll$score_data, node_column = "node",
+               p_column = "pvalue", sign_column = "logFoldChange",
+               limit_rej = 0.05)
+
+## Best candidate
+cc$candidate_best
+
+## Details for best candidate
 cc$output
+
 }
 \author{
 Ruizhu Huang

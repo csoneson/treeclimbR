@@ -1,131 +1,134 @@
 #' Calculate true positive rate (TPR) on a tree structure
 #'
-#' \code{tpr} calculates the true positive rate (TPR) on a tree structure at
-#' leaf or node level.
+#' Calculate the true positive rate on a tree structure, at either leaf or
+#' node level.
 #'
-#' @param tree A phylo object
-#' @param truth Nodes that have signals (eg. differentally abundant at different
-#'   experimental conditions.). \strong{Note:} when TPR is required at leaf
-#'   level (\code{only.leaf = TRUE}), the descendant leaves of the given nodes
-#'   will be found out and the TPR is calculated on the leaf level;
-#' @param found Nodes that have been found to have signal (eg. differentally
-#'   abundant at different experimental conditions). \strong{Note:} when TPR is
-#'   required at leaf level (\code{only.leaf = TRUE}), the descendant leaves of
-#'   the given nodes will be found out and the TPR is calculated on the leaf
-#'   level;
-#' @param only.leaf A logical value, TRUE or FALSE. If TRUE, true positive rate
-#'   is calculated at the leaf (tip) level; otherwise it is calculated at node
-#'   level. The default is TRUE
-#'   
-#' @export
-#' @return A true positive rate
 #' @author Ruizhu Huang
+#' @export
+#'
+#' @param tree A \code{phylo} object.
+#' @param truth True signal nodes (e.g., nodes that are truly differentially
+#'     abundant between experimental conditions). \strong{Note:} when the
+#'     TPR is requested at the leaf level (\code{only.leaf = TRUE}), the
+#'     descendant leaves of the given nodes will be found and the TPR will be
+#'     estimated on the leaf level.
+#' @param found Detected signal nodes (e.g., nodes that have been found to be
+#'     differentially abundant via a statistical testing procedure).
+#'     \strong{Note:} when the TPR is requested at the leaf level
+#'     (\code{only.leaf = TRUE}), the descendant leaves of the given nodes will
+#'     be found out and the TPR will be estimated on the leaf level.
+#' @param only.leaf A logical scalar. If \code{TRUE}, the false discovery rate
+#'     is calculated at the leaf (tip) level; otherwise it is calculated at
+#'     the node level.
+#'
+#' @returns The estimated true positive rate.
+#'
+#' @importFrom TreeSummarizedExperiment convertNode
+#'
 #' @examples
-#' library(ggtree)
-#' library(TreeSummarizedExperiment)
+#' suppressPackageStartupMessages({
+#'     library(ggtree)
+#'     library(TreeSummarizedExperiment)
+#' })
+#'
 #' data("tinyTree")
-#' ggtree(tinyTree) + 
-#'    geom_text2(aes(label = node)) + 
+#'
+#' ## Two branches are truly differential
+#' ggtree(tinyTree) +
+#'    geom_text2(aes(label = node)) +
 #'    geom_hilight(node = 16, fill = "orange", alpha = 0.3) +
 #'    geom_hilight(node = 13, fill = "blue", alpha = 0.3)
 #'
-#' # Truth: two branches have differential
-#' # abundance under different conditions.
+#' ## TPR at the leaf level (7/8)
+#' tpr(tree = tinyTree, truth = c(16, 13),
+#'     found = c(15, 14), only.leaf = TRUE)
 #'
-#' # Found: branches with node 17 and node 14
-#'  # TPR at the tip level
-#' tpr1 <- tpr(tree = tinyTree, truth = c(16, 13),
-#'             found = c(17, 14), only.leaf = TRUE)
-#'  # TPR at the node level
-#' tpr2 <- tpr(tree = tinyTree, truth = c(16, 13),
-#'             found = c(15, 14), only.leaf = FALSE)
+#' ## TPR at the node level (12/14)
+#' tpr(tree = tinyTree, truth = c(16, 13),
+#'     found = c(15, 14), only.leaf = FALSE)
 #'
-#'
+tpr <- function(tree, truth, found, only.leaf = TRUE) {
+    .assertVector(x = tree, type = "phylo")
+    .assertScalar(x = only.leaf, type = "logical")
 
-
-tpr <- function(tree, truth, found,
-                only.leaf = TRUE) {
-    
-    if (!inherits(tree, "phylo")) {
-        stop("tree: should be a phylo object")
-    }
-    
-   if (is.character(truth)) {
-        truth <- convertNode(tree = tree, node = truth,
-                           message = FALSE)
+    if (is.character(truth)) {
+        truth <- TreeSummarizedExperiment::convertNode(
+            tree = tree, node = truth, message = FALSE)
     }
     if (is.character(found)) {
-        found <- convertNode(tree = tree, node = found,
-                           message = FALSE)
+        found <- TreeSummarizedExperiment::convertNode(
+            tree = tree, node = found, message = FALSE)
     }
-    
+
     tt <- .tpr0(tree = tree, truth = truth,
                 found = found, only.leaf = only.leaf)
     tpr <- tt[1]/tt[2]
-    
-    
-    # return final results
     names(tpr) <- "tpr"
+
     return(tpr)
 }
 
 
-#' Calculate true positives and positives
+#' Count true positives and all positives
 #'
-#' \code{.tpr0} calculates the number of true positives and the total number of
-#' positives on a tree structure at leaf or node level.
+#' Calculate the number of true positives and the total
+#' number of positives on a tree structure, at leaf or node level.
 #'
-#' @param tree A phylo object
-#' @param truth Nodes that have signals (eg. differentally abundant at different
-#'  experimental conditions.).
-#' @param found Nodes that have been found to have signal
-#' @param only.leaf A logical value, TRUE or FALSE. If TRUE, true positive rate
-#'   is calculated at the leaf (tip) level; otherwise it is calculated at node
-#'   level. The default is TRUE
-#' @return a vector
+#' @author Ruizhu Huang
+#'
+#' @param tree A \code{phylo} object.
+#' @param truth True signal nodes (e.g., nodes that are truly differentially
+#'     abundant between experimental conditions).
+#' @param found Detected signal nodes (e.g., nodes that have been found to be
+#'     differentially abundant via a statistical testing procedure).
+#' @param only.leaf A logical scalar. If \code{TRUE}, the false discovery rate
+#'     is calculated at the leaf (tip) level; otherwise it is calculated at
+#'     the node level.
+#'
+#' @return A vector with two numbers, the number of true positives and the
+#' total number of positives.
+#'
 #' @keywords internal
+#' @noRd
+#'
+#' @importFrom TreeSummarizedExperiment findDescendant
+#'
+.tpr0 <- function(tree, truth = NULL, found = NULL, only.leaf = TRUE) {
 
+    ## Check inputs
+    ## -------------------------------------------------------------------------
+    if (!is.null(truth) && !(is.character(truth) || is.numeric(truth))) {
+        stop("'truth' should be either a character vector or a numeric ",
+             "vector")
+    }
 
-.tpr0 <- function(tree,
-                  truth = NULL,
-                  found = NULL,
-                  only.leaf = TRUE) {
-    
-    # ================= check inputs ===========================
-    if (!is.null(truth)) {
-        if (!(is.character(truth) |
-              is.numeric(truth) |
-              is.integer(truth))) {
-            stop("truth should include character or numeric")
-        }
+    if (!is.null(found) && !(is.character(found) || is.numeric(found))) {
+        stop("'found' should be either a character vector or a numeric ",
+             "vector")
     }
-    
-    if (!is.null(found)) {
-        if (!(is.character(found) |
-              is.numeric(found) |
-              is.integer(found))) {
-            stop("found should include character or numeric")
-        } 
-    }
-    
-    # ================= without diff ===========================
-    if (is.null(truth) | length(truth) == 0) {
+
+    ## Count positives
+    ## -------------------------------------------------------------------------
+    if (is.null(truth) || length(truth) == 0) {
+        ## No truly positive nodes
         c(tp = 1, pos = 1)
     } else {
-        # ================= with diff ===========================
-        nodeT <- findDescendant(tree = tree, node = truth,
-                        only.leaf = only.leaf, self.include = TRUE)
+        ## Some truly positive nodes
+        nodeT <- TreeSummarizedExperiment::findDescendant(
+            tree = tree, node = truth, only.leaf = only.leaf,
+            self.include = TRUE)
         nodeT <- unique(unlist(nodeT))
-        
-        # no discovery
+
         if (is.null(found)) {
-            c(tp = 0, pos = length(nodeT)) 
+            ## No significant nodes
+            c(tp = 0, pos = length(nodeT))
         } else {
-            # found 
-            nodeF <- findDescendant(tree = tree, node = found,
-                            only.leaf = only.leaf, self.include = TRUE)
+            ## Some significant nodes
+            nodeF <- TreeSummarizedExperiment::findDescendant(
+                tree = tree, node = found, only.leaf = only.leaf,
+                self.include = TRUE)
             nodeF <- unique(unlist(nodeF))
-            # true positive & positive
+
             TP <- intersect(nodeT, nodeF)
             c(tp = length(TP), pos = length(nodeT))
         }
