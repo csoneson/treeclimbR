@@ -32,7 +32,10 @@ They are considered directly connected if one node is the parent of the
 other, and indirectly connected otherwise.
 }
 \examples{
-library(ggtree)
+suppressPackageStartupMessages({
+    library(ggtree)
+})
+
 data(tinyTree)
 ggtree(tinyTree, branch.length = "none") +
     geom_text2(aes(label = node))

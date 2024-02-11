@@ -12,16 +12,18 @@
 #' @importFrom rlang .data
 #'
 #' @examples
-#' library(TreeSummarizedExperiment)
-#' library(ggtree)
+#' suppressPackageStartupMessages({
+#'     library(TreeSummarizedExperiment)
+#'     library(ggtree)
+#' })
 #'
 #' ## Simulate some data
 #' data(tinyTree)
 #' ggtree(tinyTree, branch.length = "none") +
 #'    geom_text2(aes(label = node)) +
-#'    geom_hilight(node = 13, fill = "blue", alpha = 0.5) +
-#'    geom_hilight(node = 18, fill = "orange", alpha = 0.5)
-#' set.seed(2)
+#'    geom_hilight(node = 13, fill = "blue", alpha = 0.3) +
+#'    geom_hilight(node = 18, fill = "orange", alpha = 0.3)
+#' set.seed(1)
 #' pv <- runif(19, 0, 1)
 #' pv[c(seq_len(5), 13, 14, 18)] <- runif(8, 0, 0.001)
 #'

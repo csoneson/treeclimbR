@@ -33,22 +33,24 @@ with adjusted p-values equal or lower than specified are returned.}
 }
 \value{
 A \code{data.frame} with test results. The \strong{node}
-    column stores the node number for each entity.
+column stores the node number for each entity.
 }
 \description{
 Generate a table of top-ranked nodes from the optimal resolution candidate
 of entities on a tree.
 }
 \examples{
-library(TreeSummarizedExperiment)
-library(ggtree)
+suppressPackageStartupMessages({
+    library(TreeSummarizedExperiment)
+    library(ggtree)
+})
 
 data(tinyTree)
 ggtree(tinyTree, branch.length = "none") +
    geom_text2(aes(label = node)) +
-   geom_hilight(node = 13, fill = "blue", alpha = 0.5) +
-   geom_hilight(node = 18, fill = "orange", alpha = 0.5)
-set.seed(2)
+   geom_hilight(node = 13, fill = "blue", alpha = 0.3) +
+   geom_hilight(node = 18, fill = "orange", alpha = 0.3)
+set.seed(1)
 pv <- runif(19, 0, 1)
 pv[c(seq_len(5), 13, 14, 18)] <- runif(8, 0, 0.001)
 

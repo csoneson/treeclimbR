@@ -11,7 +11,7 @@
 #' @param marker_in_column A logical scalar, indicating whether markers (genes,
 #'     features) are in the columns of \code{SE} or not.
 #' @param column_cluster The name of the column of \code{colData(SE)} that
-#'     contains the cluster assignment of each smaple.
+#'     contains the cluster assignment of each sample.
 #' @param use_marker A logical or numeric vector such that
 #'     \code{SE[use_marker, ]} (if \code{marker_in_column = FALSE}) or
 #'     \code{SE[, use_marker]} (if \code{marker_in_column = TRUE}) subsets
@@ -27,7 +27,9 @@
 #'     assayNames
 #'
 #' @examples
-#' library(SummarizedExperiment)
+#' suppressPackageStartupMessages({
+#'     library(SummarizedExperiment)
+#' })
 #'
 #' ## Simulate data with 100 cells and 10 markers (5 type, 5 state markers)
 #' set.seed(1)

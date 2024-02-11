@@ -26,7 +26,10 @@
 #' @importFrom TreeSummarizedExperiment convertNode matTree
 #'
 #' @examples
-#' library(ggtree)
+#' suppressPackageStartupMessages({
+#'     library(ggtree)
+#' })
+#'
 #' data(tinyTree)
 #' ggtree(tinyTree, branch.length = "none") +
 #'     geom_text2(aes(label = node))

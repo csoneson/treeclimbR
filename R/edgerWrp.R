@@ -1,7 +1,7 @@
 #' Wrapper applying an edgeR differential analysis workflow
 #'
 #' \code{edgerWrp} is a wrapper using functions from the \code{\link{edgeR}}
-#' (Robinson et al. 2010, \emph{Bioinformatics}; McCarthy et al. 2012,
+#' package (Robinson et al. 2010, \emph{Bioinformatics}; McCarthy et al. 2012,
 #' \emph{Nucleic Acids Research}) to fit models and perform a moderated test for
 #' each entity.
 #'
@@ -51,7 +51,7 @@
 #'     (if \code{option = "glmQL"}).
 #'
 #' @returns The output of \code{\link[edgeR]{glmQLFTest}} or
-#'     \code{\link[edgeR]{glmLRT}} depending on the specified \code{option}.
+#' \code{\link[edgeR]{glmLRT}} depending on the specified \code{option}.
 #'
 #' @importFrom edgeR DGEList calcNormFactors estimateDisp glmFit glmLRT
 #'     glmQLFit glmQLFTest
@@ -65,6 +65,9 @@
 #' out <- edgerWrp(count = assay(x), option = "glm",
 #'                 design = model.matrix(~ group, data = colData(x)),
 #'                 contrast = c(0, 1))
+#'
+#' ## The output is an edgeR DGELRT object
+#' class(out)
 #'
 edgerWrp <- function(count, lib_size = NULL, option = c("glm", "glmQL"),
                      design, contrast = NULL, normalize = TRUE,

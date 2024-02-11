@@ -57,12 +57,18 @@ either the original sample clusters, or larger metaclusters encompassing
 several of the original clusters (defined by the provided column tree).
 }
 \examples{
-library(treeclimbR)
-library(ape)
+suppressPackageStartupMessages({
+    library(treeclimbR)
+    library(ape)
+    library(ggtree)
+})
 
 set.seed(1L)
 tr <- rtree(3, tip.label = LETTERS[seq_len(3)])
-plot(tr)
+ggtree(tr) +
+    geom_text(aes(label = node), hjust = -1, vjust = 1) +
+    geom_text(aes(label = label), hjust = -1, vjust = -1)
+
 cc <- matrix(rpois(60, 10), nrow = 6)
 rownames(cc) <- paste0("gene", seq_len(6))
 colnames(cc) <- paste0("cell", seq_len(10))
@@ -79,8 +85,11 @@ tse <- TreeSummarizedExperiment(assays = list(counts = cc),
 out <- aggDS(TSE = tse, assay = "counts", sample_id = "sid",
              group_id = "gid", cluster_id = "cid")
 
-## Aggregated counts for the node alias_4
-SummarizedExperiment::assay(out, "alias_4")
+## Aggregated counts for the node 5
+SummarizedExperiment::assay(out, "alias_5")
+## This is equal to the sum of the counts from nodes 1 and 2
+SummarizedExperiment::assay(out, "alias_1")
+SummarizedExperiment::assay(out, "alias_2")
 
 }
 \author{

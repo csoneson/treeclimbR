@@ -22,7 +22,10 @@ Find all branches whose leaves do not overlap with those of the specified
 branches.
 }
 \examples{
-library(ggtree)
+suppressPackageStartupMessages({
+    library(ggtree)
+})
+
 data(tinyTree)
 ggtree(tinyTree, branch.length = "none") +
     geom_text2(aes(label = node)) +

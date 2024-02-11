@@ -4,11 +4,11 @@
 #' the \code{\link{edgeR}} package. This adapts \code{\link{edgerWrp}} to
 #' accept input as a
 #' \code{\link[TreeSummarizedExperiment]{TreeSummarizedExperiment}}
-#' (\strong{TSE}) object instead of a \code{matrix}. Features could be
+#' (TSE) object instead of a \code{matrix}. Features could be
 #' represented in either rows or columns. By default, features are in the rows.
 #' Then, samples are in columns and the sample information is in \code{colData}.
 #' The tree that stores the hierarchical information about features is in
-#' \code{rowTree}. Each row of \code{assays} table could be mapped to a node of
+#' \code{rowTree}. Each row of the \code{assays} can be mapped to a node of
 #' the tree. Data on rows that are mapped to internal nodes is generated from
 #' data on leaf nodes. Normalization for samples is automatically performed by
 #' \code{edgeR} and the library size is calculated using features that
@@ -23,7 +23,7 @@
 #' @export
 #'
 #' @param TSE A \code{TreeSummarizedExperiment} object.
-#' @param feature_on_row A logical scalar. If TRUE (default),
+#' @param feature_on_row A logical scalar. If \code{TRUE} (default),
 #'     features or entities (e.g. genes, OTUs) are in rows of the \code{assays}
 #'     tables, and samples are in columns; otherwise, it's the other way around.
 #' @param assay A numeric index or assay name to specify which assay from
@@ -62,15 +62,15 @@
 #'     (\code{option = "glmQL"}).
 #'
 #' @returns A list with entries \strong{edgeR_results}, \strong{tree}, and
-#'     \strong{nodes_drop}.
+#' \strong{nodes_drop}.
 #' \describe{
 #'     \item{edgeR_results}{The output of \code{\link[edgeR]{glmQLFTest}} or
 #'          \code{\link[edgeR]{glmLRT}} depending on the specified
 #'          \code{option}.}
 #'     \item{tree}{The hierarchical structure of entities that was stored in the
-#'          input \code{tse}}
+#'          input \code{TSE}.}
 #'     \item{nodes_drop}{A vector storing the alias node labels of entities
-#'          that are filtered before analysis due to low counts. }
+#'          that are filtered before analysis due to low counts.}
 #' }
 #'
 #' @importFrom TreeSummarizedExperiment TreeSummarizedExperiment rowLinks
@@ -79,7 +79,9 @@
 #' @importFrom SummarizedExperiment assays colData rowData assayNames
 #'
 #' @examples
-#' library(TreeSummarizedExperiment)
+#' suppressPackageStartupMessages({
+#'     library(TreeSummarizedExperiment)
+#' })
 #'
 #' ## Load example data set
 #' lse <- readRDS(system.file("extdata", "da_sim_100_30_18de.rds",

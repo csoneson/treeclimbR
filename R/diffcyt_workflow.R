@@ -27,7 +27,7 @@
 #' abundance for each (ID type) marker and cluster, and uses this data to
 #' further aggregate the initial clusters using hierarchical clustering.
 #' \item
-#' \code{calcTreeCounts} calculate the number of cells per cluster-sample
+#' \code{calcTreeCounts} calculates the number of cells per cluster-sample
 #' combination (referred to as cluster cell 'counts', 'abundances', or
 #' 'frequencies'. This is a tree version of \code{\link[diffcyt]{calcCounts}}.
 #' \item

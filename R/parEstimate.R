@@ -111,14 +111,16 @@
 #'     or index of the assay to use to estimate Dirichlet multinomial
 #'     parameters. If \code{NULL}, the first assay will be used.
 #'
-#' @returns A list including the estimates of \dQuote{pi} (a vector with one
-#' element per row in \code{obj}) and \dQuote{theta} (a scalar).
+#' @returns A list including the estimates of \code{pi} (a vector with one
+#' element per row in \code{obj}) and \code{theta} (a scalar).
 #'
 #' @importFrom methods is
 #'
 #' @examples
+#' suppressPackageStartupMessages({
+#'     library(TreeSummarizedExperiment)
+#' })
 #'
-#' library(TreeSummarizedExperiment)
 #' set.seed(1L)
 #' y <- matrix(rnbinom(200, size = 1, mu = 10), nrow = 10)
 #' colnames(y) <- paste("S", seq_len(20), sep = "")

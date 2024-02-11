@@ -9,13 +9,13 @@
 #' @param tree A \code{phylo} object.
 #' @param score_data A \code{data.frame} providing scores for all nodes in the
 #'     tree. The data frame should have at least 2 columns, one with information
-#'     about nodes (the node number) and the other with score for each node.
+#'     about nodes (the node number) and the other with the score for each node.
 #' @param drop A logical expression indicating elements or rows to keep.
-#'     Missing values are taken as FALSE.
+#'     Missing values are taken as \code{FALSE}.
 #' @param score_column The name of the column of \code{score_data} that
 #'     contains the original scores of the nodes.
 #' @param node_column The name of the column of \code{score_data} that contains
-#'     the numbers of the nodes.
+#'     the node numbers.
 #' @param get_max A logical scalar. If \code{TRUE}, search for nodes
 #'     that has higher score value than its descendants; otherwise, search for
 #'     nodes that has lower score value than its descendants.
@@ -33,16 +33,19 @@
 #' @importFrom TreeSummarizedExperiment findDescendant printNode
 #'
 #' @examples
-#' library(TreeSummarizedExperiment)
-#' library(ggtree)
+#' suppressPackageStartupMessages({
+#'     library(TreeSummarizedExperiment)
+#'     library(ggtree)
+#' })
+#'
 #' data(tinyTree)
-#' ggtree(tinyTree, size = 2, branch.length = "none") +
+#' ggtree(tinyTree, branch.length = "none") +
 #'     geom_text2(aes(label = node), color = "darkblue",
-#'            hjust = -0.5, vjust = 0.7, size = 4) +
+#'            hjust = -0.5, vjust = 0.7) +
 #'     geom_text2(aes(label = label), color = "darkorange",
-#'                hjust = -0.1, vjust = -0.7, size = 4) +
-#'     geom_hilight(node = 13, fill = "blue", alpha = 0.4) +
-#'     geom_hilight(node = 16, fill = "orange", alpha = 0.4)
+#'                hjust = -0.1, vjust = -0.7) +
+#'     geom_hilight(node = 13, fill = "blue", alpha = 0.3) +
+#'     geom_hilight(node = 16, fill = "orange", alpha = 0.3)
 #'
 #' ## Generate score for each node
 #' pv <- rep(0.1, 19)

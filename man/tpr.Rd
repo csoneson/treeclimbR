@@ -41,16 +41,16 @@ suppressPackageStartupMessages({
 data("tinyTree")
 
 ## Two branches are truly differential
-ggtree(tinyTree) +
+ggtree(tinyTree, branch.length = "none") +
    geom_text2(aes(label = node)) +
    geom_hilight(node = 16, fill = "orange", alpha = 0.3) +
    geom_hilight(node = 13, fill = "blue", alpha = 0.3)
 
-## TPR at the leaf level (7/8)
+## TPR at the leaf level if nodes 14 and 15 are called differential  (7/8)
 tpr(tree = tinyTree, truth = c(16, 13),
     found = c(15, 14), only.leaf = TRUE)
 
-## TPR at the node level (12/14)
+## TPR at the node level if nodes 14 and 15 are called differential (12/14)
 tpr(tree = tinyTree, truth = c(16, 13),
     found = c(15, 14), only.leaf = FALSE)
 

@@ -29,13 +29,16 @@
 #' @importFrom TreeSummarizedExperiment printNode matTree findDescendant
 #'
 #' @examples
-#' library(TreeSummarizedExperiment)
-#' library(ggtree)
-#' library(dplyr)
+#' suppressPackageStartupMessages({
+#'     library(TreeSummarizedExperiment)
+#'     library(ggtree)
+#'     library(dplyr)
+#' })
 #'
 #' ## tree
 #' data(tinyTree)
-#' ggtree(tinyTree) + geom_text2(aes(label = node))
+#' ggtree(tinyTree, branch.length = "none") +
+#'     geom_text2(aes(label = node))
 #'
 #' ## score
 #' exScore <- data.frame(nodeNum = seq_len(19), score = (seq_len(19))/10)

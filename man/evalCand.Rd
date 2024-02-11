@@ -59,7 +59,7 @@ the argument \code{method} in \code{\link[stats]{p.adjust}}. Default is
 
 \item{use_pseudo_leaf}{A logical scalar. If \code{FALSE}, the FDR is
 calculated on the leaf level of the tree; If \code{TRUE}, the FDR is
-calculated on the pseudo leaf level. The pseudo-leaf level is the level
+calculated on the pseudo-leaf level. The pseudo-leaf level is the level
 on which entities have sufficient data to run analysis and the that is
 closest to the leaf level.}
 
@@ -86,7 +86,7 @@ More details about the columns in \code{level_info}:
     \item \code{limit_rej} The specified FDR.
     \item \code{level_name} The name of the candidate level.
     \item \code{rej_leaf} The number of rejections on the leaf level.
-    \item \code{rej_pseudo_leaf} The number of rejected pseudo leaf nodes.
+    \item \code{rej_pseudo_leaf} The number of rejected pseudo-leaf nodes.
     \item \code{rej_node} The number of rejections on the tested candidate
     level (leaves or internal nodes).
 }
@@ -97,9 +97,12 @@ the one with best performance. For more details about how the scoring is
 done, see Huang et al (2021): https://doi.org/10.1186/s13059-021-02368-1.
 }
 \examples{
-library(TreeSummarizedExperiment)
-library(ggtree)
+suppressPackageStartupMessages({
+    library(TreeSummarizedExperiment)
+    library(ggtree)
+})
 
+## Generate example tree and assign p-values and signs to each node
 data(tinyTree)
 ggtree(tinyTree, branch.length = "none") +
    geom_text2(aes(label = node)) +
@@ -115,10 +118,14 @@ fc[c(4, 5, 18)] <- -1
 df <- data.frame(node = seq_len(19),
                  pvalue = pv,
                  logFoldChange = fc)
+
+## Propose candidates
 ll <- getCand(tree = tinyTree, score_data = df,
                node_column = "node",
                p_column = "pvalue",
                sign_column = "logFoldChange")
+
+## Evaluate candidates
 cc <- evalCand(tree = tinyTree, levels = ll$candidate_list,
                score_data = ll$score_data, node_column = "node",
                p_column = "pvalue", sign_column = "logFoldChange",

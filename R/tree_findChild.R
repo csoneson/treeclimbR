@@ -21,13 +21,14 @@
 #' @importFrom TreeSummarizedExperiment matTree convertNode
 #'
 #' @examples
-#' library(ggtree)
+#' suppressPackageStartupMessages({
+#'     library(ggtree)
+#' })
 #'
 #' data(tinyTree)
-#' ggtree(tinyTree) +
+#' ggtree(tinyTree, branch.length = "none") +
 #'     geom_text2(aes(label = node), color = "darkblue",
 #'                hjust = -0.5, vjust = 0.7) +
-#'     geom_hilight(node = 17, fill = 'steelblue', alpha = 0.5) +
 #'     geom_text2(aes(label = label), color = "darkorange",
 #'                hjust = -0.1, vjust = -0.7)
 #'

@@ -209,10 +209,12 @@ A \code{ggtree} object.
 Generate a heatmap corresponding to an arbitrary aggregation level of a tree.
 }
 \examples{
-library(TreeSummarizedExperiment)
-library(ggtree)
-library(ggplot2)
-library(scales)
+suppressPackageStartupMessages({
+    library(TreeSummarizedExperiment)
+    library(ggtree)
+    library(ggplot2)
+    library(scales)
+})
 
 ## Load example data (tiny tree with corresponding count matrix)
 tse <- readRDS(system.file("extdata", "tinytree_counts.rds",
@@ -220,7 +222,7 @@ tse <- readRDS(system.file("extdata", "tinytree_counts.rds",
 
 ## Prepare the tree figure
 tree_fig <- ggtree(rowTree(tse), branch.length = "none",
-                   layout = "rectangular", open.angle = 100) +
+                   layout = "rectangular") +
     geom_hilight(node = 18, fill = "orange", alpha = 0.3) +
     geom_hilight(node = 13, fill = "blue", alpha = 0.3)
 tree_fig

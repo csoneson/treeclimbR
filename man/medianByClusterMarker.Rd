@@ -22,7 +22,7 @@ to use to calculate medians.}
 features) are in the columns of \code{SE} or not.}
 
 \item{column_cluster}{The name of the column of \code{colData(SE)} that
-contains the cluster assignment of each smaple.}
+contains the cluster assignment of each sample.}
 
 \item{use_marker}{A logical or numeric vector such that
 \code{SE[use_marker, ]} (if \code{marker_in_column = FALSE}) or
@@ -38,7 +38,9 @@ A \code{\link[SummarizedExperiment]{SummarizedExperiment}} object
 Calculate median value of each marker in each cluster.
 }
 \examples{
-library(SummarizedExperiment)
+suppressPackageStartupMessages({
+    library(SummarizedExperiment)
+})
 
 ## Simulate data with 100 cells and 10 markers (5 type, 5 state markers)
 set.seed(1)

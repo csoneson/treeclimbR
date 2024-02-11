@@ -31,19 +31,19 @@
 #'     library(TreeSummarizedExperiment)
 #' })
 #'
-#' data("tinyTree")
+#' data(tinyTree)
 #'
 #' ## Two branches are truly differential
-#' ggtree(tinyTree) +
+#' ggtree(tinyTree, branch.length = "none") +
 #'    geom_text2(aes(label = node)) +
 #'    geom_hilight(node = 16, fill = "orange", alpha = 0.3) +
 #'    geom_hilight(node = 13, fill = "blue", alpha = 0.3)
 #'
-#' ## FDR at the leaf level (1/8)
+#' ## FDR at the leaf level if nodes 14 and 15 are called differential (1/8)
 #' fdr(tree = tinyTree, truth = c(16, 13),
 #'     found = c(15, 14), only.leaf = TRUE)
 #'
-#' ## FDR at the node level (2/14)
+#' ## FDR at the node level if nodes 14 and 15 are called differential (2/14)
 #' fdr(tree = tinyTree, truth = c(16, 13),
 #'     found = c(15, 14), only.leaf = FALSE)
 #'

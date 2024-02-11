@@ -65,8 +65,11 @@ of leaves and the count proportion. Note that only internal branch nodes
 are considered - no individual leaves will be returned.
 }
 \examples{
+suppressPackageStartupMessages({
+    library(TreeSummarizedExperiment)
+})
+
 ## Generate example data
-library(TreeSummarizedExperiment)
 set.seed(1)
 data(tinyTree)
 toyTable <- matrix(rnbinom(40, size = 1, mu = 10), nrow = 10)

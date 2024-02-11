@@ -36,7 +36,7 @@
 #' @param limit_rej The desired false discovery rate threshold.
 #' @param use_pseudo_leaf A logical scalar. If \code{FALSE}, the FDR is
 #'     calculated on the leaf level of the tree; If \code{TRUE}, the FDR is
-#'     calculated on the pseudo leaf level. The pseudo-leaf level is the level
+#'     calculated on the pseudo-leaf level. The pseudo-leaf level is the level
 #'     on which entities have sufficient data to run analysis and the that is
 #'     closest to the leaf level.
 #' @param message A logical scalar, indicating whether progress messages should
@@ -61,7 +61,7 @@
 #'     \item \code{limit_rej} The specified FDR.
 #'     \item \code{level_name} The name of the candidate level.
 #'     \item \code{rej_leaf} The number of rejections on the leaf level.
-#'     \item \code{rej_pseudo_leaf} The number of rejected pseudo leaf nodes.
+#'     \item \code{rej_pseudo_leaf} The number of rejected pseudo-leaf nodes.
 #'     \item \code{rej_node} The number of rejections on the tested candidate
 #'     level (leaves or internal nodes).
 #' }
@@ -72,9 +72,12 @@
 #' @importFrom TreeSummarizedExperiment findDescendant showNode matTree isLeaf
 #'
 #' @examples
-#' library(TreeSummarizedExperiment)
-#' library(ggtree)
+#' suppressPackageStartupMessages({
+#'     library(TreeSummarizedExperiment)
+#'     library(ggtree)
+#' })
 #'
+#' ## Generate example tree and assign p-values and signs to each node
 #' data(tinyTree)
 #' ggtree(tinyTree, branch.length = "none") +
 #'    geom_text2(aes(label = node)) +
@@ -90,10 +93,14 @@
 #' df <- data.frame(node = seq_len(19),
 #'                  pvalue = pv,
 #'                  logFoldChange = fc)
+#'
+#' ## Propose candidates
 #' ll <- getCand(tree = tinyTree, score_data = df,
 #'                node_column = "node",
 #'                p_column = "pvalue",
 #'                sign_column = "logFoldChange")
+#'
+#' ## Evaluate candidates
 #' cc <- evalCand(tree = tinyTree, levels = ll$candidate_list,
 #'                score_data = ll$score_data, node_column = "node",
 #'                p_column = "pvalue", sign_column = "logFoldChange",
@@ -161,12 +168,12 @@ evalCand <- function(tree, type = c("single", "multiple"),
     ## -------------------------------------------------------------------------
     ## Some nodes might not be included in the analysis step because they don't
     ## have enough data (invalid p-values). In such case, an internal node
-    ## would become a pseudo leaf node if its descendant nodes are filtered
+    ## would become a pseudo-leaf node if its descendant nodes are filtered
     ## due to lack of sufficient data.
     if (use_pseudo_leaf) {
-        ## Find pseudo leaves for each element in score_data
+        ## Find pseudo-leaves for each element in score_data
         if (message) {
-            message("Finding the pseudo leaf level for all features ...")
+            message("Finding the pseudo-leaf level for all features ...")
         }
         pseudo_leaf <- lapply(seq_along(score_data), FUN = function(x) {
             if (message) {
@@ -178,7 +185,7 @@ evalCand <- function(tree, type = c("single", "multiple"),
         })
         names(pseudo_leaf) <- names(score_data)
 
-        ## Count the number of leaves and pseudo leaves for each node
+        ## Count the number of leaves and pseudo-leaves for each node
         if (message) {
             message("Calculating the number of pseudo-leaves of each node",
                     "for all features ...")
@@ -405,7 +412,7 @@ evalCand <- function(tree, type = c("single", "multiple"),
 #' @author Ruizhu  Huang
 #' @keywords internal
 #'
-#' @returns A vector of node numbers representing the pseudo leaf level
+#' @returns A vector of node numbers representing the pseudo-leaf level
 #'
 #' @importFrom TreeSummarizedExperiment matTree
 #'

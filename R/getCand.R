@@ -12,8 +12,8 @@
 #' @param t A vector of threshold values used to search for candidates,
 #'     in the range [0, 1]. The default (\code{NULL}) uses a sequence
 #'     \code{c(seq(0, 0.04, by = 0.01), seq(0.05, 1, by = 0.05))}
-#' @param score_data A data.frame including at least one column with node IDs
-#'     (specified with the \code{node_column} argument),
+#' @param score_data A \code{data.frame} including at least one column with
+#'     node IDs (specified with the \code{node_column} argument),
 #'     one column with p-values (specified with the \code{p_column} argument)
 #'     and one column with directions of change (specified with the
 #'     \code{sign_column} argument).
@@ -22,11 +22,12 @@
 #' @param p_column The name of the column of \code{score_data} that
 #'     contains p-values for nodes.
 #' @param sign_column The name of the column of \code{score_data} that
-#'     contains the direction of change (e.g., the sign of the log-fold change).
+#'     contains the direction of change (e.g., the log-fold change). Only
+#'     the sign of this column will be used.
 #' @param threshold Numeric scalar; any internal node where the value of
 #'     the p-value column is above this value will not be returned. The default
-#'     is 0.05. The aim of this threshold is to avoid internal nodes without
-#'     true signal to be picked up arbitrarily.
+#'     is 0.05. The aim of this threshold is to avoid arbitrarily picking up
+#'     internal nodes without true signal.
 #' @param pct_na Numeric scalar. In order for an internal node to be eligible
 #'     for selection, more than \code{pct_na} of its direct child nodes must
 #'     have a valid (i.e., non-missing) value in the \code{p_column} column.
@@ -47,14 +48,16 @@
 #' @importFrom TreeSummarizedExperiment matTree printNode findDescendant
 #'
 #' @examples
-#' library(TreeSummarizedExperiment)
-#' library(ggtree)
+#' suppressPackageStartupMessages({
+#'     library(TreeSummarizedExperiment)
+#'     library(ggtree)
+#' })
 #'
 #' data(tinyTree)
 #' ggtree(tinyTree, branch.length = "none") +
 #'    geom_text2(aes(label = node)) +
-#'    geom_hilight(node = 13, fill = "blue", alpha = 0.5) +
-#'    geom_hilight(node = 18, fill = "orange", alpha = 0.5)
+#'    geom_hilight(node = 13, fill = "blue", alpha = 0.3) +
+#'    geom_hilight(node = 18, fill = "orange", alpha = 0.3)
 #'
 #' ## Simulate p-values and directions of change for nodes
 #' ## (Nodes 1, 2, 3, 4, 5, 13, 14, 18 have a true signal)

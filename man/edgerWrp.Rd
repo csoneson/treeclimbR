@@ -53,11 +53,11 @@ should be calculated (using \code{\link[edgeR]{calcNormFactors}}).}
 }
 \value{
 The output of \code{\link[edgeR]{glmQLFTest}} or
-    \code{\link[edgeR]{glmLRT}} depending on the specified \code{option}.
+\code{\link[edgeR]{glmLRT}} depending on the specified \code{option}.
 }
 \description{
 \code{edgerWrp} is a wrapper using functions from the \code{\link{edgeR}}
-(Robinson et al. 2010, \emph{Bioinformatics}; McCarthy et al. 2012,
+package (Robinson et al. 2010, \emph{Bioinformatics}; McCarthy et al. 2012,
 \emph{Nucleic Acids Research}) to fit models and perform a moderated test for
 each entity.
 }
@@ -85,6 +85,9 @@ x <- readRDS(system.file("extdata/da_sim_100_30_18de.rds",
 out <- edgerWrp(count = assay(x), option = "glm",
                 design = model.matrix(~ group, data = colData(x)),
                 contrast = c(0, 1))
+
+## The output is an edgeR DGELRT object
+class(out)
 
 }
 \author{

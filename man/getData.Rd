@@ -52,7 +52,7 @@ names(col_split) <- colnames(ct)
 
 ## Prepare the tree figure
 tree_fig <- ggtree(tinyTree, branch.length = "none",
-                   layout = "rectangular", open.angle = 100) +
+                   layout = "rectangular") +
     geom_hilight(node = 18, fill = "orange", alpha = 0.3) +
     geom_hilight(node = 13, fill = "blue", alpha = 0.3)
 fig <- TreeHeatmap(
