@@ -348,6 +348,10 @@ evalCand <- function(tree, type = c("single", "multiple"),
     ## -------------------------------------------------------------------------
     ## candidates: levels that fulfill the requirement to control FDR on the
     ## (pseudo) leaf level when multiple hypothesis correction is performed
+    if (all(!level_info$is_valid)) {
+        stop("No valid level could be found controlling the leaf-level FDR ",
+             "at the indicated level.")
+    }
     isB <- level_info |>
         dplyr::filter(.data$is_valid) |>
         dplyr::filter(.data$rej_leaf == max(.data$rej_leaf)) |>
