@@ -41,18 +41,23 @@ Branches that include entities with signals are colored in orange.
 Nodes identified by `treeclimbR` are compared to those identified by `BH` under FDR 0.05.
 
 <p align="center"> 
-<img src="https://github.com/fionarhuang/treeclimbR_toy_example/blob/master/output/signal_result.png">
+<img src="https://raw.githubusercontent.com/fionarhuang/treeclimbR_toy_example/master/output/signal_result.png">
 </p>
 
 
 ## More scenarios ([here](https://htmlpreview.github.io/?https://github.com/fionarhuang/treeclimbR_animation/blob/master/docs/index.html))
+
 1. BS
 
-![Alt Text](https://github.com/fionarhuang/treeclimbR_animation/blob/master/output/pk_BS.gif)
+<p align="center">
+<img src="https://raw.githubusercontent.com/fionarhuang/treeclimbR_animation/master/output/pk_BS.gif">
+</p>
 
 2. SS
 
-![Alt Text](https://github.com/fionarhuang/treeclimbR_animation/blob/master/output/pk_SS.gif)
+<p align="center">
+<img src="https://raw.githubusercontent.com/fionarhuang/treeclimbR_animation/master/output/pk_SS.gif">
+</p>
 
 ## Learn more
 More examples of using `treeclimbR` can be found [here](https://github.com/fionarhuang/treeclimbR_article).
