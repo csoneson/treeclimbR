@@ -19,8 +19,7 @@ medianByClusterMarker(
 to use to calculate medians.}
 
 \item{marker_in_column}{A logical scalar, indicating whether markers (genes,
-features) are in the columns of \code{SE} or not. The default is
-\code{TRUE} (markers are in columns).}
+features) are in the columns of \code{SE} or not.}
 
 \item{column_cluster}{The name of the column of \code{colData(SE)} that
 contains the cluster assignment of each smaple.}

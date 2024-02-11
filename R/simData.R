@@ -19,7 +19,7 @@
 #'     basis for simulation. If \code{assay} is \code{NULL}, the first
 #'     assay in the object is used.
 #' @param scenario The simulation scenario, either \dQuote{BS}, \dQuote{US},
-#'     or \dQuote{SS} (see \bold{Details}). The default is \dQuote{BS}.
+#'     or \dQuote{SS} (see \bold{Details}).
 #' @param from.A,from.B The branch node labels of branches A and B for which the
 #'     signal will be swapped. By default, both are \code{NULL}, in which case
 #'     they will be chosen based on the restrictions provided (\code{minTip.A},

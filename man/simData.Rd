@@ -46,7 +46,7 @@ basis for simulation. If \code{assay} is \code{NULL}, the first
 assay in the object is used.}
 
 \item{scenario}{The simulation scenario, either \dQuote{BS}, \dQuote{US},
-or \dQuote{SS} (see \bold{Details}). The default is \dQuote{BS}.}
+or \dQuote{SS} (see \bold{Details}).}
 
 \item{from.A, from.B}{The branch node labels of branches A and B for which the
 signal will be swapped. By default, both are \code{NULL}, in which case

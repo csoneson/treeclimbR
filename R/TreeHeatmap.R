@@ -1,6 +1,6 @@
-#' Generate a heatmap corresponding to an arbitrary level of a tree
+#' Generate a heatmap corresponding to an arbitrary aggregation level of a tree
 #'
-#' Generate a heatmap corresponding to an arbitrary level of a tree.
+#' Generate a heatmap corresponding to an arbitrary aggregation level of a tree.
 #'
 #' @author Ruizhu Huang
 #' @export
@@ -16,9 +16,9 @@
 #'     the width of the tree. For example, if \code{rel_width = 1}, the width of
 #'     the heatmap is the same as the width of the tree.
 #' @param cell_line_color A color for the lines separating cells in the
-#'     heatmap. The default is NA.
+#'     heatmap.
 #' @param cell_line_size A numeric scalar specifying the line width for lines
-#'     separating cells in the heatmap. The default is 0.
+#'     separating cells in the heatmap.
 #' @param column_order A character vector specifying the display order of the
 #'     columns in the heatmap. Should correspond to the column names of
 #'     \code{hm_data}. Ignored when \strong{column_split} is provided.
@@ -30,20 +30,15 @@
 #' @param column_split_gap A numeric scalar specifying the gap between the
 #'     groups of split columns in the heatmap.
 #' @param split_label_fontface The fontface of the labels of the column split.
-#'     The default is "bold".
 #' @param split_label_color The color of the the labels of the column split.
-#'     The default is "black".
-#' @param split_label_size The size of the the labels of the column split. The
-#'     default is 3.
-#' @param split_label_angle The angle of the the labels of the column split. The
-#'     default is 0.
+#' @param split_label_size The size of the the labels of the column split.
+#' @param split_label_angle The angle of the the labels of the column split.
 #' @param split_label_offset_x A numeric value to shift the labels of the column
-#'     split along the x-axis. The default is 0.
+#'     split along the x-axis.
 #' @param split_label_offset_y A numeric value to shift the labels of the column
-#'     split along the y-axis. The default is 2.
+#'     split along the y-axis.
 #' @param split_label_hjust The horizontal justification for the labels of the
-#'     column split: 0 (left aligned); 0.5 (centered); 1 (right aligned).
-#'     .The default is 0.5
+#'     column split: e.g. 0 (left aligned); 0.5 (centered); 1 (right aligned).
 #' @param split_label_vjust Similar to \code{split_label_hjust}, but controls
 #'     vertical justification.
 #' @param column_anno A named vector to specify labels that are used to
@@ -57,51 +52,45 @@
 #' @param legend_title_hm The legend title of the heatmap.
 #' @param legend_title_column_anno The legend title of the column annotation.
 #' @param show_colnames A logical value to specify whether column names should
-#'     be displayed. The default is FALSE.
+#'     be displayed.
 #' @param colnames_position The position of column names, either "top" or
 #'     "bottom".
 #' @param colnames_angle A numeric scalar specifying the angle of column names.
 #' @param colnames_offset_x A numeric value to shift column names on the x-axis.
-#'     The default is 0.
 #' @param colnames_offset_y A numeric value to shift column names on the y-axis.
-#'     The default is 0.
 #' @param colnames_size A numeric value to specify the size of column names.
-#' @param colnames_hjust The horizontal justification for column names:
+#' @param colnames_hjust The horizontal justification for column names: e.g.
 #'     0 (left aligned); 0.5 (centered); 1 (right aligned).
 #' @param show_rownames A logical value to specify whether row names should
-#'     be displayed. The default is FALSE.
+#'     be displayed.
 #' @param rownames_position The position of the row names, either "right" or
 #'     "left".
 #' @param rownames_label A named vector to annotate the rows of the heatmap
 #'     instead of the row names of \strong{hm_data}.
 #' @param rownames_angle A numeric value specifying the angle of row names.
 #' @param rownames_offset_x A numeric value to shift row names on the x-axis.
-#'     The default is 0.
 #' @param rownames_offset_y A numeric value to shift row names on the y-axis.
-#'     The default is 0.
 #' @param rownames_size A numeric value to specify the size of row names.
-#' @param rownames_hjust The horizontal justification for row names:
+#' @param rownames_hjust The horizontal justification for row names: e.g.
 #'     0 (left aligned); 0.5 (centered); 1 (right aligned).
 #' @param show_title A logical value to specify whether the title should
-#'     be displayed. The default is FALSE.
+#'     be displayed.
 #' @param title_hm The title of the heatmap.
-#' @param title_fontface The fontface of the title. The default is "bold".
-#' @param title_color  The color of the title. The default is "black".
-#' @param title_size The size of the title. The default is 3.
-#' @param title_angle The angle of the title. The default is 0.
+#' @param title_fontface The fontface of the title.
+#' @param title_color  The color of the title.
+#' @param title_size The size of the title.
+#' @param title_angle The angle of the title.
 #' @param title_offset_x A numeric value to shift the title along the x-axis.
-#'     The default is 0.
 #' @param title_offset_y A numeric value to shift the title along the y-axis.
-#'     The default is 2.
-#' @param title_hjust The horizontal justification for the title:
-#'     0 (left aligned); 0.5 (centered); 1 (right aligned). The default is 0.5.
+#' @param title_hjust The horizontal justification for the title: e.g.
+#'     0 (left aligned); 0.5 (centered); 1 (right aligned).
 #' @param cluster_column A logical scalar, specifying whether
-#'     columns of the heatmap should be clustered by similarity. The default is
-#'     \code{TRUE}. This is ignored when \strong{column_order} is given.
+#'     columns of the heatmap should be clustered by similarity.
+#'     This is ignored when \strong{column_order} is given.
 #' @param dist_method See \strong{method} in \code{\link[stats]{dist}}. The
-#'     distance method used for clustering columns. The default is "euclidean".
+#'     distance method used for clustering columns.
 #' @param hclust_method See \strong{method} in \code{\link[stats]{hclust}}. The
-#'     clustering method used for clustering columns. The default is "ave".
+#'     clustering method used for clustering columns.
 #' @param show_row_tree A logical scalar (default \code{TRUE}). If \code{FALSE},
 #'     the figure provided in \code{tree_fig} is not shown.
 #'
