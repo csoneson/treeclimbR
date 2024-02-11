@@ -79,12 +79,12 @@ value needs to be provided for each node of the tree.</p>
 <dt>score_data</dt>
 <dd><p>A <code>data.frame</code> providing scores for all nodes in the
 tree. The data frame should have at least 2 columns, one with information
-about nodes (the node number) and the other with score for each node.</p></dd>
+about nodes (the node number) and the other with the score for each node.</p></dd>
 
 
 <dt>drop</dt>
 <dd><p>A logical expression indicating elements or rows to keep.
-Missing values are taken as FALSE.</p></dd>
+Missing values are taken as <code>FALSE</code>.</p></dd>
 
 
 <dt>score_column</dt>
@@ -94,7 +94,7 @@ contains the original scores of the nodes.</p></dd>
 
 <dt>node_column</dt>
 <dd><p>The name of the column of <code>score_data</code> that contains
-the numbers of the nodes.</p></dd>
+the node numbers.</p></dd>
 
 
 <dt>get_max</dt>
@@ -128,16 +128,19 @@ additional column named <code>keep</code> indicating which nodes to retain.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">TreeSummarizedExperiment</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.amazon.com/Integration-Manipulation-Visualization-Phylogenetic-Computational-ebook/dp/B0B5NLZR1Z/" class="external-link">ggtree</a></span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">TreeSummarizedExperiment</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.amazon.com/Integration-Manipulation-Visualization-Phylogenetic-Computational-ebook/dp/B0B5NLZR1Z/" class="external-link">ggtree</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">tinyTree</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/ggtree/man/ggtree.html" class="external-link">ggtree</a></span><span class="op">(</span><span class="va">tinyTree</span>, size <span class="op">=</span> <span class="fl">2</span>, branch.length <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/ggtree/man/ggtree.html" class="external-link">ggtree</a></span><span class="op">(</span><span class="va">tinyTree</span>, branch.length <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/ggtree/man/geom_text2.html" class="external-link">geom_text2</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">node</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"darkblue"</span>,</span></span>
-<span class="r-in"><span>           hjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.5</span>, vjust <span class="op">=</span> <span class="fl">0.7</span>, size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>           hjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.5</span>, vjust <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/ggtree/man/geom_text2.html" class="external-link">geom_text2</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">label</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"darkorange"</span>,</span></span>
-<span class="r-in"><span>               hjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.1</span>, vjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.7</span>, size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/ggtree/man/geom-hilight.html" class="external-link">geom_hilight</a></span><span class="op">(</span>node <span class="op">=</span> <span class="fl">13</span>, fill <span class="op">=</span> <span class="st">"blue"</span>, alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/ggtree/man/geom-hilight.html" class="external-link">geom_hilight</a></span><span class="op">(</span>node <span class="op">=</span> <span class="fl">16</span>, fill <span class="op">=</span> <span class="st">"orange"</span>, alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span></span></span>
+<span class="r-in"><span>               hjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.1</span>, vjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/ggtree/man/geom-hilight.html" class="external-link">geom_hilight</a></span><span class="op">(</span>node <span class="op">=</span> <span class="fl">13</span>, fill <span class="op">=</span> <span class="st">"blue"</span>, alpha <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span> <span class="op">+</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/ggtree/man/geom-hilight.html" class="external-link">geom_hilight</a></span><span class="op">(</span>node <span class="op">=</span> <span class="fl">16</span>, fill <span class="op">=</span> <span class="st">"orange"</span>, alpha <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="getLevel-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Generate score for each node</span></span></span>

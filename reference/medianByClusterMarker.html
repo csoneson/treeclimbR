@@ -78,13 +78,12 @@ to use to calculate medians.</p></dd>
 
 <dt>marker_in_column</dt>
 <dd><p>A logical scalar, indicating whether markers (genes,
-features) are in the columns of <code>SE</code> or not. The default is
-<code>TRUE</code> (markers are in columns).</p></dd>
+features) are in the columns of <code>SE</code> or not.</p></dd>
 
 
 <dt>column_cluster</dt>
 <dd><p>The name of the column of <code>colData(SE)</code> that
-contains the cluster assignment of each smaple.</p></dd>
+contains the cluster assignment of each sample.</p></dd>
 
 
 <dt>use_marker</dt>
@@ -109,7 +108,9 @@ contains the cluster assignment of each smaple.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/SummarizedExperiment" class="external-link">SummarizedExperiment</a></span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://bioconductor.org/packages/SummarizedExperiment" class="external-link">SummarizedExperiment</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Simulate data with 100 cells and 10 markers (5 type, 5 state markers)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span></span>

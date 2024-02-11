@@ -63,7 +63,7 @@ the assays is provided via the argument tree."><!-- mathjax --><script src="http
     <p>Test for differential state of entities using functions from the
 <code>edgeR</code> package. This adapts <code><a href="edgerWrp.html">edgerWrp</a></code> to accept
 input as a
-<code><a href="https://rdrr.io/pkg/SummarizedExperiment/man/RangedSummarizedExperiment-class.html" class="external-link">SummarizedExperiment</a></code> (<strong>SE</strong>) object
+<code><a href="https://rdrr.io/pkg/SummarizedExperiment/man/RangedSummarizedExperiment-class.html" class="external-link">SummarizedExperiment</a></code> (SE) object
 instead of <code>matrix</code>. Each <code>assay</code> should correspond to data
 for one node of the tree. Samples are in columns and
 features are in rows. The sample information is
@@ -190,9 +190,8 @@ should be printed.</p></dd>
     <h2>Value</h2>
     
 
-<p>A list with entries <strong>edgeR_results</strong>, <strong>tree</strong>, and</p>
-<p></p>
-<p><strong>nodes_drop</strong>.</p><dl><dt>edgeR_results</dt>
+<p>A list with entries <strong>edgeR_results</strong>, <strong>tree</strong>, and
+<strong>nodes_drop</strong>.</p><dl><dt>edgeR_results</dt>
 <dd><p>A list. Each of the elements contains the output of
          <code><a href="https://rdrr.io/pkg/edgeR/man/glmQLFTest.html" class="external-link">glmQLFTest</a></code> or
          <code><a href="https://rdrr.io/pkg/edgeR/man/glmLRT.html" class="external-link">glmLRT</a></code> for one node, depending on the specified
@@ -200,7 +199,7 @@ should be printed.</p></dd>
 
     <dt>tree</dt>
 <dd><p>The hierarchical structure of entities that was stored in the
-         input <code>tse</code></p></dd>
+         input <code>SE</code>.</p></dd>
 
     <dt>nodes_drop</dt>
 <dd><p>A vector storing the alias node labels of entities

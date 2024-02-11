@@ -7,7 +7,7 @@ TreeSummarizedExperiment
 represented in either rows or columns. By default, features are in the rows.
 Then, samples are in columns and the sample information is in colData.
 The tree that stores the hierarchical information about features is in
-rowTree. Each row of assays table could be mapped to a node of
+rowTree. Each row of the assays can be mapped to a node of
 the tree. Data on rows that are mapped to internal nodes is generated from
 data on leaf nodes. Normalization for samples is automatically performed by
 edgeR and the library size is calculated using features that
@@ -68,11 +68,11 @@ are mapped to leaf nodes."><!-- mathjax --><script src="https://cdnjs.cloudflare
 the <code>edgeR</code> package. This adapts <code><a href="edgerWrp.html">edgerWrp</a></code> to
 accept input as a
 <code><a href="https://rdrr.io/pkg/TreeSummarizedExperiment/man/TreeSummarizedExperiment-constructor.html" class="external-link">TreeSummarizedExperiment</a></code>
-(<strong>TSE</strong>) object instead of a <code>matrix</code>. Features could be
+(TSE) object instead of a <code>matrix</code>. Features could be
 represented in either rows or columns. By default, features are in the rows.
 Then, samples are in columns and the sample information is in <code>colData</code>.
 The tree that stores the hierarchical information about features is in
-<code>rowTree</code>. Each row of <code>assays</code> table could be mapped to a node of
+<code>rowTree</code>. Each row of the <code>assays</code> can be mapped to a node of
 the tree. Data on rows that are mapped to internal nodes is generated from
 data on leaf nodes. Normalization for samples is automatically performed by
 <code>edgeR</code> and the library size is calculated using features that
@@ -106,7 +106,7 @@ are mapped to leaf nodes.</p>
 
 
 <dt>feature_on_row</dt>
-<dd><p>A logical scalar. If TRUE (default),
+<dd><p>A logical scalar. If <code>TRUE</code> (default),
 features or entities (e.g. genes, OTUs) are in rows of the <code>assays</code>
 tables, and samples are in columns; otherwise, it's the other way around.</p></dd>
 
@@ -188,16 +188,15 @@ that will be used to generate the design matrix. This is ignored if
     <h2>Value</h2>
     
 
-<p>A list with entries <strong>edgeR_results</strong>, <strong>tree</strong>, and</p>
-<p></p>
-<p><strong>nodes_drop</strong>.</p><dl><dt>edgeR_results</dt>
+<p>A list with entries <strong>edgeR_results</strong>, <strong>tree</strong>, and
+<strong>nodes_drop</strong>.</p><dl><dt>edgeR_results</dt>
 <dd><p>The output of <code><a href="https://rdrr.io/pkg/edgeR/man/glmQLFTest.html" class="external-link">glmQLFTest</a></code> or
          <code><a href="https://rdrr.io/pkg/edgeR/man/glmLRT.html" class="external-link">glmLRT</a></code> depending on the specified
          <code>option</code>.</p></dd>
 
     <dt>tree</dt>
 <dd><p>The hierarchical structure of entities that was stored in the
-         input <code>tse</code></p></dd>
+         input <code>TSE</code>.</p></dd>
 
     <dt>nodes_drop</dt>
 <dd><p>A vector storing the alias node labels of entities
@@ -219,7 +218,9 @@ normalization factor could be found from
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">TreeSummarizedExperiment</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">TreeSummarizedExperiment</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Load example data set</span></span></span>
 <span class="r-in"><span><span class="va">lse</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"da_sim_100_30_18de.rds"</span>,</span></span>

@@ -138,7 +138,7 @@ the argument <code>method</code> in <code><a href="https://rdrr.io/r/stats/p.adj
 <dt>use_pseudo_leaf</dt>
 <dd><p>A logical scalar. If <code>FALSE</code>, the FDR is
 calculated on the leaf level of the tree; If <code>TRUE</code>, the FDR is
-calculated on the pseudo leaf level. The pseudo-leaf level is the level
+calculated on the pseudo-leaf level. The pseudo-leaf level is the level
 on which entities have sufficient data to run analysis and the that is
 closest to the leaf level.</p></dd>
 
@@ -181,7 +181,7 @@ be printed.</p></dd>
 <li><p><code>limit_rej</code> The specified FDR.</p></li>
 <li><p><code>level_name</code> The name of the candidate level.</p></li>
 <li><p><code>rej_leaf</code> The number of rejections on the leaf level.</p></li>
-<li><p><code>rej_pseudo_leaf</code> The number of rejected pseudo leaf nodes.</p></li>
+<li><p><code>rej_pseudo_leaf</code> The number of rejected pseudo-leaf nodes.</p></li>
 <li><p><code>rej_node</code> The number of rejections on the tested candidate
     level (leaves or internal nodes).</p></li>
 </ul></div>
@@ -192,9 +192,12 @@ be printed.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">TreeSummarizedExperiment</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.amazon.com/Integration-Manipulation-Visualization-Phylogenetic-Computational-ebook/dp/B0B5NLZR1Z/" class="external-link">ggtree</a></span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">TreeSummarizedExperiment</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.amazon.com/Integration-Manipulation-Visualization-Phylogenetic-Computational-ebook/dp/B0B5NLZR1Z/" class="external-link">ggtree</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Generate example tree and assign p-values and signs to each node</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">tinyTree</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/ggtree/man/ggtree.html" class="external-link">ggtree</a></span><span class="op">(</span><span class="va">tinyTree</span>, branch.length <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>   <span class="fu"><a href="https://rdrr.io/pkg/ggtree/man/geom_text2.html" class="external-link">geom_text2</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">node</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
@@ -211,10 +214,14 @@ be printed.</p></dd>
 <span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>node <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">19</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                 pvalue <span class="op">=</span> <span class="va">pv</span>,</span></span>
 <span class="r-in"><span>                 logFoldChange <span class="op">=</span> <span class="va">fc</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Propose candidates</span></span></span>
 <span class="r-in"><span><span class="va">ll</span> <span class="op">&lt;-</span> <span class="fu"><a href="getCand.html">getCand</a></span><span class="op">(</span>tree <span class="op">=</span> <span class="va">tinyTree</span>, score_data <span class="op">=</span> <span class="va">df</span>,</span></span>
 <span class="r-in"><span>               node_column <span class="op">=</span> <span class="st">"node"</span>,</span></span>
 <span class="r-in"><span>               p_column <span class="op">=</span> <span class="st">"pvalue"</span>,</span></span>
 <span class="r-in"><span>               sign_column <span class="op">=</span> <span class="st">"logFoldChange"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Evaluate candidates</span></span></span>
 <span class="r-in"><span><span class="va">cc</span> <span class="op">&lt;-</span> <span class="fu">evalCand</span><span class="op">(</span>tree <span class="op">=</span> <span class="va">tinyTree</span>, levels <span class="op">=</span> <span class="va">ll</span><span class="op">$</span><span class="va">candidate_list</span>,</span></span>
 <span class="r-in"><span>               score_data <span class="op">=</span> <span class="va">ll</span><span class="op">$</span><span class="va">score_data</span>, node_column <span class="op">=</span> <span class="st">"node"</span>,</span></span>
 <span class="r-in"><span>               p_column <span class="op">=</span> <span class="st">"pvalue"</span>, sign_column <span class="op">=</span> <span class="st">"logFoldChange"</span>,</span></span>

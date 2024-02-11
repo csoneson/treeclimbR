@@ -145,7 +145,7 @@ from the high-resolution clustering created by
 <code><a href="https://rdrr.io/pkg/diffcyt/man/generateClusters.html" class="external-link">generateClusters</a></code>. The function calculates the median
 abundance for each (ID type) marker and cluster, and uses this data to
 further aggregate the initial clusters using hierarchical clustering.</p></li>
-<li><p><code>calcTreeCounts</code> calculate the number of cells per cluster-sample
+<li><p><code>calcTreeCounts</code> calculates the number of cells per cluster-sample
 combination (referred to as cluster cell 'counts', 'abundances', or
 'frequencies'. This is a tree version of <code><a href="https://rdrr.io/pkg/diffcyt/man/calcCounts.html" class="external-link">calcCounts</a></code>.</p></li>
 <li><p><code>calcMediansByTreeMarker</code> calculates the median value for each
@@ -200,7 +200,7 @@ cluster-sample-marker combination. This is a tree version of
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Generate clusters</span></span></span>
 <span class="r-in"><span><span class="va">d_se</span> <span class="op">&lt;-</span> <span class="fu">diffcyt</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/diffcyt/man/generateClusters.html" class="external-link">generateClusters</a></span><span class="op">(</span><span class="va">d_se</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> FlowSOM clustering completed in 0.4 seconds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> FlowSOM clustering completed in 0.6 seconds</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Build a tree</span></span></span>
 <span class="r-in"><span><span class="va">tr</span> <span class="op">&lt;-</span> <span class="fu">buildTree</span><span class="op">(</span><span class="va">d_se</span><span class="op">)</span></span></span>
