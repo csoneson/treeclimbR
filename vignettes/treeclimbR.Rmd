@@ -24,9 +24,9 @@ knitr::opts_chunk$set(
 # Introduction
 
 `treeclimbR` is a method for analyzing hierarchical trees of entities, such as 
-phylogenies, at different levels of resolutions. It proposes multiple 
-candidates, corresponding to different aggregation levels, that capture the 
-latent signal and pinpoints branches or leaves that contain features of 
+phylogenies, at different levels of resolution. It proposes multiple 
+candidates (corresponding to different aggregation levels) that capture the 
+latent signal, and pinpoints branches or leaves that contain features of 
 interest, in a data-driven way. One motivation for such a multi-level 
 analysis is that the most highly resolved entities (e.g., individual species 
 in a microbial context) may not be abundant enough to allow a potential 
@@ -35,7 +35,8 @@ abundances on a higher level in the tree can detect families of species that
 are closely related and that all change (possibly weakly but) concordantly. At 
 the same time, blindly aggregating to a higher level across the whole tree may 
 mean that we lose the ability to pinpoint specific species with a strong 
-signal. Taken together, this motivates the development of a data-dependent
+signal that may not be shared with their closest neighbors in the tree. 
+Taken together, this motivates the development of a data-dependent
 aggregation approach, which is also allowed to aggregate different parts of 
 the tree at different levels of resolution.
 
@@ -66,7 +67,8 @@ suppressPackageStartupMessages({
 
 # Differential abundance (DA) analysis
 
-The differential abundance (DA) workflow is suitable in situations where we have
+The differential abundance (DA) workflow in `treeclimbR` is suitable in 
+situations where we have
 observed abundances (often counts) of a set of entities in a set of 
 samples, the entities can be represented as leaves of a given tree, and we are 
 interested in finding entities (or groups of entities in the same subtree) whose
@@ -78,9 +80,10 @@ of mice receiving transaortic constriction or sham surgery, and cell
 type abundance differences between conditions at 
 different clustering granularities. In all these cases, the entities are 
 naturally represented as leaves in a tree (a phylogenetic tree in the first 
-case, a tree where internal nodes represent miRNA duplexes, primary transcript, 
+case, a tree where internal nodes represent miRNA duplexes, primary transcripts, 
 and clusters of miRNAs for the second, and a clustering tree defined based on 
-the average similarity between baseline clusters for the third).
+the average similarity between baseline high-resolution cell clusters for the 
+third).
 
 ## Load and visualize example data
 
@@ -176,7 +179,8 @@ We see that the new `TreeSummarizedExperiment` now has `r nrow(da_tse)` rows
 
 ## Perform differential analysis for leaves and nodes
 
-Next, we perform differential abundance analysis, comparing the two conditions. 
+Next, we perform differential abundance analysis for each leaf and node, 
+comparing the average abundance in the two conditions. 
 Here, any suitable function can be used (depending on the properties of the 
 data matrix). `treeclimbR` provides a convenience function to perform 
 the differential abundance analysis using `edgeR`, which we will use here. 
@@ -196,12 +200,17 @@ were dropped due to a low total count, and the tree.
 
 ```{r da-runda-res}
 names(da_res)
+class(da_res$edgeR_results)
+
+## Nodes with too low total count
+da_res$nodes_drop
 ```
 
 Again, note that any differential abundance method can be used, as long as it 
 produces a data frame with at least columns corresponding to the node number, 
-the p-value, and the sign of the inferred change. For the `runDA` output, we 
-can generate such a table with the `nodeResult` function (where the `PValue` 
+the p-value, and the inferred effect size (only the sign will be used). 
+For the `runDA` output, we 
+can generate such a table with the `nodeResult()` function (where the `PValue` 
 column contains the p-value, and the `logFC` column provides information 
 about the sign of the inferred change):
 
@@ -213,10 +222,11 @@ head(da_tbl)
 
 ## Find candidates
 
-Next, for each of a range of values of the $t$ parameter (see [@huang2021]), 
-`treeclimbR` determines a _candidate_. A candidate consists of a set of nodes, 
+Next, `treeclimbR` proposes a set of aggregation _candidates_, corresponding 
+to a range of values for a threshold parameter $t$ (see [@huang2021]). 
+A candidate consists of a set of nodes, 
 representing a specific pattern of aggregation. In general, higher values of 
-$t$ lead to a higher degree of aggregation.
+$t$ lead to aggregation further up in the tree (closer to the root).
 
 ```{r da-get-cand}
 ## Get candidates
@@ -240,6 +250,7 @@ be chosen.
 names(da_cand$candidate_list)
 
 ## Nodes contained in the candidate corresponding to t = 0.03
+## This is a mix of leaves and internal nodes
 (da_cand_0.03 <- da_cand$candidate_list[["0.03"]])
 
 ## Visualize candidate
@@ -255,7 +266,7 @@ da_fig_tree +
 ## Select the optimal candidate
 
 Finally, given the set of candidates extracted above, `treeclimbR` can now 
-determine the one providing the optimal aggregation level [@huang2021]. 
+extract the one providing the optimal aggregation level [@huang2021]. 
 
 ```{r da-eval-cand}
 ## Evaluate candidates
@@ -308,7 +319,7 @@ tpr(rowTree(da_tse), truth = rownames(da_lse)[rowData(da_lse)$Signal],
 
 # Differential state (DS) analysis
 
-`treeclimbR` also contains functionality for performing so called 'differential 
+`treeclimbR` also provides functionality for performing so called 'differential 
 state analysis' in a hierarchical setting. An example use case for this type 
 of analysis is in a multi-sample, multi-condition single-cell RNA-seq data set
 with multiple cell types, where we are interested in finding genes that are 
@@ -331,7 +342,13 @@ the conditions (so called 'state markers') at some level of the clustering tree.
 ds_tse <- readRDS(system.file("extdata", "ds_sim_20_500_8de.rds", 
                               package = "treeclimbR"))
 ds_tse
+
+## Assignment of cells to high-resolution clusters, samples and conditions
 head(colData(ds_tse))
+
+## Tree providing the successive aggregation of the high-resolution clusters
+## into more coarse-grained ones
+## Node numbers are indicated in blue, node labels in orange
 ggtree(colTree(ds_tse)) +
     geom_text2(aes(label = node), color = "darkblue",
                hjust = -0.5, vjust = 0.7) +
@@ -341,8 +358,8 @@ ggtree(colTree(ds_tse)) +
 
 The data set contains 8 genes that are simulated to be differentially 
 expressed between the two conditions. Four genes are differentially expressed 
-in all the clusters, two in clusters t2, t6 and t7, and two in clusters 
-t4 and t5.
+in all the clusters, two in clusters `t2`, `t6` and `t7`, and two in clusters 
+`t4` and `t5`.
 
 ```{r ds-list-truth}
 rowData(ds_tse)[rowData(ds_tse)$Signal != "no", , drop = FALSE] 
@@ -408,7 +425,7 @@ head(ds_tbl)
 
 The next step in the analysis is to generate a list of candidates. This is done
 separately for each gene - hence, we first split the result table above by 
-the feature column, and then run `getCand` for each subtable.
+the `feature` column, and then run `getCand()` for each subtable.
 
 ```{r ds-get-cand}
 ## Split result table by feature
@@ -417,21 +434,21 @@ ds_tbl_list <- split(ds_tbl, f = ds_tbl$feature)
 ## Find candidates for each gene separately
 ds_cand_list <- lapply(seq_along(ds_tbl_list), 
                        FUN = function(x) {
-                           xx <- getCand(
+                           getCand(
                                tree = colTree(ds_tse),
                                t = seq(from = 0.05, to = 1, by = 0.05),
                                score_data = ds_tbl_list[[x]], 
                                node_column = "node", 
                                p_column = "PValue", 
                                sign_column = "logFC",
-                               message = FALSE)
-                           xx$candidate_list})
+                               message = FALSE)$candidate_list
+                       })
 names(ds_cand_list) <- names(ds_tbl_list)
 ```
 
 ## Select the optimal candidate
 
-We can then find the optimal candidate using the `evalCand` function, and list 
+We can then find the optimal candidate using the `evalCand()` function, and list 
 the top hits.
 
 ```{r ds-eval-cand}
@@ -449,7 +466,8 @@ ds_out <- topNodes(object = ds_best, n = Inf, p_value = 0.05)
 ds_out
 ```
 
-We find eight differentially expressed features (feature 1-8, as expected). 
+As expected, we detect the eight truly differentially expressed features 
+(feature 1-8). 
 Furthermore, we see that they have been aggregated to different nodes in the 
 tree. Features 1, 3, 5 and 6 are aggregated to node 11, features 2 and 4 to 
 node 13, and features 7 and 8 to nodes 5 and 9. Let's see which leaves these 
