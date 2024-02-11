@@ -30,7 +30,7 @@ tree to obtain P-values and directions of change. Details are [here](https://fio
 Candidates proposed at different `t` values are shown in the animation below.
 
 <p align="center"> 
-<img src="https://github.com/fionarhuang/treeclimbR_toy_example/blob/master/output/signal_cands.gif">
+<img src="https://raw.githubusercontent.com/fionarhuang/treeclimbR_toy_example/master/output/signal_cands.gif">
 </p>
 
 The heatmap shows counts of entities (rows) in samples (columns) split by groups. 
