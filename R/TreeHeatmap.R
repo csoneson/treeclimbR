@@ -319,8 +319,7 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
     desd_hm <- TreeSummarizedExperiment::findDescendant(
         tree = tree, node = hm_df$node, only.leaf = FALSE, self.include = TRUE)
     hm_df$y <- vapply(desd_hm, FUN = function(x) {
-        xx <- match(x, df$node)
-        y <- df$y[xx]
+        y <- df$y[match(x, df$node)]
         ## Get the middle point of the range defined by the nodes
         mean(range(y, na.rm = TRUE))
     }, NA_real_)
@@ -330,8 +329,7 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
         xx <- match(x, df$node)
         y <- df$y[xx]
 
-        cy <- colnames(df)
-        if ("scale" %in% cy) {
+        if ("scale" %in% colnames(df)) {
             dt <- unique(df$scale[xx])
             if (length(dt) > 1) {
                 dt <- max(setdiff(dt, 1), 1)
@@ -344,9 +342,7 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
     }, NA_real_)
 
     ## Width of each column in the heatmap
-    hm_df$width <- rel_width * (df$x |>
-                                    range(na.rm = TRUE) |>
-                                    diff()) / ncol(hm_data)
+    hm_df$width <- rel_width * diff(range(df$x, na.rm = TRUE)) / ncol(hm_data)
 
     ## Convert to long form
     ## -------------------------------------------------------------------------
@@ -358,10 +354,10 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
     ## Determine column order
     ## -------------------------------------------------------------------------
     if (!is.null(column_split)) {
-        # 1. column_split is given, ignore column order. The order within the
-        #    same slice is determined by the input order of column split
-        # 2. column_split is given and column_cluster = TRUE, the order within
-        #    the same slice is determined by the column similarity
+        ## 1. column_split is given, ignore column order. The order within the
+        ##    same slice is determined by the input order of column split
+        ## 2. column_split is given and column_cluster = TRUE, the order within
+        ##    the same slice is determined by the column similarity
         column_split <- factor(column_split, levels = unique(column_split))
         if (cluster_column) {
             ## Column similarity within the same slice
@@ -389,25 +385,23 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
         column_order <- names(split_level)
     } else {
         ## column_split isn't given
-        # 1. column_order is given, use column_order and ignore column
-        #    similarity.
-        # 2. column_order isn't given but allow cluster columns, order columns
-        #    by similarity
-        # 3. column_order isn't given and cluter columns is not allowed, use the
-        #    original column order.
+        ## 1. column_order is given, use column_order and ignore column
+        ##    similarity.
+        ## 2. column_order isn't given but allow cluster columns, order columns
+        ##    by similarity
+        ## 3. column_order isn't given and cluster columns is not allowed, use
+        ##    the original column order.
         split_level <- rep(0, ncol(hm_data))
         names(split_level) <- colnames(hm_data)
         split_level <- factor(split_level)
         if (is.null(column_order) && !cluster_column) {
             column_order <- colnames(hm_data)
-        }
-        if (!is.null(column_order) && cluster_column) {
+        } else if (!is.null(column_order) && cluster_column) {
             ## This needs to be before the next check, since that will
             ## create column_order by clustering and thus this would
             ## always trigger
             warning("cluster_column is ignored because column_order is given")
-        }
-        if (is.null(column_order) && cluster_column) {
+        } else if (is.null(column_order) && cluster_column) {
             hc <- hclust(dist(t(hm_data), method = dist_method),
                          method = hclust_method)
             column_order <- colnames(hm_data)[hc$order]
@@ -439,8 +433,8 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
     }
     p <- tree_fig +
         ggplot2::geom_tile(data = hm_dt,
-                           aes(x = x, y = y, height = height,
-                               fill = value, width = width),
+                           aes(x = .data$x, y = .data$y, height = .data$height,
+                               fill = .data$value, width = .data$width),
                            color = cell_line_color,
                            linewidth = cell_line_size,
                            inherit.aes = FALSE) +
@@ -460,7 +454,7 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
             column_anno_color <- viridis::viridis(length(anno_uc))
             names(column_anno_color) <- anno_uc
         }
-        ## column annotations
+        ## Column annotations
         anno_df <- hm_dt |>
             dplyr::select("variable", "x", "width") |>
             dplyr::distinct() |>
@@ -479,7 +473,8 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
             ggnewscale::new_scale_color() +
             ggplot2::geom_segment(
                 data = anno_df,
-                aes(x = x, y = y, xend = xend, yend = yend, color = anno_group),
+                aes(x = .data$x, y = .data$y, xend = .data$xend,
+                    yend = .data$yend, color = .data$anno_group),
                 inherit.aes = FALSE,
                 linewidth = column_anno_size) +
             ggplot2::scale_color_manual(values = anno_color) +
@@ -501,7 +496,8 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
                 y = ifelse(colnames_position == "top",
                            .data$y_top, .data$y_bottom))
         p <- p + ggplot2::geom_text(data = cn_df,
-                                    aes(x = x, y = y, label = variable),
+                                    aes(x = .data$x, y = .data$y,
+                                        label = .data$variable),
                                     size = colnames_size, inherit.aes = FALSE,
                                     angle = colnames_angle,
                                     nudge_x = colnames_offset_x,
@@ -520,7 +516,8 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
                           x = ifelse(rownames_position == "right",
                                      .data$x_right, .data$x_left))
         p <- p + ggplot2::geom_text(data = rn_df,
-                                    aes(x = x, y = y, label = row_label),
+                                    aes(x = .data$x, y = .data$y,
+                                        label = .data$row_label),
                                     size = rownames_size, inherit.aes = FALSE,
                                     angle = rownames_angle,
                                     nudge_x = rownames_offset_x,
@@ -537,7 +534,8 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
                                y = max(hm_dt$y),
                                label = title_hm)
         p <- p + ggplot2::geom_text(data = title_df,
-                                    aes(x = x, y = y, label = label),
+                                    aes(x = .data$x, y = .data$y,
+                                        label = .data$label),
                                     inherit.aes = FALSE,
                                     fontface = title_fontface,
                                     colour = title_color,
@@ -565,7 +563,8 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
                 split_label =
                     column_split_label[as.character(.data$column_split)])
         p <- p + ggplot2::geom_text(data = split_df,
-                                    aes(x = x, y = y, label = split_label),
+                                    aes(x = .data$x, y = .data$y,
+                                        label = .data$split_label),
                                     inherit.aes = FALSE,
                                     fontface = split_label_fontface,
                                     colour = split_label_color,
