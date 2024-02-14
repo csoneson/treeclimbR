@@ -80,10 +80,10 @@ of mice receiving transaortic constriction or sham surgery, and cell
 type abundance differences between conditions at 
 different clustering granularities. In all these cases, the entities are 
 naturally represented as leaves in a tree (a phylogenetic tree in the first 
-case, a tree where internal nodes represent miRNA duplexes, primary transcripts, 
-and clusters of miRNAs for the second, and a clustering tree defined based on 
-the average similarity between baseline high-resolution cell clusters for the 
-third).
+case, a tree where internal nodes represent miRNA duplexes, primary 
+transcripts, and clusters of miRNAs for the second, and a clustering tree 
+defined based on the average similarity between baseline high-resolution 
+cell clusters for the third).
 
 ## Load and visualize example data
 
@@ -448,8 +448,8 @@ names(ds_cand_list) <- names(ds_tbl_list)
 
 ## Select the optimal candidate
 
-We can then find the optimal candidate using the `evalCand()` function, and list 
-the top hits.
+We can then find the optimal candidate using the `evalCand()` function, and 
+list the top hits.
 
 ```{r ds-eval-cand}
 ds_best <- evalCand(tree = colTree(ds_tse), type = "multiple", 
