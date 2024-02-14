@@ -65,6 +65,32 @@ test_that("evalCand works", {
                     node_column = "node", p_column = "pvalue",
                     sign_column = "foldChange", threshold = 1e-4,
                     pct_na = 0.25, message = FALSE)
+    ## Stricter threshold on pct_na -> however, node 18 will still be chosen
+    ## since it does not have any descendants with non-NA p-value and thus
+    ## is considered a (pseudo)-leaf
+    llnastrict <- getCand(tree = tinyTree, score_data = df2,
+                          t = c(seq(0.01, 0.05, by = 0.01), seq(0.1, 1, by = 0.05)),
+                          node_column = "node", p_column = "pvalue",
+                          sign_column = "foldChange", threshold = 0.05,
+                          pct_na = 0.75, message = FALSE)
+    ## Stricter threshold on pct_na, and now leaf 4 has a valid p-value, so
+    ## node 18 is not a leaf, but will not be chosen
+    df2p <- df
+    df2p$pvalue[df2p$node %in% c(5, 6)] <- NA
+    llnastrict2 <- getCand(tree = tinyTree, score_data = df2p,
+                          t = c(seq(0.01, 0.05, by = 0.01), seq(0.1, 1, by = 0.05)),
+                          node_column = "node", p_column = "pvalue",
+                          sign_column = "foldChange", threshold = 0.05,
+                          pct_na = 0.75, message = FALSE)
+
+    ## One where there are different candidates generated
+    df3 <- df
+    df3$foldChange[df3$node %in% c(17, 7, 19)] <- -1
+    lldiff <- getCand(tree = tinyTree, score_data = df3,
+                      t = c(0.01, 0.05, 0.1, 0.25, 0.95),
+                      node_column = "node", p_column = "pvalue",
+                      sign_column = "foldChange", threshold = 1,
+                      pct_na = 0.5, message = FALSE)
 
     ## Check that the function returns error for invalid input
     ## -------------------------------------------------------------------------
@@ -220,6 +246,155 @@ test_that("evalCand works", {
     expect_equal(as.data.frame(out$output)[, seq_len(7)],
                  ll$score_data[match(out$output$node, ll$score_data$node), seq_len(7)],
                  ignore_attr = TRUE)
+    expect_equal(sum(out$output$adj.p <= 0.05), 2)
+
+    ## Single - different candidates
+    out <- evalCand(tree = tinyTree, type = "single",
+                    levels = lldiff$candidate_list,
+                    score_data = lldiff$score_data,
+                    node_column = "node", p_column = "pvalue",
+                    sign_column = "foldChange",
+                    feature_column = NULL, method = "BH",
+                    limit_rej = 0.95, use_pseudo_leaf = FALSE,
+                    message = FALSE)
+    expect_type(out, "list")
+    expect_named(out, c("candidate_best", "output", "candidate_list",
+                        "level_info", "FDR", "method", "column_info"))
+    expect_type(out$candidate_best, "list")
+    expect_s3_class(out$output, "data.frame")
+    expect_type(out$candidate_list, "list")
+    expect_s3_class(out$level_info, "data.frame")
+    expect_equal(out$FDR, 0.95)
+    expect_equal(out$method, "BH")
+    expect_equal(out$column_info,
+                 list(node_column = "node", p_column = "pvalue",
+                      sign_column = "foldChange", feature_column = NULL))
+    expect_equal(out$level_info$rej_pseudo_leaf, rep(NA, nrow(out$level_info)))
+    expect_equal(out$level_info[3, ],
+                 data.frame(t = 0.10, upper_t = 1, is_valid = TRUE,
+                            method = "BH", limit_rej = 0.95, level_name = "0.1",
+                            best = FALSE, rej_leaf = 10, rej_node = 7,
+                            rej_pseudo_leaf = NA, rej_pseudo_node = NA),
+                 ignore_attr = TRUE)
+    expect_equal(out$level_info[5, ],
+                 data.frame(t = 0.95, upper_t = 1, is_valid = TRUE,
+                            method = "BH", limit_rej = 0.95, level_name = "0.95",
+                            best = TRUE, rej_leaf = 10, rej_node = 4,
+                            rej_pseudo_leaf = NA, rej_pseudo_node = NA),
+                 ignore_attr = TRUE)
+    expect_equal(nrow(out$output), length(lldiff$candidate_list$`0.95`))
+    expect_equal(as.data.frame(out$output)[, seq_len(7)],
+                 lldiff$score_data[match(out$output$node, lldiff$score_data$node), seq_len(7)],
+                 ignore_attr = TRUE)
+    expect_equal(out$output$adj.p, p.adjust(out$output$pvalue, method = "BH"))
+
+    ## Single - NA values
+    out <- evalCand(tree = tinyTree, type = "single",
+                    levels = llna$candidate_list,
+                    score_data = llna$score_data,
+                    node_column = "node", p_column = "pvalue",
+                    sign_column = "foldChange",
+                    feature_column = NULL, method = "BH",
+                    limit_rej = 0.1, use_pseudo_leaf = FALSE,
+                    message = FALSE)
+    expect_type(out, "list")
+    expect_named(out, c("candidate_best", "output", "candidate_list",
+                        "level_info", "FDR", "method", "column_info"))
+    expect_type(out$candidate_best, "list")
+    expect_s3_class(out$output, "data.frame")
+    expect_type(out$candidate_list, "list")
+    expect_s3_class(out$level_info, "data.frame")
+    expect_equal(out$FDR, 0.1)
+    expect_equal(out$method, "BH")
+    expect_equal(out$column_info,
+                 list(node_column = "node", p_column = "pvalue",
+                      sign_column = "foldChange", feature_column = NULL))
+    expect_equal(out$level_info$rej_pseudo_leaf, rep(NA, nrow(out$level_info)))
+    expect_equal(out$level_info[3, ],
+                 data.frame(t = 0.03, upper_t = 0.1, is_valid = TRUE,
+                            method = "BH", limit_rej = 0.1, level_name = "0.03",
+                            best = TRUE, rej_leaf = 6, rej_node = 5,
+                            rej_pseudo_leaf = NA, rej_pseudo_node = NA),
+                 ignore_attr = TRUE)
+    expect_equal(nrow(out$output), length(llna$candidate_list$`0.03`))
+    expect_equal(as.data.frame(out$output)[, seq_len(7)],
+                 llna$score_data[match(out$output$node, llna$score_data$node), seq_len(7)],
+                 ignore_attr = TRUE)
+    expect_equal(out$candidate_best[[1]], c(1, 2, 3, 18, 7, 8, 9, 10))
+    expect_equal(out$output$adj.p, p.adjust(out$output$pvalue, method = "BH"))
+    expect_equal(out$output$node[out$output$signal.node], c(1, 2, 3, 18, 10))
+
+    ## Single - NA values with more strict requirements on pct_na
+    out <- evalCand(tree = tinyTree, type = "single",
+                    levels = llnastrict$candidate_list,
+                    score_data = llnastrict$score_data,
+                    node_column = "node", p_column = "pvalue",
+                    sign_column = "foldChange",
+                    feature_column = NULL, method = "BH",
+                    limit_rej = 0.1, use_pseudo_leaf = FALSE,
+                    message = FALSE)
+    expect_type(out, "list")
+    expect_named(out, c("candidate_best", "output", "candidate_list",
+                        "level_info", "FDR", "method", "column_info"))
+    expect_type(out$candidate_best, "list")
+    expect_s3_class(out$output, "data.frame")
+    expect_type(out$candidate_list, "list")
+    expect_s3_class(out$level_info, "data.frame")
+    expect_equal(out$FDR, 0.1)
+    expect_equal(out$method, "BH")
+    expect_equal(out$column_info,
+                 list(node_column = "node", p_column = "pvalue",
+                      sign_column = "foldChange", feature_column = NULL))
+    expect_equal(out$level_info$rej_pseudo_leaf, rep(NA, nrow(out$level_info)))
+    expect_equal(out$level_info[3, ],
+                 data.frame(t = 0.03, upper_t = 0.3, is_valid = TRUE,
+                            method = "BH", limit_rej = 0.1, level_name = "0.03",
+                            best = TRUE, rej_leaf = 5, rej_node = 2,
+                            rej_pseudo_leaf = NA, rej_pseudo_node = NA),
+                 ignore_attr = TRUE)
+    expect_equal(nrow(out$output), length(llnastrict$candidate_list$`0.03`))
+    expect_equal(as.data.frame(out$output)[, seq_len(7)],
+                 llnastrict$score_data[match(out$output$node, llnastrict$score_data$node), seq_len(7)],
+                 ignore_attr = TRUE)
+    expect_equal(out$output$adj.p, p.adjust(out$output$pvalue, method = "BH"))
+    expect_equal(out$candidate_best[[1]], c(18, 7, 8, 9, 10, 13))
+    expect_equal(out$output$node[out$output$signal.node], c(18, 13))
+
+    ## Single - NA values with more strict requirements on pct_na
+    out <- evalCand(tree = tinyTree, type = "single",
+                    levels = llnastrict2$candidate_list,
+                    score_data = llnastrict2$score_data,
+                    node_column = "node", p_column = "pvalue",
+                    sign_column = "foldChange",
+                    feature_column = NULL, method = "BH",
+                    limit_rej = 0.1, use_pseudo_leaf = FALSE,
+                    message = FALSE)
+    expect_type(out, "list")
+    expect_named(out, c("candidate_best", "output", "candidate_list",
+                        "level_info", "FDR", "method", "column_info"))
+    expect_type(out$candidate_best, "list")
+    expect_s3_class(out$output, "data.frame")
+    expect_type(out$candidate_list, "list")
+    expect_s3_class(out$level_info, "data.frame")
+    expect_equal(out$FDR, 0.1)
+    expect_equal(out$method, "BH")
+    expect_equal(out$column_info,
+                 list(node_column = "node", p_column = "pvalue",
+                      sign_column = "foldChange", feature_column = NULL))
+    expect_equal(out$level_info$rej_pseudo_leaf, rep(NA, nrow(out$level_info)))
+    expect_equal(out$level_info[3, ],
+                 data.frame(t = 0.03, upper_t = 0.2, is_valid = TRUE,
+                            method = "BH", limit_rej = 0.1, level_name = "0.03",
+                            best = TRUE, rej_leaf = 4, rej_node = 2,
+                            rej_pseudo_leaf = NA, rej_pseudo_node = NA),
+                 ignore_attr = TRUE)
+    expect_equal(nrow(out$output), length(llnastrict2$candidate_list$`0.03`))
+    expect_equal(as.data.frame(out$output)[, seq_len(7)],
+                 llnastrict2$score_data[match(out$output$node, llnastrict2$score_data$node), seq_len(7)],
+                 ignore_attr = TRUE)
+    expect_equal(out$output$adj.p, p.adjust(out$output$pvalue, method = "BH"))
+    expect_equal(out$candidate_best[[1]], c(4, 7, 8, 9, 10, 13))
+    expect_equal(out$output$node[out$output$signal.node], c(4, 13))
 
     ## Single - too low FDR
     expect_error({

@@ -122,6 +122,27 @@ test_that("getCand works", {
     }
     expect_equal(ll$candidate_list$`0.05`, c(6, 7, 8, 9, 10, 13, 18))
 
+    ## Candidates are the same even with threshold = 1 - issue is with the sign
+    ll <- getCand(tree = tinyTree, score_data = df,
+                  t = c(0.01, 0.05, 0.1, 0.25, 0.75),
+                  node_column = "node", p_column = "pvalue",
+                  sign_column = "foldChange", threshold = 1,
+                  pct_na = 0.5, message = FALSE)
+    expect_type(ll, "list")
+    expect_named(ll, c("candidate_list", "score_data"))
+    expect_type(ll$candidate_list, "list")
+    expect_s3_class(ll$score_data, "data.frame")
+    expect_equal(df, ll$score_data[, seq_len(ncol(df))])
+    expect_length(ll$candidate_list, 5)
+    expect_named(ll$candidate_list,
+                 as.character(c(0.01, 0.05, 0.1, 0.25, 0.75)))
+    for (i in c(0.01, 0.05, 0.1, 0.25, 0.75)) {
+        expect_equal(as.numeric(ll$score_data$pvalue <= i) *
+                         ll$score_data$foldChange,
+                     ll$score_data[[paste0("q_", i)]])
+    }
+    expect_equal(ll$candidate_list$`0.75`, c(6, 7, 8, 9, 10, 13, 18))
+
     ## Lower threshold so that 13/14 are no longer valid
     ll <- getCand(tree = tinyTree, score_data = df,
                   t = c(0.01, 0.05, 0.1, 0.25, 0.75),
@@ -142,6 +163,29 @@ test_that("getCand works", {
                      ll$score_data[[paste0("q_", i)]])
     }
     expect_equal(ll$candidate_list$`0.05`, c(1, 2, 3, 6, 7, 8, 9, 10, 18))
+
+    ## Change signs so that node 16 is a valid node for a high t threshold
+    df2 <- df
+    df2$foldChange[df2$node %in% c(17, 7, 19)] <- -1
+    ll <- getCand(tree = tinyTree, score_data = df2,
+                  t = c(0.01, 0.05, 0.1, 0.25, 0.95),
+                  node_column = "node", p_column = "pvalue",
+                  sign_column = "foldChange", threshold = 1,
+                  pct_na = 0.5, message = FALSE)
+    expect_type(ll, "list")
+    expect_named(ll, c("candidate_list", "score_data"))
+    expect_type(ll$candidate_list, "list")
+    expect_s3_class(ll$score_data, "data.frame")
+    expect_equal(df2, ll$score_data[, seq_len(ncol(df2))])
+    expect_length(ll$candidate_list, 5)
+    expect_named(ll$candidate_list,
+                 as.character(c(0.01, 0.05, 0.1, 0.25, 0.95)))
+    for (i in c(0.01, 0.05, 0.1, 0.25, 0.95)) {
+        expect_equal(as.numeric(ll$score_data$pvalue <= i) *
+                         ll$score_data$foldChange,
+                     ll$score_data[[paste0("q_", i)]])
+    }
+    expect_equal(ll$candidate_list$`0.95`, c(9, 10, 13, 16))
 
     ## Add some NAs, set a lenient threshold
     df2 <- df
