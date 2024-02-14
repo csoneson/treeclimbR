@@ -126,6 +126,19 @@ test_that("getLevel works", {
     expect_equal(final$pvalue, out$pvalue)
     expect_equal(final$node[final$keep], c(13, 17))
 
+    ## Too many NA p-values of direct children - don't retain node 13
+    out2 <- out
+    out2$pvalue[out2$node %in% c(1, 14)] <- NA
+    final <- getLevel(tree = tinyTree, score_data = out2,
+                      drop =  pvalue > 0.05, score_column = "pvalue",
+                      node_column = "node", get_max = FALSE,
+                      parent_first = TRUE, message = FALSE)
+    expect_s3_class(final, "data.frame")
+    expect_equal(nrow(final), nrow(out2))
+    expect_equal(final$node, out2$node)
+    expect_equal(final$pvalue, out2$pvalue)
+    expect_equal(final$node[final$keep], 17)
+
     ## parent_first = FALSE
     final <- getLevel(tree = tinyTree, score_data = DataFrame(out),
                       drop =  pvalue > 0.05, score_column = "pvalue",
