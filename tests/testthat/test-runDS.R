@@ -261,4 +261,44 @@ test_that("runDS works", {
                                               n = Inf, p.value = 1e-2))),
                  as.character(c(1, 3, 5, 6)))
     expect_null(ds_res$edgeR_results$alias_5)
+
+    ## glmQL, some samples have zero counts in some nodes,
+    ## specify design_terms
+    ds2 <- ds_se
+    SummarizedExperiment::assay(ds2, "alias_5")[, c("1")] <- 0
+    SummarizedExperiment::assay(ds2, "alias_13")[, c("4")] <- 0
+    ds_res <- runDS(SE = ds2, tree = colTree(ds_tse), option = "glmQL",
+                    group_column = "group", contrast = c(0, 1),
+                    filter_min_count = 0, filter_min_total_count = 1,
+                    design = NULL, design_terms = "group",
+                    filter_min_prop = 0, min_cells = 1, message = FALSE)
+    expect_type(ds_res, "list")
+    expect_named(ds_res, c("edgeR_results", "tree", "nodes_drop"))
+    expect_equal(ds_res$nodes_drop, character(0),
+                 ignore_attr = TRUE)
+    expect_type(ds_res$edgeR_results, "list")
+    expect_length(ds_res$edgeR_results, 19)
+    expect_s4_class(ds_res$edgeR_results[[1]], "DGELRT")
+    ## Check that truly DE features show up where they should
+    expect_equal(sort(rownames(edgeR::topTags(ds_res$edgeR_results$alias_11,
+                                              n = Inf, p.value = 1e-4))),
+                 as.character(seq_len(8)))
+    expect_equal(sort(rownames(edgeR::topTags(ds_res$edgeR_results$alias_14,
+                                              n = Inf, p.value = 1e-4))),
+                 as.character(seq_len(6)))
+    expect_equal(sort(rownames(edgeR::topTags(ds_res$edgeR_results$alias_2,
+                                              n = Inf, p.value = 1e-2))),
+                 as.character(seq_len(6)))
+    expect_equal(sort(rownames(edgeR::topTags(ds_res$edgeR_results$alias_7,
+                                              n = Inf, p.value = 1e-2))),
+                 as.character(c(1, 3, 5, 6)))
+    expect_equal(sort(rownames(edgeR::topTags(ds_res$edgeR_results$alias_19,
+                                              n = Inf, p.value = 1e-2))),
+                 as.character(c(1, 3, 5, 6)))
+    expect_equal(sort(rownames(edgeR::topTags(ds_res$edgeR_results$alias_13,
+                                              n = Inf, p.value = 1e-4))),
+                 as.character(seq_len(6)))
+    expect_equal(sort(rownames(edgeR::topTags(ds_res$edgeR_results$alias_5,
+                                              n = Inf, p.value = 1e-4))),
+                 as.character(c(1, 3, 5, 6, 7, 8)))
 })
