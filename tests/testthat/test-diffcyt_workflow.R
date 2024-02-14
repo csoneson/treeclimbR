@@ -21,7 +21,7 @@ test_that("diffcyt workflow works", {
     marker_info <- data.frame(
         channel_name = paste0("channel", sprintf("%03d", seq_len(20))),
         marker_name = paste0("marker", sprintf("%02d", seq_len(20))),
-        marker_class = factor(c(rep("type", 10), rep("state", 10)),
+        marker_class = factor(c(rep("type", 8), rep("none", 2), rep("state", 10)),
                               levels = c("type", "state", "none"))
     )
     d_se <- diffcyt::prepareData(d_input, experiment_info, marker_info)
@@ -109,7 +109,7 @@ test_that("diffcyt workflow works", {
         }, "Multiple nodes are found to have the same label")
     }, "Multiple nodes are found to have the same label")
     expect_s4_class(out, "TreeSummarizedExperiment")
-    expect_equal(length(SummarizedExperiment::assayNames(out)), 20) ## nmarkers
+    expect_equal(length(SummarizedExperiment::assayNames(out)), 18) ## nmarkers
     expect_equal(nrow(out), 199) ## nclusters
     expect_equal(ncol(out), 4) ## nsamples
     ## Spot check some values
@@ -137,11 +137,19 @@ test_that("diffcyt workflow works", {
     }, "Multiple nodes are found to have the same label")
     expect_identical(out, out2)
 
-    ## With missing nodes
+    ## With missing data (subset cells; some clusters will not have cells from
+    ## all samples)
     set.seed(1)
-    kp <- sample(seq_len(nrow(d_se)), 3000)
+    kp <- sample(seq_len(nrow(d_se)), 2680)
     tmp <- d_se[kp, ]
     tmp2 <- d_se
+    ## One cluster-sample combination is missing
+    expect_equal(sum(table(rowData(tmp)$cluster_id,
+                           rowData(tmp)$sample_id) == 0), 1)
+    expect_equal(sum(rowData(tmp)$cluster_id == 38 &
+                         rowData(tmp)$sample_id == "sample1"), 0)
+    expect_equal(sum(rowData(tmp)$cluster_id == 88 &
+                         rowData(tmp)$sample_id == "sample2"), 10)
     SummarizedExperiment::assay(tmp2, "exprs")[
         setdiff(seq_len(nrow(d_se)), kp), ] <- NA
     expect_warning({
@@ -157,7 +165,7 @@ test_that("diffcyt workflow works", {
         }, "leaves couldn't be found")
     }, "Missing leaves")
     expect_s4_class(out, "TreeSummarizedExperiment")
-    expect_equal(length(SummarizedExperiment::assayNames(out)), 20) ## nmarkers
+    expect_equal(length(SummarizedExperiment::assayNames(out)), 18) ## nmarkers
     expect_equal(nrow(out), 199) ## nclusters
     expect_equal(ncol(out), 4) ## nsamples
     ## Spot check some values
@@ -241,7 +249,7 @@ test_that("diffcyt workflow works", {
     }, "Multiple nodes are found to have the same label")
     expect_s4_class(out, "TreeSummarizedExperiment")
     expect_equal(nrow(out), 199) ## nclusters
-    expect_equal(ncol(out), 20) ## nmarkers
+    expect_equal(ncol(out), 18) ## nmarkers
     expect_equal(SummarizedExperiment::assayNames(out), "exprs")
     ## Spot check some values
     for (l in list(list(node = 127, marker = "marker17"),
