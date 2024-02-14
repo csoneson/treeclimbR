@@ -315,30 +315,41 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
         hm_df$row_label <- rownames_label[rownames(hm_df)]
     }
 
-    ## y position for each row
+    ## Height and y position for each row
     desd_hm <- TreeSummarizedExperiment::findDescendant(
         tree = tree, node = hm_df$node, only.leaf = FALSE, self.include = TRUE)
-    hm_df$y <- vapply(desd_hm, FUN = function(x) {
-        y <- df$y[match(x, df$node)]
-        ## Get the middle point of the range defined by the nodes
-        mean(range(y, na.rm = TRUE))
-    }, NA_real_)
-
-    ## Height of each row
-    hm_df$height <- vapply(desd_hm, FUN = function(x) {
+    hy_vals <- lapply(desd_hm, function(x) {
+        df0 <- df |> dplyr::filter(.data$isTip)
         xx <- match(x, df$node)
         y <- df$y[xx]
-
-        if ("scale" %in% colnames(df)) {
-            dt <- unique(df$scale[xx])
-            if (length(dt) > 1) {
-                dt <- max(setdiff(dt, 1), 1)
-            }
-        } else {
-            dt <- 1
+        if (!"scale" %in% colnames(df)) {
+            df$scale <- 1
         }
-        ## Size of range spanned by nodes
-        diff(range(y, na.rm = TRUE)) + dt
+
+        ## Upper bound
+        if (!any(df0$y > max(y))) {
+            ## No row above the subtree
+            upper <- max(y) + df$scale[xx[which.max(y)]] / 2
+        } else {
+            ## Something above the subtree - boundary should be in the middle
+            upper <- (min(df0$y[df0$y > max(y)]) + max(y)) / 2
+        }
+        ## Lower bound
+        if (!any(df0$y < min(y))) {
+            ## No row below the subtree
+            lower <- min(y) - df$scale[xx[which.min(y)]] / 2
+        } else {
+            ## Something below the subtree - boundary should be in the middle
+            lower <- (max(df0$y[df0$y < min(y)]) + min(y)) / 2
+        }
+
+        list(upper = upper, lower = lower)
+    })
+    hm_df$height <- vapply(hy_vals, function(x) {
+        x$upper - x$lower
+    }, NA_real_)
+    hm_df$y <- vapply(hy_vals, function(x) {
+        (x$upper + x$lower) / 2
     }, NA_real_)
 
     ## Width of each column in the heatmap
@@ -462,8 +473,10 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
                 variable = as.character(.data$variable),
                 x = .data$x - 0.5 * .data$width,
                 xend = .data$x + .data$width,
-                y = max(df$y, na.rm = TRUE) + column_anno_gap,
-                yend = max(df$y, na.rm = TRUE) + column_anno_gap,
+                y = max(vapply(hy_vals, function(x) x$upper, NA_real_)) +
+                    column_anno_gap,
+                yend = max(vapply(hy_vals, function(x) x$upper, NA_real_)) +
+                    column_anno_gap,
                 anno_group = column_anno[.data$variable],
                 anno_color = column_anno_color[.data$anno_group])
         anno_color <- anno_df$anno_color
@@ -531,7 +544,8 @@ TreeHeatmap <- function(tree, tree_fig, hm_data,
     ## -------------------------------------------------------------------------
     if (show_title) {
         title_df <- data.frame(x = mean(range(hm_dt$x, na.rm = TRUE)),
-                               y = max(hm_dt$y),
+                               y = max(vapply(hy_vals, function(x) x$upper,
+                                              NA_real_)),
                                label = title_hm)
         p <- p + ggplot2::geom_text(data = title_df,
                                     aes(x = .data$x, y = .data$y,
