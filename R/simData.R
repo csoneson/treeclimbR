@@ -715,18 +715,14 @@ simData <- function(tree = NULL, data = NULL, obj = NULL, assay = NULL,
             ## Avoid selecting all low or high abundance tips in the branch.
 
             spr <- sumA / sum(pars[tip.A])
-            ind.pr <- spr <= (pct + 0.05) & spr >= (pct - 0.05)
+            ind.pr <- spr <= (pct + 0.05) && spr >= (pct - 0.05)
 
-            if (all(subA <= 0.6) & ind.pr) {
+            if (all(subA <= 0.6) && ind.pr) {
                 break
             }
             iter <- iter + 1
         }
 
-        if (length(branchB) == 0) {
-            stop("No suitable branches.
-                 Try another branchA or another max ratio... \n")
-        }
         tip.B <- TreeSummarizedExperiment::findDescendant(
             tree = tree, node = branchB, only.leaf = TRUE, self.include = TRUE,
             use.alias = TRUE)
@@ -739,9 +735,6 @@ simData <- function(tree = NULL, data = NULL, obj = NULL, assay = NULL,
             beta[selA] <- sumB/sumA
             beta[tip.B] <- sumA/sumB
         } else {
-            if (!is.numeric(adjB)) {
-                stop("adjB should be numeric")
-            }
             beta[tip.B] <- adjB
             beta[selA] <- (sumB * (1 - adjB) + sumA) / sumA
         }
@@ -794,7 +787,11 @@ simData <- function(tree = NULL, data = NULL, obj = NULL, assay = NULL,
         rownames(Mp.c1) <- paste("C1_", seq_len(n1), sep = "")
         colnames(Mp.c1) <- names(p.c1)
         Mobs.c1 <- Mp.c1
-        if (length(mu) & !length(size)) {
+        if (length(mu) == 1 && !length(size)) {
+            ## Need to treat this case separately since otherwise it will
+            ## sample from seq_len(mu) below
+            nSeq1 <- rep(mu, n1)
+        } else if (length(mu) && !length(size)) {
             nSeq1 <- sample(x = mu, size = n1, replace = TRUE)
         } else {
             nSeq1 <- stats::rnbinom(n = n1, mu = mu, size = size)
@@ -811,12 +808,15 @@ simData <- function(tree = NULL, data = NULL, obj = NULL, assay = NULL,
         rownames(Mp.c2) <- paste("C2_", seq_len(n2), sep = "")
         colnames(Mp.c2) <- names(p.c2)
         Mobs.c2 <- Mp.c2
-        if (length(mu) & !length(size)) {
+        if (length(mu) == 1 && !length(size)) {
+            ## Need to treat this case separately since otherwise it will
+            ## sample from seq_len(mu) below
+            nSeq2 <- rep(mu, n2)
+        } else if (length(mu) && !length(size)) {
             nSeq2 <- sample(x = mu, size = n2, replace = TRUE)
         } else {
             nSeq2 <- stats::rnbinom(n = n2, mu = mu, size = size)
         }
-
         for (i in seq_len(n2)) {
             Mp.c2[i, ] <- dirmult::rdirichlet(1, g.c2)[1, ]
             Mobs.c2[i, ] <- stats::rmultinom(1, nSeq2[i],
