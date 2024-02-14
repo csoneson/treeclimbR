@@ -214,14 +214,17 @@ should be printed.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Load example data</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">TreeSummarizedExperiment</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## Load example data</span></span></span>
 <span class="r-in"><span><span class="va">ds_tse</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"ds_sim_20_500_8de.rds"</span>,</span></span>
 <span class="r-in"><span>                              package <span class="op">=</span> <span class="st">"treeclimbR"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ds_se</span> <span class="op">&lt;-</span> <span class="fu"><a href="aggDS.html">aggDS</a></span><span class="op">(</span>TSE <span class="op">=</span> <span class="va">ds_tse</span>, assay <span class="op">=</span> <span class="st">"counts"</span>, sample_id <span class="op">=</span> <span class="st">"sample_id"</span>,</span></span>
 <span class="r-in"><span>               group_id <span class="op">=</span> <span class="st">"group"</span>, cluster_id <span class="op">=</span> <span class="st">"cluster_id"</span>, FUN <span class="op">=</span> <span class="va">sum</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Multiple nodes are found to have the same label.</span>
 <span class="r-in"><span><span class="co">## Information about the number of cells is provided in the metadata</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html" class="external-link">metadata</a></span><span class="op">(</span><span class="va">ds_se</span><span class="op">)</span><span class="op">$</span><span class="va">n_cells</span></span></span>
+<span class="r-in"><span><span class="fu">S4Vectors</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html" class="external-link">metadata</a></span><span class="op">(</span><span class="va">ds_se</span><span class="op">)</span><span class="op">$</span><span class="va">n_cells</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            4   1   2   3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> alias_1   10   8  14  12</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> alias_2   17  12  10  14</span>

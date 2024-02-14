@@ -95,6 +95,7 @@ used. The alias of the node label is created by adding a prefix
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="op">{</span></span></span>
 <span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://www.amazon.com/Integration-Manipulation-Visualization-Phylogenetic-Computational-ebook/dp/B0B5NLZR1Z/" class="external-link">ggtree</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">TreeSummarizedExperiment</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">tinyTree</span><span class="op">)</span></span></span>
@@ -107,36 +108,22 @@ used. The alias of the node label is created by adding a prefix
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Specify node numbers</span></span></span>
 <span class="r-in"><span><span class="fu">findChild</span><span class="op">(</span>tree <span class="op">=</span> <span class="va">tinyTree</span>, node <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">17</span>, <span class="fl">12</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $Node_17</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  6 18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $Node_12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 13 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Node_13      t8 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      13       6 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Name return values using aliases</span></span></span>
 <span class="r-in"><span><span class="fu">findChild</span><span class="op">(</span>tree <span class="op">=</span> <span class="va">tinyTree</span>, node <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">17</span>, <span class="fl">12</span><span class="op">)</span>, use.alias <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $alias_17</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  6 18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $alias_12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 13 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alias_13  alias_6 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       13        6 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Specify node labels</span></span></span>
 <span class="r-in"><span><span class="fu">findChild</span><span class="op">(</span>tree <span class="op">=</span> <span class="va">tinyTree</span>, node <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Node_17"</span>, <span class="st">"Node_12"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $Node_17</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  6 18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $Node_12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 13 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Node_13      t8 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      13       6 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Tips have no children</span></span></span>
 <span class="r-in"><span><span class="fu">findChild</span><span class="op">(</span>tree <span class="op">=</span> <span class="va">tinyTree</span>, node <span class="op">=</span> <span class="st">"t4"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $t4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> integer(0)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> named integer(0)</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
