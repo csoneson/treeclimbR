@@ -27,7 +27,7 @@ test_that("getData works", {
     col_split <- ifelse(colnames(ct) %in% paste0("S", seq_len(5)), "A", "B")
     names(col_split) <- colnames(ct)
 
-    ## Prepare the tree figure
+    ## Prepare the heatmaps
     tree_fig <- ggtree(tinyTree, branch.length = "none",
                        layout = "rectangular", open.angle = 100) +
         geom_hilight(node = 18, fill = "orange", alpha = 0.3) +
@@ -53,6 +53,50 @@ test_that("getData works", {
         show_title = TRUE, title_offset_y = 1.5, title_color = "blue",
         show_rownames = TRUE
     )
+
+    ## Figure with scaled tree
+    tree_fig_sc <- ggtree(tinyTree, branch.length = "none",
+           layout = "rectangular", open.angle = 100)
+    tree_fig_sc <- ggtree::scaleClade(tree_fig_sc, node = 15, scale = 4)
+    tree_fig_sc <- ggtree::scaleClade(tree_fig_sc, node = 14, scale = 0.25) +
+        geom_hilight(node = 18, fill = "orange", alpha = 0.3) +
+        geom_hilight(node = 13, fill = "blue", alpha = 0.3)
+    figsc <- TreeHeatmap(
+        tree = tinyTree, tree_fig = tree_fig_sc, hm_data = ct,
+        cluster_column = TRUE, column_split = col_split,
+        column_anno = col_split, column_anno_gap = 0.6,
+        column_anno_color = c(A = "red", B = "blue"),
+        show_colnames = TRUE, colnames_position = "bottom",
+        colnames_angle = 90, colnames_size = 2, colnames_offset_y = -0.2,
+        show_title = TRUE, title_offset_y = 1.5, title_color = "blue",
+        show_rownames = TRUE, rownames_hjust = 0, rownames_offset_x = 0.1
+    )
+
+    ## Provide column order -> ignore cluster_column
+    expect_warning({
+        figco <- TreeHeatmap(
+            tree = tinyTree, tree_fig = tree_fig, hm_data = ct,
+            column_order = paste0("S", seq_len(10)),
+            cluster_column = TRUE, column_split = col_split,
+            column_anno = col_split, column_anno_gap = 0.6,
+            column_anno_color = c(A = "red", B = "blue"),
+            show_colnames = TRUE, colnames_position = "bottom",
+            colnames_angle = 90, colnames_size = 2, colnames_offset_y = -0.2,
+            show_title = TRUE, title_offset_y = 1.5, title_color = "blue",
+            show_rownames = TRUE
+        )}, "column_order is ignored when column_split is given")
+    expect_warning({
+        figco <- TreeHeatmap(
+            tree = tinyTree, tree_fig = tree_fig, hm_data = ct,
+            column_order = paste0("S", seq_len(10)),
+            cluster_column = TRUE, column_split = NULL,
+            column_anno = col_split, column_anno_gap = 0.6,
+            column_anno_color = c(A = "red", B = "blue"),
+            show_colnames = TRUE, colnames_position = "bottom",
+            colnames_angle = 90, colnames_size = 2, colnames_offset_y = -0.2,
+            show_title = TRUE, title_offset_y = 1.5, title_color = "blue",
+            show_rownames = TRUE
+        )}, "cluster_column is ignored because column_order is given")
 
     ## Check that the function fails with wrong input
     ## -------------------------------------------------------------------------
@@ -95,6 +139,35 @@ test_that("getData works", {
     df_hm_rn <- getData(tree_hm = figrn, type = "heatmap")
     expect_equal(df_hm, df_hm_rn)
 
+    ## ... from figure with scaled tree
+    df_hm_sc <- getData(tree_hm = figsc, type = "heatmap")
+    expect_s3_class(df_hm_sc, "data.frame")
+    expect_equal(nrow(df_hm_sc), 70) ## 7 blocks, 10 samples
+    expect_named(df_hm_sc, c("node", "row_label", "x", "y", "height", "width",
+                             "variable", "value", "column_order", "split_level"))
+    expect_equal(df_hm_sc$row_label, rep(rownames(ct), each = 10))
+    expect_equal(df_hm_sc$column_order, rep(c(2, 3, 4, 0, 1, 5, 6, 8, 9, 7), 7))
+    expect_equal(df_hm_sc$variable, factor(rep(paste0("S", seq_len(10)), 7),
+                                        levels = c("S4", "S5", "S1", "S2", "S3",
+                                                   "S6", "S7", "S10", "S8",
+                                                   "S9")))
+    expect_true(all(diff(df_hm_sc$x[order(df_hm_sc$column_order)]) >= 0))
+    expect_length(unique(paste(df_hm_sc$column_order, df_hm_sc$x)), 10)
+    expect_equal(unique(df_hm_sc$width), 0.6)
+    expect_equal(unique(df_hm_sc$split_level[df_hm_sc$variable == "S1"]), 0)
+    expect_equal(unique(df_hm_sc$split_level[df_hm_sc$variable == "S8"]), 1)
+    expect_equal(unique(df_hm_sc$height[df_hm_sc$row_label == "Node_13"]), 2.25)
+    expect_equal(unique(df_hm_sc$height[df_hm_sc$row_label == "Node_18"]), 8) ## scaled by 4
+    expect_equal(unique(df_hm_sc$height[df_hm_sc$row_label == "t8"]), 4)
+    expect_equal(unique(df_hm_sc$y[df_hm_sc$row_label == "Node_13"]), -0.9375)
+    for (n in rownames(ct)) {
+        for (m in colnames(ct)) {
+            expect_equal(df_hm_sc$value[df_hm_sc$variable == m &
+                                         df_hm_sc$row_label == n],
+                         ct[n, m])
+        }
+    }
+
     ## Row names
     df_rn <- getData(tree_hm = fig, type = "row_name")
     expect_null(df_rn)
@@ -123,7 +196,7 @@ test_that("getData works", {
     ## Title
     df_title <- getData(tree_hm = fig, type = "title")
     expect_s3_class(df_title, "data.frame")
-    expect_equal(df_title, data.frame(x = 9.1, y = 9.5, label = "First heatmap"))
+    expect_equal(df_title, data.frame(x = 9.1, y = 10.5, label = "First heatmap"))
 
     ## Column annotation
     df_ca <- getData(tree_hm = fig, type = "column_anno")
