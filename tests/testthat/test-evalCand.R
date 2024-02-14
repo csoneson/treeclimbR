@@ -52,6 +52,7 @@ test_that("evalCand works", {
     df <- data.frame(node = seq_len(19), pvalue = pv,
                      foldChange = fc, feature = "gene1")
     ll <- getCand(tree = tinyTree, score_data = df,
+                  t = c(seq(0.01, 0.05, by = 0.01), seq(0.1, 1, by = 0.05)),
                   node_column = "node", p_column = "pvalue",
                   sign_column = "foldChange")
 
@@ -60,6 +61,7 @@ test_that("evalCand works", {
     df2$feature <- "gene2"
     df2$pvalue[df2$node %in% c(4, 5, 6)] <- NA
     llna <- getCand(tree = tinyTree, score_data = df2,
+                    t = c(seq(0.01, 0.05, by = 0.01), seq(0.1, 1, by = 0.05)),
                     node_column = "node", p_column = "pvalue",
                     sign_column = "foldChange", threshold = 1e-4,
                     pct_na = 0.25, message = FALSE)
@@ -208,7 +210,7 @@ test_that("evalCand works", {
                  list(node_column = "node", p_column = "pvalue",
                       sign_column = "foldChange", feature_column = NULL))
     expect_equal(out$level_info$rej_pseudo_leaf, rep(NA, nrow(out$level_info)))
-    expect_equal(out$level_info[2, ],
+    expect_equal(out$level_info[1, ],
                  data.frame(t = 0.01, upper_t = 0.15, is_valid = TRUE,
                             method = "BH", limit_rej = 0.05, level_name = "0.01",
                             best = TRUE, rej_leaf = 5, rej_node = 2,
@@ -218,6 +220,17 @@ test_that("evalCand works", {
     expect_equal(as.data.frame(out$output)[, seq_len(7)],
                  ll$score_data[match(out$output$node, ll$score_data$node), seq_len(7)],
                  ignore_attr = TRUE)
+
+    ## Single - too low FDR
+    expect_error({
+        out <- evalCand(tree = tinyTree, type = "single",
+                        levels = ll$candidate_list, score_data = ll$score_data,
+                        node_column = "node", p_column = "pvalue",
+                        sign_column = "foldChange",
+                        feature_column = NULL, method = "BH",
+                        limit_rej = 1e-10, use_pseudo_leaf = FALSE,
+                        message = FALSE)
+    }, "No valid level could be found")
 
     ## Multiple
     out <- evalCand(tree = tinyTree, type = "multiple",
@@ -243,7 +256,7 @@ test_that("evalCand works", {
                  list(node_column = "node", p_column = "pvalue",
                       sign_column = "foldChange", feature_column = "feature"))
     expect_equal(out$level_info$rej_pseudo_leaf, rep(NA, nrow(out$level_info)))
-    expect_equal(out$level_info[2, ],
+    expect_equal(out$level_info[1, ],
                  data.frame(t = 0.01, upper_t = 0.1, is_valid = TRUE,
                             method = "BH", limit_rej = 0.05, level_name = "0.01",
                             best = TRUE, rej_leaf = 10, rej_node = 6,
@@ -280,7 +293,7 @@ test_that("evalCand works", {
                  list(node_column = "node", p_column = "pvalue",
                       sign_column = "foldChange", feature_column = "feature"))
     expect_equal(out$level_info$rej_pseudo_leaf, rep(9, nrow(out$level_info)))
-    expect_equal(out$level_info[2, ],
+    expect_equal(out$level_info[1, ],
                  data.frame(t = 0.01, upper_t = 0.08, is_valid = TRUE,
                             method = "BH", limit_rej = 0.05, level_name = "0.01",
                             best = TRUE, rej_leaf = 9, rej_node = 6,
