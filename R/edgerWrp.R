@@ -57,6 +57,9 @@
 #'     glmQLFit glmQLFTest
 #'
 #' @examples
+#' suppressPackageStartupMessages({
+#'     library(TreeSummarizedExperiment)
+#' })
 #' ## Read example data
 #' x <- readRDS(system.file("extdata/da_sim_100_30_18de.rds",
 #'                          package = "treeclimbR"))

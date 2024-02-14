@@ -45,7 +45,7 @@
 #'
 #' @examples
 #' suppressPackageStartupMessages({
-#'     library(treeclimbR)
+#'     library(TreeSummarizedExperiment)
 #'     library(ape)
 #'     library(ggtree)
 #' })

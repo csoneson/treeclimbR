@@ -77,6 +77,9 @@ QLF edgeR workflows (i.e., either \code{\link[edgeR]{glmFit}} +
 }
 }
 \examples{
+suppressPackageStartupMessages({
+    library(TreeSummarizedExperiment)
+})
 ## Read example data
 x <- readRDS(system.file("extdata/da_sim_100_30_18de.rds",
                          package = "treeclimbR"))

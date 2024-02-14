@@ -18,6 +18,7 @@
 #' @examples
 #' suppressPackageStartupMessages({
 #'     library(ggtree)
+#'     library(TreeSummarizedExperiment)
 #' })
 #'
 #' data(tinyTree)

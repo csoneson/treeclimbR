@@ -163,6 +163,9 @@ Simulate a count table for entities which are corresponding to the
     swapped with the proportion of some leaves from the other branch.}
 }
 \examples{
+suppressPackageStartupMessages({
+    library(TreeSummarizedExperiment)
+})
 ## Generate data to use as the starting point (this would usually be a
 ## real data set)
 set.seed(1L)

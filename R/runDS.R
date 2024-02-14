@@ -80,13 +80,16 @@
 #' @importFrom stats model.matrix
 #'
 #' @examples
+#' suppressPackageStartupMessages({
+#'     library(TreeSummarizedExperiment)
+#' })
 #' ## Load example data
 #' ds_tse <- readRDS(system.file("extdata", "ds_sim_20_500_8de.rds",
 #'                               package = "treeclimbR"))
 #' ds_se <- aggDS(TSE = ds_tse, assay = "counts", sample_id = "sample_id",
 #'                group_id = "group", cluster_id = "cluster_id", FUN = sum)
 #' ## Information about the number of cells is provided in the metadata
-#' metadata(ds_se)$n_cells
+#' S4Vectors::metadata(ds_se)$n_cells
 #'
 #' ds_res <- runDS(SE = ds_se, tree = colTree(ds_tse), option = "glmQL",
 #'                 group_column = "group", contrast = c(0, 1),

@@ -120,6 +120,9 @@
 #' @importFrom TreeSummarizedExperiment TreeSummarizedExperiment
 #'
 #' @examples
+#' suppressPackageStartupMessages({
+#'     library(TreeSummarizedExperiment)
+#' })
 #' ## Generate data to use as the starting point (this would usually be a
 #' ## real data set)
 #' set.seed(1L)

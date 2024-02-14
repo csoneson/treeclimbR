@@ -34,6 +34,7 @@ other, and indirectly connected otherwise.
 \examples{
 suppressPackageStartupMessages({
     library(ggtree)
+    library(TreeSummarizedExperiment)
 })
 
 data(tinyTree)

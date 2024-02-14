@@ -58,7 +58,7 @@ several of the original clusters (defined by the provided column tree).
 }
 \examples{
 suppressPackageStartupMessages({
-    library(treeclimbR)
+    library(TreeSummarizedExperiment)
     library(ape)
     library(ggtree)
 })

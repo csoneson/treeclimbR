@@ -29,6 +29,7 @@ Find the direct children of an internal node in a tree.
 \examples{
 suppressPackageStartupMessages({
     library(ggtree)
+    library(TreeSummarizedExperiment)
 })
 
 data(tinyTree)

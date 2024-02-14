@@ -58,6 +58,7 @@ We start by loading the packages that will be needed in the analyses below.
 
 ```{r setup}
 suppressPackageStartupMessages({
+    library(TreeSummarizedExperiment)
     library(treeclimbR)
     library(ggtree)
     library(dplyr)
