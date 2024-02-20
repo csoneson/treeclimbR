@@ -74,7 +74,7 @@ hypotheses with treeclimbR</h1>
                         <h4 data-toc-skip class="author">Charlotte
 Soneson and Ruizhu Huang</h4>
             
-            <h4 data-toc-skip class="date">2024-02-14</h4>
+            <h4 data-toc-skip class="date">2024-02-20</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/csoneson/treeclimbR/blob/HEAD/vignettes/treeclimbR.Rmd" class="external-link"><code>vignettes/treeclimbR.Rmd</code></a></small>
       <div class="hidden name"><code>treeclimbR.Rmd</code></div>
@@ -98,9 +98,9 @@ conditions to be reliably detected. Aggregating abundances on a higher
 level in the tree can detect families of species that are closely
 related and that all change (possibly weakly but) concordantly. At the
 same time, blindly aggregating to a higher level across the whole tree
-may mean that we lose the ability to pinpoint specific species with a
-strong signal that may not be shared with their closest neighbors in the
-tree. Taken together, this motivates the development of a data-dependent
+may imply losing the ability to pinpoint specific species with a strong
+signal that may not be shared with their closest neighbors in the tree.
+Taken together, this motivates the development of a data-dependent
 aggregation approach, which is also allowed to aggregate different parts
 of the tree at different levels of resolution.</p>
 <p>If you are using <code>treeclimbR</code>, please cite <span class="citation">Huang et al. (2021)</span>, which also contains the
@@ -214,7 +214,7 @@ data.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">vv</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">scale_count</span><span class="op">)</span></span>
 <span><span class="va">anno_c</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/structure.html" class="external-link">structure</a></span><span class="op">(</span><span class="va">vv</span>, names <span class="op">=</span> <span class="va">vv</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/TreeHeatmap.html">TreeHeatmap</a></span><span class="op">(</span>tree <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/TreeSummarizedExperiment/man/TreeSummarizedExperiment-accessor.html" class="external-link">rowTree</a></span><span class="op">(</span><span class="va">da_lse</span><span class="op">)</span>, tree_fig <span class="op">=</span> <span class="va">da_fig_tree</span>, </span>
-<span>            hm_data <span class="op">=</span> <span class="va">scale_count</span>,</span>
+<span>            hm_data <span class="op">=</span> <span class="va">scale_count</span>, legend_title_hm <span class="op">=</span> <span class="st">"Scaled\ncount"</span>,</span>
 <span>            column_split <span class="op">=</span> <span class="va">vv</span>, rel_width <span class="op">=</span> <span class="fl">0.6</span>,</span>
 <span>            tree_hm_gap <span class="op">=</span> <span class="fl">0.3</span>,</span>
 <span>            column_split_label <span class="op">=</span> <span class="va">anno_c</span><span class="op">)</span> <span class="op">+</span></span>
@@ -241,7 +241,9 @@ aggregation level.</p>
 <p>Here, we use the <code>aggTSE</code> function from the
 <code>TreeSummarizedExperiment</code> package to calculate an aggregated
 count for each internal node in the tree by summing the counts for all
-its descendant leaves.</p>
+its descendant leaves. For other applications, other aggregation methods
+(e.g., averaging) may be more suitable. This can be controlled via the
+<code>rowFun</code> argument.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Get a list of all node IDs</span></span>
 <span><span class="va">all_node</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/TreeSummarizedExperiment/man/showNode.html" class="external-link">showNode</a></span><span class="op">(</span>tree <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/TreeSummarizedExperiment/man/TreeSummarizedExperiment-accessor.html" class="external-link">rowTree</a></span><span class="op">(</span><span class="va">da_lse</span><span class="op">)</span>, only.leaf <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
@@ -581,10 +583,10 @@ applying <code>edgeR</code> on the aggregated counts for each node.
 However, any suitable method can be used.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ds_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runDS.html">runDS</a></span><span class="op">(</span>SE <span class="op">=</span> <span class="va">ds_se</span>, tree <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/TreeSummarizedExperiment/man/TreeSummarizedExperiment-accessor.html" class="external-link">colTree</a></span><span class="op">(</span><span class="va">ds_tse</span><span class="op">)</span>, option <span class="op">=</span> <span class="st">"glmQL"</span>, </span>
-<span>                group_column <span class="op">=</span> <span class="st">"group"</span>, contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, </span>
-<span>                filter_min_count <span class="op">=</span> <span class="fl">0</span>, filter_min_total_count <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                design <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></span><span class="op">(</span><span class="op">~</span> <span class="va">group</span>, data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">ds_se</span><span class="op">)</span><span class="op">)</span>, </span>
-<span>                filter_min_prop <span class="op">=</span> <span class="fl">0</span>, min_cells <span class="op">=</span> <span class="fl">5</span>, message <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>                contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, filter_min_count <span class="op">=</span> <span class="fl">0</span>, </span>
+<span>                filter_min_total_count <span class="op">=</span> <span class="fl">1</span>, filter_min_prop <span class="op">=</span> <span class="fl">0</span>, min_cells <span class="op">=</span> <span class="fl">5</span>, </span>
+<span>                group_column <span class="op">=</span> <span class="st">"group"</span>, message <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 0 nodes are ignored, as they don't contain at least 5 cells in at least half of the samples.</span></span></code></pre></div>
 <p>As before, the output contains the <code>edgeR</code> results for
 each node, the tree, and the list of nodes that were dropped because of
@@ -733,9 +735,9 @@ experimental data sets can be found on <a href="https://github.com/fionarhuang/t
 (click to expand) </b>
 </summary><div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; R Under development (unstable) (2024-02-13 r85897)</span></span>
+<span><span class="co">#&gt; R Under development (unstable) (2024-02-19 r85942)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-apple-darwin20</span></span>
-<span><span class="co">#&gt; Running under: macOS Monterey 12.7.2</span></span>
+<span><span class="co">#&gt; Running under: macOS Monterey 12.7.3</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Matrix products: default</span></span>
 <span><span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/4.4-x86_64/Resources/lib/libRblas.0.dylib </span></span>
@@ -757,7 +759,7 @@ experimental data sets can be found on <a href="https://github.com/fionarhuang/t
 <span><span class="co">#&gt;  [5] TreeSummarizedExperiment_2.11.0 Biostrings_2.71.2              </span></span>
 <span><span class="co">#&gt;  [7] XVector_0.43.1                  SingleCellExperiment_1.25.0    </span></span>
 <span><span class="co">#&gt;  [9] SummarizedExperiment_1.33.3     Biobase_2.63.0                 </span></span>
-<span><span class="co">#&gt; [11] GenomicRanges_1.55.2            GenomeInfoDb_1.39.6            </span></span>
+<span><span class="co">#&gt; [11] GenomicRanges_1.55.3            GenomeInfoDb_1.39.6            </span></span>
 <span><span class="co">#&gt; [13] IRanges_2.37.1                  S4Vectors_0.41.3               </span></span>
 <span><span class="co">#&gt; [15] BiocGenerics_0.49.1             MatrixGenerics_1.15.0          </span></span>
 <span><span class="co">#&gt; [17] matrixStats_1.2.0               BiocStyle_2.31.0               </span></span>
@@ -773,11 +775,11 @@ experimental data sets can be found on <a href="https://github.com/fionarhuang/t
 <span><span class="co">#&gt;  [15] minqa_1.2.6                 RCurl_1.98-1.14            </span></span>
 <span><span class="co">#&gt;  [17] rstatix_0.7.2               htmltools_0.5.7            </span></span>
 <span><span class="co">#&gt;  [19] S4Arrays_1.3.3              broom_1.0.5                </span></span>
-<span><span class="co">#&gt;  [21] gridGraphics_0.5-1          SparseArray_1.3.3          </span></span>
+<span><span class="co">#&gt;  [21] gridGraphics_0.5-1          SparseArray_1.3.4          </span></span>
 <span><span class="co">#&gt;  [23] sass_0.4.8                  bslib_0.6.1                </span></span>
 <span><span class="co">#&gt;  [25] desc_1.4.3                  plyr_1.8.9                 </span></span>
 <span><span class="co">#&gt;  [27] sandwich_3.1-0              zoo_1.8-12                 </span></span>
-<span><span class="co">#&gt;  [29] cachem_1.0.8                igraph_2.0.1.1             </span></span>
+<span><span class="co">#&gt;  [29] cachem_1.0.8                igraph_2.0.2               </span></span>
 <span><span class="co">#&gt;  [31] lifecycle_1.0.4             iterators_1.0.14           </span></span>
 <span><span class="co">#&gt;  [33] pkgconfig_2.0.3             Matrix_1.6-5               </span></span>
 <span><span class="co">#&gt;  [35] R6_2.5.1                    fastmap_1.1.1              </span></span>
@@ -793,7 +795,7 @@ experimental data sets can be found on <a href="https://github.com/fionarhuang/t
 <span><span class="co">#&gt;  [55] ConsensusClusterPlus_1.67.0 backports_1.4.1            </span></span>
 <span><span class="co">#&gt;  [57] BiocParallel_1.37.0         viridis_0.6.5              </span></span>
 <span><span class="co">#&gt;  [59] carData_3.0-5               highr_0.10                 </span></span>
-<span><span class="co">#&gt;  [61] ggforce_0.4.1               ggsignif_0.6.4             </span></span>
+<span><span class="co">#&gt;  [61] ggforce_0.4.2               ggsignif_0.6.4             </span></span>
 <span><span class="co">#&gt;  [63] MASS_7.3-60.2               DelayedArray_0.29.1        </span></span>
 <span><span class="co">#&gt;  [65] rjson_0.2.21                FlowSOM_2.11.0             </span></span>
 <span><span class="co">#&gt;  [67] diffcyt_1.23.0              tools_4.4.0                </span></span>
@@ -805,18 +807,18 @@ experimental data sets can be found on <a href="https://github.com/fionarhuang/t
 <span><span class="co">#&gt;  [79] car_3.1-2                   utf8_1.2.4                 </span></span>
 <span><span class="co">#&gt;  [81] foreach_1.5.2               pillar_1.9.0               </span></span>
 <span><span class="co">#&gt;  [83] stringr_1.5.1               yulab.utils_0.1.4          </span></span>
-<span><span class="co">#&gt;  [85] limma_3.59.2                circlize_0.4.15            </span></span>
+<span><span class="co">#&gt;  [85] limma_3.59.3                circlize_0.4.15            </span></span>
 <span><span class="co">#&gt;  [87] splines_4.4.0               flowCore_2.15.2            </span></span>
 <span><span class="co">#&gt;  [89] tweenr_2.0.2                treeio_1.27.0              </span></span>
-<span><span class="co">#&gt;  [91] lattice_0.22-5              survival_3.5-7             </span></span>
+<span><span class="co">#&gt;  [91] lattice_0.22-5              survival_3.5-8             </span></span>
 <span><span class="co">#&gt;  [93] dirmult_0.1.3-5             RProtoBufLib_2.15.0        </span></span>
 <span><span class="co">#&gt;  [95] tidyselect_1.2.0            ComplexHeatmap_2.19.0      </span></span>
 <span><span class="co">#&gt;  [97] locfit_1.5-9.8              knitr_1.45                 </span></span>
 <span><span class="co">#&gt;  [99] gridExtra_2.3               bookdown_0.37              </span></span>
-<span><span class="co">#&gt; [101] edgeR_4.1.15                xfun_0.42                  </span></span>
+<span><span class="co">#&gt; [101] edgeR_4.1.16                xfun_0.42                  </span></span>
 <span><span class="co">#&gt; [103] statmod_1.5.0               stringi_1.8.3              </span></span>
 <span><span class="co">#&gt; [105] ggfun_0.1.4                 lazyeval_0.2.2             </span></span>
-<span><span class="co">#&gt; [107] yaml_2.3.8                  boot_1.3-28.1              </span></span>
+<span><span class="co">#&gt; [107] yaml_2.3.8                  boot_1.3-29                </span></span>
 <span><span class="co">#&gt; [109] evaluate_0.23               codetools_0.2-19           </span></span>
 <span><span class="co">#&gt; [111] tibble_3.2.1                BiocManager_1.30.22        </span></span>
 <span><span class="co">#&gt; [113] ggplotify_0.1.2             cli_3.6.2                  </span></span>
