@@ -20,8 +20,6 @@ Description: The arrangement of hypotheses in a hierarchical structure appears
     resolutions and from these selects the optimal one.
 License: Artistic-2.0
 Encoding: UTF-8
-Depends: 
-    R (>= 4.3.0)
 biocViews: StatisticalMethod, CellBasedAssays
 Imports:
     TreeSummarizedExperiment (>= 1.99.0),

@@ -34,7 +34,7 @@ abundance difference between conditions to be reliably detected. Aggregating
 abundances on a higher level in the tree can detect families of species that 
 are closely related and that all change (possibly weakly but) concordantly. At 
 the same time, blindly aggregating to a higher level across the whole tree may 
-mean that we lose the ability to pinpoint specific species with a strong 
+imply losing the ability to pinpoint specific species with a strong 
 signal that may not be shared with their closest neighbors in the tree. 
 Taken together, this motivates the development of a data-dependent
 aggregation approach, which is also allowed to aggregate different parts of 
@@ -143,7 +143,7 @@ vv <- gsub(pattern = "_.*", "", colnames(count))
 names(vv) <- colnames(scale_count)
 anno_c <- structure(vv, names = vv)
 TreeHeatmap(tree = rowTree(da_lse), tree_fig = da_fig_tree, 
-            hm_data = scale_count,
+            hm_data = scale_count, legend_title_hm = "Scaled\ncount",
             column_split = vv, rel_width = 0.6,
             tree_hm_gap = 0.3,
             column_split_label = anno_c) +
@@ -164,7 +164,9 @@ level.
 
 Here, we use the `aggTSE` function from the `TreeSummarizedExperiment` 
 package to calculate an aggregated count for each internal node in the tree by 
-summing the counts for all its descendant leaves. 
+summing the counts for all its descendant leaves. For other applications, 
+other aggregation methods (e.g., averaging) may be more suitable. This can 
+be controlled via the `rowFun` argument.
 
 ```{r da-aggregate}
 ## Get a list of all node IDs
@@ -399,10 +401,10 @@ aggregated counts for each node. However, any suitable method can be used.
 
 ```{r ds-run-edger}
 ds_res <- runDS(SE = ds_se, tree = colTree(ds_tse), option = "glmQL", 
-                group_column = "group", contrast = c(0, 1), 
-                filter_min_count = 0, filter_min_total_count = 1,
                 design = model.matrix(~ group, data = colData(ds_se)), 
-                filter_min_prop = 0, min_cells = 5, message = FALSE)
+                contrast = c(0, 1), filter_min_count = 0, 
+                filter_min_total_count = 1, filter_min_prop = 0, min_cells = 5, 
+                group_column = "group", message = FALSE)
 ```
 
 As before, the output contains the `edgeR` results for each node, the tree, and 
