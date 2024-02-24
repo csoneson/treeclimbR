@@ -54,7 +54,14 @@ if (!require("BiocManager", quietly = TRUE))
 BiocManager::install("treeclimbR")
 ```
 
-We start by loading the packages that will be needed in the analyses below.
+It integrates seamlessly with the `TreeSummarizedExperiment` class, which 
+allows observed data, feature and sample annotations, as well as a tree 
+representing the hierarchical relationship among features (or samples) to be 
+stored in the same object. 
+
+This vignette outlines the main functionality of `treeclimbR`, using simulated 
+example data provided with the package. We start by loading the packages 
+that will be needed in the analyses below.
 
 ```{r setup}
 suppressPackageStartupMessages({
