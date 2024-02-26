@@ -12,13 +12,13 @@ Huang R, Soneson C, Germain PL, Schmidt TSB, Mering CV, Robinson MD: [treeclimbR
 
 ## Installation
 
-`treeclimbR` can be installed from GitHub via
+`treeclimbR` can be installed from Bioconductor (release 3.19 onwards) via
 
 ``` r
-if (!require("remotes", quietly = TRUE))
-    install.packages("remotes")
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
 
-remotes::install_github("csoneson/treeclimbR")
+BiocManager::install("treeclimbR")
 ```
 
 ## Usage
@@ -48,16 +48,14 @@ The heatmap shows the abundances of entities (rows) across the samples (columns)
 <img src="https://raw.githubusercontent.com/fionarhuang/treeclimbR_toy_example/master/output/signal_cands.gif">
 </p>
 
-The trees below compare the nodes that are identified as significantly differentially abundant with `treeclimbR` for the optimal value of `t` (in red) to the leaves that are found to be significant after applying a multiple hypothesis testing correction using the Benjamini-Hochberg method to the leaf-level results only (in blue).
-
-Nodes identified by `treeclimbR` are compared to those identified by `BH` under FDR 0.05.
+The trees below compare the nodes that are identified as significantly differentially abundant with `treeclimbR` for the optimal value of `t` (in red) to the leaves that are found to be significant (at an adjusted p-value threshold of 0.05) after applying a multiple hypothesis testing correction using the Benjamini-Hochberg method to the leaf-level results only (in blue).
 
 <p align="center"> 
 <img src="https://raw.githubusercontent.com/fionarhuang/treeclimbR_toy_example/master/output/signal_result.png">
 </p>
 
 
-## More scenarios (see more details [here](https://htmlpreview.github.io/?https://github.com/fionarhuang/treeclimbR_animation/blob/master/docs/index.html))
+## Other simulation scenarios (more details [here](https://htmlpreview.github.io/?https://github.com/fionarhuang/treeclimbR_animation/blob/master/docs/index.html))
 
 The animations below show the identified candidates under other simulation settings. 
 Orange branches represent 'positive' signal (higher abundance in group B compared to group A), and blue branches represent 'negative' signal (lower abundance in group B compared to group A).
@@ -71,4 +69,4 @@ Orange branches represent 'positive' signal (higher abundance in group B compare
 </p>
 
 ## Learn more
-More examples of using `treeclimbR` can be found [here](https://github.com/fionarhuang/treeclimbR_article).
+Additional examples of applying `treeclimbR` to different types of data can be found [here](https://github.com/fionarhuang/treeclimbR_article).
