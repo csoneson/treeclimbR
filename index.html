@@ -78,12 +78,12 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p><code>treeclimbR</code> can be installed from GitHub via</p>
+<p><code>treeclimbR</code> can be installed from Bioconductor (release 3.19 onwards) via</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://remotes.r-lib.org" class="external-link">"remotes"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://bioconductor.github.io/BiocManager/" class="external-link">"BiocManager"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"csoneson/treeclimbR"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"treeclimbR"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
@@ -97,13 +97,12 @@
 <p>Before running <code>treeclimbR</code>, we expand the leaf-level count matrix to also encompass internal nodes, by summing the counts for all the corresponding leaves. Next, we perform a Wilcoxon rank sum test on each node in the tree to obtain P-values and directions of change. Details of the analysis are available <a href="https://fionarhuang.github.io/treeclimbR_toy_example/toy_signal.html" class="external-link">here</a>. The question is now whether it is beneficial to interpret parts of the tree on a level higher up in the tree than the leaves - this would be the case if there are subtrees where all nodes and leaves change consistently in the same direction. In this situation, we can summarize the signal on the root level of that subtree, which will reduce the length of the result list and improve the interpretability. The optimal aggregation level can vary across the tree, and will be inferred from the data. Thus, <code>treeclimbR</code> will propose a range of aggregation ‘candidates’, corresponding to different values of a threshold parameter <code>t</code>. These candidates are shown in the animation below. Note that as <code>t</code> increases, the aggregation happens further up the tree. Orange branches correspond to branches with a true differential signal, and blue circles indicate the aggregated nodes for a given threshold value. The heatmap shows the abundances of entities (rows) across the samples (columns) split by group.</p>
 <p align="center">
 <img src="https://raw.githubusercontent.com/fionarhuang/treeclimbR_toy_example/master/output/signal_cands.gif"></p>
-<p>The trees below compare the nodes that are identified as significantly differentially abundant with <code>treeclimbR</code> for the optimal value of <code>t</code> (in red) to the leaves that are found to be significant after applying a multiple hypothesis testing correction using the Benjamini-Hochberg method to the leaf-level results only (in blue).</p>
-<p>Nodes identified by <code>treeclimbR</code> are compared to those identified by <code>BH</code> under FDR 0.05.</p>
+<p>The trees below compare the nodes that are identified as significantly differentially abundant with <code>treeclimbR</code> for the optimal value of <code>t</code> (in red) to the leaves that are found to be significant (at an adjusted p-value threshold of 0.05) after applying a multiple hypothesis testing correction using the Benjamini-Hochberg method to the leaf-level results only (in blue).</p>
 <p align="center">
 <img src="https://raw.githubusercontent.com/fionarhuang/treeclimbR_toy_example/master/output/signal_result.png"></p>
 </div>
 <div class="section level2">
-<h2 id="more-scenarios-see-more-details-here">More scenarios (see more details <a href="https://htmlpreview.github.io/?https://github.com/fionarhuang/treeclimbR_animation/blob/master/docs/index.html" class="external-link">here</a>)<a class="anchor" aria-label="anchor" href="#more-scenarios-see-more-details-here"></a>
+<h2 id="other-simulation-scenarios-more-details-here">Other simulation scenarios (more details <a href="https://htmlpreview.github.io/?https://github.com/fionarhuang/treeclimbR_animation/blob/master/docs/index.html" class="external-link">here</a>)<a class="anchor" aria-label="anchor" href="#other-simulation-scenarios-more-details-here"></a>
 </h2>
 <p>The animations below show the identified candidates under other simulation settings. Orange branches represent ‘positive’ signal (higher abundance in group B compared to group A), and blue branches represent ‘negative’ signal (lower abundance in group B compared to group A).</p>
 <p align="center">
@@ -114,7 +113,7 @@
 <div class="section level2">
 <h2 id="learn-more">Learn more<a class="anchor" aria-label="anchor" href="#learn-more"></a>
 </h2>
-<p>More examples of using <code>treeclimbR</code> can be found <a href="https://github.com/fionarhuang/treeclimbR_article" class="external-link">here</a>.</p>
+<p>Additional examples of applying <code>treeclimbR</code> to different types of data can be found <a href="https://github.com/fionarhuang/treeclimbR_article" class="external-link">here</a>.</p>
 </div>
 </div>
   </div>
