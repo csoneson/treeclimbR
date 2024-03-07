@@ -43,6 +43,8 @@ the tree at different levels of resolution.
 If you are using `treeclimbR`, please cite @huang2021, which also contains 
 the theoretical justifications and more details of the method.
 
+## Installation
+
 `treeclimbR` can be installed from Bioconductor using the following code: 
 
 ```{r install-pkg}
@@ -58,6 +60,8 @@ It integrates seamlessly with the `TreeSummarizedExperiment` class, which
 allows observed data, feature and sample annotations, as well as a tree 
 representing the hierarchical relationship among features (or samples) to be 
 stored in the same object. 
+
+## Preparation
 
 This vignette outlines the main functionality of `treeclimbR`, using simulated 
 example data provided with the package. We start by loading the packages 
