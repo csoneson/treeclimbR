@@ -186,7 +186,7 @@ runDS <- function(SE, tree, option = c("glm", "glmQL"),
                                    normalize = normalize,
                                    normalize_method = normalize_method,
                                    group_column = group_column,
-                                   design_terms = design_terms)
+                                   design_terms = design_terms, ...)
         }
     }
     out <- list(edgeR_results = res,
