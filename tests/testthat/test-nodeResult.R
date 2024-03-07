@@ -8,7 +8,7 @@ test_that("nodeResult works", {
     da_res <- runDA(TSE = da_tse, feature_on_row = TRUE,
                     assay = "counts", option = "glmQL",
                     design = model.matrix( ~ group, data = colData(da_tse)),
-                    contrast = NULL, normalize = TRUE)
+                    contrast = NULL, normalize = TRUE, legacy = FALSE)
 
     ## Generate some example data - DS
     ds_tse <- readRDS(system.file("extdata", "ds_sim_20_500_8de.rds",
@@ -21,7 +21,8 @@ test_that("nodeResult works", {
                     group_column = "group", contrast = c(0, 1),
                     filter_min_count = 0, filter_min_total_count = 1,
                     design = model.matrix(~ group, data = colData(ds_se)),
-                    filter_min_prop = 0, min_cells = 5, message = FALSE)
+                    filter_min_prop = 0, min_cells = 5, message = FALSE,
+                    legacy = FALSE)
 
     ## Check that function returns error with invalid input
     ## -------------------------------------------------------------------------
