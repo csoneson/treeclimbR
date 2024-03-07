@@ -21,6 +21,8 @@ Description: The arrangement of hypotheses in a hierarchical structure appears
 License: Artistic-2.0
 Encoding: UTF-8
 biocViews: StatisticalMethod, CellBasedAssays
+Depends:
+    R (>= 4.4.0)
 Imports:
     TreeSummarizedExperiment (>= 1.99.0),
     edgeR,
