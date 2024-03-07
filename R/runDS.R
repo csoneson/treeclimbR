@@ -112,17 +112,15 @@ runDS <- function(SE, tree, option = c("glm", "glmQL"),
     ## -------------------------------------------------------------------------
     .assertVector(x = SE, type = "SummarizedExperiment")
     .assertVector(x = tree, type = "phylo")
-    .assertVector(x = design, type = "matrix", allowNULL = TRUE)
-    .assertVector(x = contrast, type = "numeric", allowNULL = TRUE)
-    .assertScalar(x = filter_min_count, type = "numeric")
-    .assertScalar(x = filter_min_total_count, type = "numeric")
-    .assertScalar(x = filter_large_n, type = "numeric")
-    .assertScalar(x = filter_min_prop, type = "numeric")
+    .checkEdgeRArgs(design = design, contrast = contrast,
+                    filter_min_count = filter_min_count,
+                    filter_min_total_count = filter_min_total_count,
+                    filter_large_n = filter_large_n,
+                    filter_min_prop = filter_min_prop, normalize = normalize,
+                    normalize_method = normalize_method,
+                    design_terms = design_terms)
     .assertScalar(x = min_cells, type = "numeric")
-    .assertScalar(x = normalize, type = "logical")
-    .assertScalar(x = normalize_method, type = "character")
     .assertVector(x = group_column, type = "character")
-    .assertVector(x = design_terms, type = "character", allowNULL = TRUE)
     .assertScalar(x = message, type = "logical")
 
     ## Get node aliases
