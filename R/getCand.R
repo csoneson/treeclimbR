@@ -43,6 +43,7 @@
 #' columns with q-scores for different thresholds.
 #'
 #' @importFrom TreeSummarizedExperiment matTree printNode findDescendant
+#' @importFrom dplyr bind_cols
 #'
 #' @examples
 #' suppressPackageStartupMessages({
@@ -125,9 +126,18 @@ getCand <- function(tree, t = NULL, score_data, node_column, p_column,
     ## -------------------------------------------------------------------------
     ## All nodes
     node_all <- TreeSummarizedExperiment::printNode(tree = tree, type = "all")
+
+    ## Initialize q columns (one for each t)
+    qcols <- do.call(dplyr::bind_cols,
+                     lapply(structure(seq_along(t),
+                                      names = paste0("q_", t)), function(i) {
+        rep(NA_real_, nrow(score_data))
+    }))
+    score_data <- dplyr::bind_cols(score_data, qcols)
+
     for (i in seq_along(t)) {
         if (message) {
-            message("Searching candidates on t =  ", t[i], " ...")
+            message("Searching candidates on t = ", t[i], " ...")
         }
 
         ## Add a q column (does the node have pvalue <= t[i], add sign)
