@@ -427,16 +427,13 @@ simData <- function(tree = NULL, data = NULL, obj = NULL, assay = NULL,
     ## Proportions for internal nodes
     ## -------------------------------------------------------------------------
     propRes <- .getInternalProps(pars = pars, tree = tree)
-    nodP <- propRes$nodP
-    desI <- propRes$desI
-    nodI <- propRes$nodI
 
     ## Abundance proportions and number of descendant leaves
     ## -------------------------------------------------------------------------
-    lenI <- unlist(lapply(desI, length))
-    tt <- cbind(nodP, lenI)
+    lenI <- unlist(lapply(propRes$desI, length))
+    tt <- cbind(propRes$nodP, lenI)
     rownames(tt) <- TreeSummarizedExperiment::convertNode(
-        tree = tree, node = nodI, use.alias = TRUE, message = FALSE)
+        tree = tree, node = propRes$nodI, use.alias = TRUE, message = FALSE)
 
     if (maxPr.A < min(tt[, 1])) {
         stop("maxPr.A is lower than the minimum value of
@@ -496,12 +493,12 @@ simData <- function(tree = NULL, data = NULL, obj = NULL, assay = NULL,
 
             ## all rows
             rn <- rownames(mm)
-            tx <- desI[rn]
+            tx <- propRes$desI[rn]
 
             cs <- lapply(
                 tx,
                 FUN = function(x) {
-                    length(intersect(x, desI[[cx]])) > 0
+                    length(intersect(x, propRes$desI[[cx]])) > 0
                 })
             cv <- unlist(cs)
             fm <- mm[, x]
@@ -558,16 +555,13 @@ simData <- function(tree = NULL, data = NULL, obj = NULL, assay = NULL,
     ## Proportions for internal nodes
     ## -------------------------------------------------------------------------
     propRes <- .getInternalProps(pars = pars, tree = tree)
-    nodP <- propRes$nodP
-    desI <- propRes$desI
-    nodI <- propRes$nodI
 
     ## Abundance proportions and number of descendant leaves
     ## -------------------------------------------------------------------------
-    lenI <- unlist(lapply(desI, length))
-    tt <- cbind(nodP, lenI)
+    lenI <- unlist(lapply(propRes$desI, length))
+    tt <- cbind(propRes$nodP, lenI)
     rownames(tt) <- TreeSummarizedExperiment::convertNode(
-        tree = tree, node = nodI, use.alias = TRUE, message = FALSE)
+        tree = tree, node = propRes$nodI, use.alias = TRUE, message = FALSE)
 
     ## Get branch names
     ## -------------------------------------------------------------------------
@@ -615,14 +609,12 @@ simData <- function(tree = NULL, data = NULL, obj = NULL, assay = NULL,
     ## Find nodes
     ## -------------------------------------------------------------------------
     propRes <- .getInternalProps(pars = NULL, tree = tree)
-    nodI <- propRes$nodI
-    leaf <- propRes$leaf
 
     ## Initialize beta
     ## -------------------------------------------------------------------------
-    beta <- rep(1, length(leaf))
+    beta <- rep(1, length(propRes$leaf))
     names(beta) <- TreeSummarizedExperiment::convertNode(
-        tree = tree, node = leaf, use.alias = TRUE)
+        tree = tree, node = propRes$leaf, use.alias = TRUE)
 
     ## Node labels on branch A
     ## -------------------------------------------------------------------------
@@ -751,7 +743,7 @@ simData <- function(tree = NULL, data = NULL, obj = NULL, assay = NULL,
     ## Rename beta with the node label instead of the alias of node label
     ## -------------------------------------------------------------------------
     names(beta) <- TreeSummarizedExperiment::convertNode(
-        tree = tree, node = leaf, use.alias = FALSE)
+        tree = tree, node = propRes$leaf, use.alias = FALSE)
     return(beta)
 }
 
