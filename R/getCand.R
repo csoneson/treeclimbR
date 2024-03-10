@@ -42,9 +42,6 @@
 #' that includes columns from the input \code{score_data} and additional
 #' columns with q-scores for different thresholds.
 #'
-#' @importFrom utils flush.console
-#' @importFrom stats p.adjust
-#' @importFrom dplyr mutate
 #' @importFrom TreeSummarizedExperiment matTree printNode findDescendant
 #'
 #' @examples

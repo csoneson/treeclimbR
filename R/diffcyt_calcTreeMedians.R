@@ -3,7 +3,7 @@
 #'
 #' @importFrom TreeSummarizedExperiment TreeSummarizedExperiment convertNode
 #'     aggTSE rowTree
-#' @importFrom dplyr select distinct
+#' @importFrom dplyr select distinct all_of
 #' @importFrom methods is
 #' @importFrom stats median
 #' @importFrom SummarizedExperiment rowData assays colData

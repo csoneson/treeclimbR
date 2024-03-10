@@ -113,11 +113,9 @@
 #'     \item SS: two branches are selected. One branch has its proportion
 #'     swapped with the proportion of some leaves from the other branch.}
 #'
-#' @importFrom dirmult dirmult
-#' @importFrom S4Vectors metadata metadata<-
-#' @importFrom methods is
-#' @importFrom SummarizedExperiment assays assayNames
-#' @importFrom TreeSummarizedExperiment TreeSummarizedExperiment
+#' @importFrom S4Vectors metadata
+#' @importFrom SummarizedExperiment assayNames
+#' @importFrom TreeSummarizedExperiment rowTree
 #'
 #' @examples
 #' suppressPackageStartupMessages({
@@ -235,6 +233,8 @@ simData <- function(tree = NULL, data = NULL, obj = NULL, assay = NULL,
 #' }
 #'
 #' @importFrom dirmult dirmult
+#' @importFrom TreeSummarizedExperiment showNode convertNode
+#'     TreeSummarizedExperiment
 #'
 .doData <- function(tree = NULL, data = NULL, scenario = "BS",
                     from.A = NULL, from.B = NULL, minTip.A = 0, maxTip.A = Inf,
@@ -414,7 +414,7 @@ simData <- function(tree = NULL, data = NULL, obj = NULL, assay = NULL,
 #'
 #' @returns A \code{data.frame} with one row
 #'
-#' @importFrom TreeSummarizedExperiment convertNode findDescendant
+#' @importFrom TreeSummarizedExperiment convertNode
 #'
 .pickLoc <- function(tree = NULL, data = NULL, from.A = NULL,
                      minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
@@ -546,7 +546,7 @@ simData <- function(tree = NULL, data = NULL, obj = NULL, assay = NULL,
 #'
 #' @returns A \code{data.frame} with one row
 #'
-#' @importFrom TreeSummarizedExperiment convertNode findDescendant
+#' @importFrom TreeSummarizedExperiment convertNode
 #'
 .infLoc <- function(tree = NULL, data = NULL,
                     from.A = NULL, from.B = NULL) {
@@ -606,6 +606,7 @@ simData <- function(tree = NULL, data = NULL, obj = NULL, assay = NULL,
 #' @returns a numeric vector with fold changes
 #'
 #' @importFrom stats runif
+#' @importFrom TreeSummarizedExperiment convertNode findDescendant
 #'
 .doFC <- function(tree = NULL, data = NULL, scenario = "BS",
                   branchA = NULL, branchB = NULL,

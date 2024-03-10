@@ -109,6 +109,7 @@
 #' element per row in \code{obj}) and \code{theta} (a scalar).
 #'
 #' @importFrom methods is
+#' @importFrom SummarizedExperiment assayNames
 #'
 #' @examples
 #' suppressPackageStartupMessages({

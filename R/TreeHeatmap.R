@@ -99,7 +99,7 @@
 #' @importFrom TreeSummarizedExperiment convertNode findDescendant
 #' @importFrom ggtree ggtree
 #' @importFrom tidyr pivot_longer
-#' @importFrom dplyr mutate select distinct group_by summarise arrange
+#' @importFrom dplyr mutate select distinct group_by summarise arrange filter
 #' @importFrom ggplot2 geom_tile geom_segment scale_color_manual labs
 #'     geom_text scale_fill_viridis_c aes scale_fill_viridis_d theme_void ggplot
 #' @importFrom ggnewscale new_scale_color

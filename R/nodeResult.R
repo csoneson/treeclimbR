@@ -29,7 +29,7 @@
 #'     over all features and nodes when the specified \code{type = "DS"}.
 #'
 #' @importFrom edgeR topTags
-#' @importFrom dplyr arrange slice filter
+#' @importFrom dplyr arrange slice filter bind_rows desc
 #' @importFrom TreeSummarizedExperiment convertNode
 #' @importFrom stats p.adjust
 #' @importFrom rlang .data

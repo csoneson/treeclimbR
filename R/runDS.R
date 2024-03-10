@@ -71,13 +71,9 @@
 #'          that are filtered before analysis due to low counts.}
 #' }
 #'
-#' @importFrom edgeR DGEList calcNormFactors estimateDisp glmFit glmLRT
-#'   glmQLFit glmQLFTest cpm filterByExpr
-#' @importFrom methods is
 #' @importFrom SummarizedExperiment assays colData assayNames assay
 #' @importFrom S4Vectors metadata
 #' @importFrom utils flush.console
-#' @importFrom stats model.matrix
 #'
 #' @examples
 #' suppressPackageStartupMessages({
@@ -195,7 +191,10 @@ runDS <- function(SE, tree, option = c("glm", "glmQL"),
 
 #' @keywords internal
 #' @noRd
-#' @importFrom stats as.formula
+#' @importFrom stats as.formula model.matrix
+#' @importFrom SummarizedExperiment assay colData
+#' @importFrom edgeR filterByExpr
+#'
 .DS <- function(SE, feature_on_row = TRUE, assay,
                 option = c("glm", "glmQL"), design = NULL, contrast = NULL,
                 filter_min_count = 10, filter_min_total_count = 15,
@@ -224,8 +223,9 @@ runDS <- function(SE, tree, option = c("glm", "glmQL"),
     ## Design matrix
     ## -------------------------------------------------------------------------
     if (is.null(design)) {
-        formula <- as.formula(paste("~", paste(design_terms, collapse = "+")))
-        design <- model.matrix(formula, data = data.frame(sp_info))
+        formula <- stats::as.formula(paste("~", paste(design_terms,
+                                                      collapse = "+")))
+        design <- stats::model.matrix(formula, data = data.frame(sp_info))
     }
 
     ## Filter lowly abundant features

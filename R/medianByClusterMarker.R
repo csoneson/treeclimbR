@@ -107,10 +107,10 @@ medianByClusterMarker <- function(SE, assay = 1, marker_in_column = TRUE,
     ## -------------------------------------------------------------------------
     med <- data_mk |>
         data.frame() |>
-        mutate(cluster_id = cluster_id) |>
-        group_by(cluster_id) |>
-        summarize_all(median, na.rm = TRUE) |>
-        column_to_rownames("cluster_id") |>
+        dplyr::mutate(cluster_id = cluster_id) |>
+        dplyr::group_by(cluster_id) |>
+        dplyr::summarize_all(median, na.rm = TRUE) |>
+        tibble::column_to_rownames("cluster_id") |>
         as.matrix()
 
     rowD <- data.frame(column_cluster = rownames(med))
