@@ -71,13 +71,9 @@
 #'          that are filtered before analysis due to low counts.}
 #' }
 #'
-#' @importFrom edgeR DGEList calcNormFactors estimateDisp glmFit glmLRT
-#'   glmQLFit glmQLFTest cpm filterByExpr
-#' @importFrom methods is
 #' @importFrom SummarizedExperiment assays colData assayNames assay
 #' @importFrom S4Vectors metadata
 #' @importFrom utils flush.console
-#' @importFrom stats model.matrix
 #'
 #' @examples
 #' suppressPackageStartupMessages({
@@ -112,17 +108,15 @@ runDS <- function(SE, tree, option = c("glm", "glmQL"),
     ## -------------------------------------------------------------------------
     .assertVector(x = SE, type = "SummarizedExperiment")
     .assertVector(x = tree, type = "phylo")
-    .assertVector(x = design, type = "matrix", allowNULL = TRUE)
-    .assertVector(x = contrast, type = "numeric", allowNULL = TRUE)
-    .assertScalar(x = filter_min_count, type = "numeric")
-    .assertScalar(x = filter_min_total_count, type = "numeric")
-    .assertScalar(x = filter_large_n, type = "numeric")
-    .assertScalar(x = filter_min_prop, type = "numeric")
+    .checkEdgeRArgs(design = design, contrast = contrast,
+                    filter_min_count = filter_min_count,
+                    filter_min_total_count = filter_min_total_count,
+                    filter_large_n = filter_large_n,
+                    filter_min_prop = filter_min_prop, normalize = normalize,
+                    normalize_method = normalize_method,
+                    design_terms = design_terms)
     .assertScalar(x = min_cells, type = "numeric")
-    .assertScalar(x = normalize, type = "logical")
-    .assertScalar(x = normalize_method, type = "character")
     .assertVector(x = group_column, type = "character")
-    .assertVector(x = design_terms, type = "character", allowNULL = TRUE)
     .assertScalar(x = message, type = "logical")
 
     ## Get node aliases
@@ -186,7 +180,7 @@ runDS <- function(SE, tree, option = c("glm", "glmQL"),
                                    normalize = normalize,
                                    normalize_method = normalize_method,
                                    group_column = group_column,
-                                   design_terms = design_terms)
+                                   design_terms = design_terms, ...)
         }
     }
     out <- list(edgeR_results = res,
@@ -197,7 +191,10 @@ runDS <- function(SE, tree, option = c("glm", "glmQL"),
 
 #' @keywords internal
 #' @noRd
-#' @importFrom stats as.formula
+#' @importFrom stats as.formula model.matrix
+#' @importFrom SummarizedExperiment assay colData
+#' @importFrom edgeR filterByExpr
+#'
 .DS <- function(SE, feature_on_row = TRUE, assay,
                 option = c("glm", "glmQL"), design = NULL, contrast = NULL,
                 filter_min_count = 10, filter_min_total_count = 15,
@@ -226,8 +223,9 @@ runDS <- function(SE, tree, option = c("glm", "glmQL"),
     ## Design matrix
     ## -------------------------------------------------------------------------
     if (is.null(design)) {
-        formula <- as.formula(paste("~", paste(design_terms, collapse = "+")))
-        design <- model.matrix(formula, data = data.frame(sp_info))
+        formula <- stats::as.formula(paste("~", paste(design_terms,
+                                                      collapse = "+")))
+        design <- stats::model.matrix(formula, data = data.frame(sp_info))
     }
 
     ## Filter lowly abundant features

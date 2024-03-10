@@ -113,11 +113,9 @@
 #'     \item SS: two branches are selected. One branch has its proportion
 #'     swapped with the proportion of some leaves from the other branch.}
 #'
-#' @importFrom dirmult dirmult
-#' @importFrom S4Vectors metadata metadata<-
-#' @importFrom methods is
-#' @importFrom SummarizedExperiment assays assayNames
-#' @importFrom TreeSummarizedExperiment TreeSummarizedExperiment
+#' @importFrom S4Vectors metadata
+#' @importFrom SummarizedExperiment assayNames
+#' @importFrom TreeSummarizedExperiment rowTree
 #'
 #' @examples
 #' suppressPackageStartupMessages({
@@ -235,6 +233,8 @@ simData <- function(tree = NULL, data = NULL, obj = NULL, assay = NULL,
 #' }
 #'
 #' @importFrom dirmult dirmult
+#' @importFrom TreeSummarizedExperiment showNode convertNode
+#'     TreeSummarizedExperiment
 #'
 .doData <- function(tree = NULL, data = NULL, scenario = "BS",
                     from.A = NULL, from.B = NULL, minTip.A = 0, maxTip.A = Inf,
@@ -356,23 +356,13 @@ simData <- function(tree = NULL, data = NULL, obj = NULL, assay = NULL,
     return(lse)
 }
 
-
-#' Select branches to swap
-#'
-#' @author Ruizhu Huang
 #' @keywords internal
 #' @noRd
+#' @author Ruizhu Huang
 #'
-#' @returns A \code{data.frame} with one row
+#' @importFrom TreeSummarizedExperiment convertNode
 #'
-#' @importFrom TreeSummarizedExperiment convertNode findDescendant
-#'
-.pickLoc <- function(tree = NULL, data = NULL, from.A = NULL,
-                     minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
-                     minPr.A = 0, maxPr.A = 1, ratio = 1) {
-
-    ## Estimate tip proportions, rename using the node label alias
-    ## -------------------------------------------------------------------------
+.getParsFromData <- function(data, tree) {
     pars <- parEstimate(obj = data)$pi
     nam1 <- names(pars)
     val1 <- TreeSummarizedExperiment::convertNode(
@@ -381,12 +371,21 @@ simData <- function(tree = NULL, data = NULL, obj = NULL, assay = NULL,
         tree = tree, node = val1, use.alias = TRUE, message = FALSE)
     names(pars) <- nam2
 
-    ## Proportions for internal nodes
-    ## -------------------------------------------------------------------------
+    pars
+}
+
+#' @keywords internal
+#' @noRd
+#' @author Ruizhu Huang
+#'
+#' @importFrom TreeSummarizedExperiment convertNode findDescendant
+#'
+.getInternalProps <- function(pars, tree) {
     leaf <- setdiff(tree$edge[, 2], tree$edge[, 1])
     leaf <- sort(leaf)
     nodI <- setdiff(tree$edge[, 1], leaf)
     nodI <- sort(nodI)
+    nodA <- c(leaf, nodI)
     desI <- TreeSummarizedExperiment::findDescendant(
         tree = tree, node = nodI, only.leaf = TRUE, self.include = TRUE,
         use.alias = TRUE)
@@ -396,16 +395,45 @@ simData <- function(tree = NULL, data = NULL, obj = NULL, assay = NULL,
     })
     names(desI) <- TreeSummarizedExperiment::convertNode(
         tree = tree, node = nodI, use.alias = TRUE, message = FALSE)
-    nodP <- mapply(function(x, y) {
-        sum(x[y])
-    }, x = list(pars), y = desI)
+    if (!is.null(pars)) {
+        nodP <- mapply(function(x, y) {
+            sum(x[y])
+        }, x = list(pars), y = desI)
+    } else {
+        nodP <- NULL
+    }
+
+    list(nodP = nodP, desI = desI, nodI = nodI, leaf = leaf)
+}
+
+#' Select branches to swap
+#'
+#' @author Ruizhu Huang
+#' @keywords internal
+#' @noRd
+#'
+#' @returns A \code{data.frame} with one row
+#'
+#' @importFrom TreeSummarizedExperiment convertNode
+#'
+.pickLoc <- function(tree = NULL, data = NULL, from.A = NULL,
+                     minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
+                     minPr.A = 0, maxPr.A = 1, ratio = 1) {
+
+    ## Estimate tip proportions, rename using the node label alias
+    ## -------------------------------------------------------------------------
+    pars <- .getParsFromData(data = data, tree = tree)
+
+    ## Proportions for internal nodes
+    ## -------------------------------------------------------------------------
+    propRes <- .getInternalProps(pars = pars, tree = tree)
 
     ## Abundance proportions and number of descendant leaves
     ## -------------------------------------------------------------------------
-    lenI <- unlist(lapply(desI, length))
-    tt <- cbind(nodP, lenI)
+    lenI <- unlist(lapply(propRes$desI, length))
+    tt <- cbind(propRes$nodP, lenI)
     rownames(tt) <- TreeSummarizedExperiment::convertNode(
-        tree = tree, node = nodI, use.alias = TRUE, message = FALSE)
+        tree = tree, node = propRes$nodI, use.alias = TRUE, message = FALSE)
 
     if (maxPr.A < min(tt[, 1])) {
         stop("maxPr.A is lower than the minimum value of
@@ -465,12 +493,12 @@ simData <- function(tree = NULL, data = NULL, obj = NULL, assay = NULL,
 
             ## all rows
             rn <- rownames(mm)
-            tx <- desI[rn]
+            tx <- propRes$desI[rn]
 
             cs <- lapply(
                 tx,
                 FUN = function(x) {
-                    length(intersect(x, desI[[cx]])) > 0
+                    length(intersect(x, propRes$desI[[cx]])) > 0
                 })
             cv <- unlist(cs)
             fm <- mm[, x]
@@ -515,47 +543,25 @@ simData <- function(tree = NULL, data = NULL, obj = NULL, assay = NULL,
 #'
 #' @returns A \code{data.frame} with one row
 #'
-#' @importFrom TreeSummarizedExperiment convertNode findDescendant
+#' @importFrom TreeSummarizedExperiment convertNode
 #'
 .infLoc <- function(tree = NULL, data = NULL,
                     from.A = NULL, from.B = NULL) {
 
     ## Estimate tip proportions, rename using the node label alias
     ## -------------------------------------------------------------------------
-    pars <- parEstimate(obj = data)$pi
-    nam1 <- names(pars)
-    val1 <- TreeSummarizedExperiment::convertNode(
-        tree = tree, node = nam1, message = FALSE)
-    nam2 <- TreeSummarizedExperiment::convertNode(
-        tree = tree, node = val1, use.alias = TRUE, message = FALSE)
-    names(pars) <- nam2
+    pars <- .getParsFromData(data = data, tree = tree)
 
     ## Proportions for internal nodes
     ## -------------------------------------------------------------------------
-    leaf <- setdiff(tree$edge[, 2], tree$edge[, 1])
-    leaf <- sort(leaf)
-    nodI <- setdiff(tree$edge[, 1], leaf)
-    nodI <- sort(nodI)
-    nodA <- c(leaf, nodI)
-    desI <- TreeSummarizedExperiment::findDescendant(
-        tree = tree, node = nodI, only.leaf = TRUE, self.include = TRUE,
-        use.alias = TRUE)
-    desI <- lapply(desI, FUN = function(x) {
-        TreeSummarizedExperiment::convertNode(
-            tree = tree, node = x, use.alias = TRUE, message = FALSE)
-    })
-    names(desI) <- TreeSummarizedExperiment::convertNode(
-        tree = tree, node = nodI, use.alias = TRUE, message = FALSE)
-    nodP <- mapply(function(x, y) {
-        sum(x[y])
-    }, x = list(pars), y = desI)
+    propRes <- .getInternalProps(pars = pars, tree = tree)
 
     ## Abundance proportions and number of descendant leaves
     ## -------------------------------------------------------------------------
-    lenI <- unlist(lapply(desI, length))
-    tt <- cbind(nodP, lenI)
+    lenI <- unlist(lapply(propRes$desI, length))
+    tt <- cbind(propRes$nodP, lenI)
     rownames(tt) <- TreeSummarizedExperiment::convertNode(
-        tree = tree, node = nodI, use.alias = TRUE, message = FALSE)
+        tree = tree, node = propRes$nodI, use.alias = TRUE, message = FALSE)
 
     ## Get branch names
     ## -------------------------------------------------------------------------
@@ -594,6 +600,7 @@ simData <- function(tree = NULL, data = NULL, obj = NULL, assay = NULL,
 #' @returns a numeric vector with fold changes
 #'
 #' @importFrom stats runif
+#' @importFrom TreeSummarizedExperiment convertNode findDescendant
 #'
 .doFC <- function(tree = NULL, data = NULL, scenario = "BS",
                   branchA = NULL, branchB = NULL,
@@ -601,17 +608,13 @@ simData <- function(tree = NULL, data = NULL, obj = NULL, assay = NULL,
 
     ## Find nodes
     ## -------------------------------------------------------------------------
-    leaf <- setdiff(tree$edge[, 2], tree$edge[, 1])
-    leaf <- sort(leaf)
-    nodI <- setdiff(tree$edge[, 1], leaf)
-    nodI <- sort(nodI)
-    nodA <- c(leaf, nodI)
+    propRes <- .getInternalProps(pars = NULL, tree = tree)
 
     ## Initialize beta
     ## -------------------------------------------------------------------------
-    beta <- rep(1, length(leaf))
+    beta <- rep(1, length(propRes$leaf))
     names(beta) <- TreeSummarizedExperiment::convertNode(
-        tree = tree, node = leaf, use.alias = TRUE)
+        tree = tree, node = propRes$leaf, use.alias = TRUE)
 
     ## Node labels on branch A
     ## -------------------------------------------------------------------------
@@ -643,13 +646,7 @@ simData <- function(tree = NULL, data = NULL, obj = NULL, assay = NULL,
 
     ## Tip proportions from real data, rename using the alias of node label
     ## -------------------------------------------------------------------------
-    pars <- parEstimate(obj = data)$pi
-    nam1 <- names(pars)
-    val1 <- TreeSummarizedExperiment::convertNode(
-        tree = tree, node = nam1, message = FALSE)
-    nam2 <- TreeSummarizedExperiment::convertNode(
-        tree = tree, node = val1, use.alias = TRUE, message = FALSE)
-    names(pars) <- nam2
+    pars <- .getParsFromData(data = data, tree = tree)
 
     ## Swap proportions of two branches
     ## -------------------------------------------------------------------------
@@ -746,7 +743,7 @@ simData <- function(tree = NULL, data = NULL, obj = NULL, assay = NULL,
     ## Rename beta with the node label instead of the alias of node label
     ## -------------------------------------------------------------------------
     names(beta) <- TreeSummarizedExperiment::convertNode(
-        tree = tree, node = leaf, use.alias = FALSE)
+        tree = tree, node = propRes$leaf, use.alias = FALSE)
     return(beta)
 }
 

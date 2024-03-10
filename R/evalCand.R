@@ -68,7 +68,7 @@
 #'
 #' @importFrom utils flush.console
 #' @importFrom stats p.adjust
-#' @importFrom dplyr select mutate filter
+#' @importFrom dplyr select mutate filter bind_rows
 #' @importFrom TreeSummarizedExperiment findDescendant showNode matTree isLeaf
 #'
 #' @examples

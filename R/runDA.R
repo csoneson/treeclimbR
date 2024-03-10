@@ -1,3 +1,20 @@
+#' @keywords internal
+#' @noRd
+.checkEdgeRArgs <- function(design, contrast, filter_min_count,
+                            filter_min_total_count, filter_large_n,
+                            filter_min_prop, normalize, normalize_method,
+                            design_terms) {
+    .assertVector(x = design, type = "matrix", allowNULL = TRUE)
+    .assertVector(x = contrast, type = "numeric", allowNULL = TRUE)
+    .assertScalar(x = filter_min_count, type = "numeric")
+    .assertScalar(x = filter_min_total_count, type = "numeric")
+    .assertScalar(x = filter_large_n, type = "numeric")
+    .assertScalar(x = filter_min_prop, type = "numeric")
+    .assertScalar(x = normalize, type = "logical")
+    .assertScalar(x = normalize_method, type = "character")
+    .assertVector(x = design_terms, type = "character", allowNULL = TRUE)
+}
+
 #' Test for differential abundance using edgeR
 #'
 #' Test for differential abundance of entities using functions from
@@ -115,15 +132,13 @@ runDA <- function(TSE, feature_on_row = TRUE, assay = NULL,
     ## -------------------------------------------------------------------------
     .assertVector(x = TSE, type = "TreeSummarizedExperiment")
     .assertScalar(x = feature_on_row, type = "logical")
-    .assertVector(x = design, type = "matrix", allowNULL = TRUE)
-    .assertVector(x = contrast, type = "numeric", allowNULL = TRUE)
-    .assertScalar(x = filter_min_count, type = "numeric")
-    .assertScalar(x = filter_min_total_count, type = "numeric")
-    .assertScalar(x = filter_large_n, type = "numeric")
-    .assertScalar(x = filter_min_prop, type = "numeric")
-    .assertScalar(x = normalize, type = "logical")
-    .assertScalar(x = normalize_method, type = "character")
-    .assertVector(x = design_terms, type = "character", allowNULL = TRUE)
+    .checkEdgeRArgs(design = design, contrast = contrast,
+                    filter_min_count = filter_min_count,
+                    filter_min_total_count = filter_min_total_count,
+                    filter_large_n = filter_large_n,
+                    filter_min_prop = filter_min_prop, normalize = normalize,
+                    normalize_method = normalize_method,
+                    design_terms = design_terms)
 
     ## If not specified, the first assays is used
     if (is.null(assay)) {

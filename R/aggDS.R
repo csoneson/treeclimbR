@@ -160,11 +160,10 @@ aggDS <- function(TSE, assay = "counts", sample_id = "sample_id",
     ## Reshape data
     ## -------------------------------------------------------------------------
     asy <- SummarizedExperiment::assays(TSE)[[assay]]
-    ## Initialize the list that will hold assays (one for each node)
-    dat_list <- vector("list", length(ind_list3))
-    names(dat_list) <- names(ind_list3)
+
     ## Populate each node assay
-    for (i in seq_along(dat_list)) {
+    dat_list <- lapply(structure(seq_along(ind_list3),
+                                 names = names(ind_list3)), function(i) {
         ind_i <- ind_list3[[i]]
         sp_i <- names(ind_i)
         asy_i <- lapply(ind_i, FUN = function(x) {
@@ -173,19 +172,21 @@ aggDS <- function(TSE, assay = "counts", sample_id = "sample_id",
             xx <- asy[, x, drop = FALSE]
 
             ## Aggregate
-            ax <- apply(xx, 1, FUN = FUN)
+            apply(xx, 1, FUN = FUN)
         })
+
         ## Assemble aggregated matrix
         asy_i <- do.call(cbind, asy_i)
         colnames(asy_i) <- sp_i
-        dat_list[[i]] <- asy_i
 
         if (message) {
-            message(i, " out of ", length(dat_list),
+            message(i, " out of ", length(ind_list3),
                     " nodes finished", "\r", appendLF = FALSE)
             utils::flush.console()
         }
-    }
+
+        asy_i
+    })
 
     ## Sample information
     ## -------------------------------------------------------------------------

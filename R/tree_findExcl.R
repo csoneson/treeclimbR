@@ -13,7 +13,7 @@
 #'
 #' @returns A vector of node numbers
 #'
-#' @importFrom TreeSummarizedExperiment convertNode
+#' @importFrom TreeSummarizedExperiment convertNode findDescendant joinNode
 #'
 #' @examples
 #' suppressPackageStartupMessages({

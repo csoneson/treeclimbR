@@ -127,7 +127,8 @@ test_that("runDS works", {
                     group_column = "group", contrast = c(0, 1),
                     filter_min_count = 0, filter_min_total_count = 1,
                     design = model.matrix(~ group, data = colData(ds_se)),
-                    filter_min_prop = 0, min_cells = 5, message = FALSE)
+                    filter_min_prop = 0, min_cells = 5, message = FALSE,
+                    legacy = FALSE)
     expect_type(ds_res, "list")
     expect_named(ds_res, c("edgeR_results", "tree", "nodes_drop"))
     expect_equal(ds_res$nodes_drop, character(0))
@@ -197,7 +198,8 @@ test_that("runDS works", {
                     group_column = "group", contrast = c(0, 1),
                     filter_min_count = 0, filter_min_total_count = 1,
                     design = model.matrix(~ group, data = colData(ds_se)),
-                    filter_min_prop = 0, min_cells = 13, message = FALSE)
+                    filter_min_prop = 0, min_cells = 13, message = FALSE,
+                    legacy = FALSE)
     expect_type(ds_res, "list")
     expect_named(ds_res, c("edgeR_results", "tree", "nodes_drop"))
     expect_equal(ds_res$nodes_drop, c("alias_1", "alias_3", "alias_10"))
@@ -235,7 +237,8 @@ test_that("runDS works", {
                     group_column = "group", contrast = c(0, 1),
                     filter_min_count = 0, filter_min_total_count = 1,
                     design = model.matrix(~ group, data = colData(ds_se)),
-                    filter_min_prop = 0, min_cells = 1, message = FALSE)
+                    filter_min_prop = 0, min_cells = 1, message = FALSE,
+                    legacy = FALSE)
     expect_type(ds_res, "list")
     expect_named(ds_res, c("edgeR_results", "tree", "nodes_drop"))
     expect_equal(ds_res$nodes_drop, c("alias_5", "alias_13"),
@@ -271,7 +274,8 @@ test_that("runDS works", {
                     group_column = "group", contrast = c(0, 1),
                     filter_min_count = 0, filter_min_total_count = 1,
                     design = NULL, design_terms = "group",
-                    filter_min_prop = 0, min_cells = 1, message = FALSE)
+                    filter_min_prop = 0, min_cells = 1, message = FALSE,
+                    legacy = FALSE)
     expect_type(ds_res, "list")
     expect_named(ds_res, c("edgeR_results", "tree", "nodes_drop"))
     expect_equal(ds_res$nodes_drop, character(0),

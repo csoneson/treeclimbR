@@ -10,6 +10,7 @@
 #' @returns A \code{data.frame} with information about candidates.
 #'
 #' @importFrom rlang .data
+#' @importFrom dplyr select all_of
 #'
 #' @examples
 #' suppressPackageStartupMessages({

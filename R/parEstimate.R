@@ -9,11 +9,7 @@
 #'
 .estimateA <- function(obj) {
     if (is.list(obj)) {
-        ind <- setequal(names(obj), c("pi", "theta"))
-        if (!ind) {
-            stop("obj is a list; it should contain pi and theta")
-        }
-        parList <- obj
+        return(.estimateB(obj))
     } else {
         if (is.null(rownames(obj))) {
             stop("obj must have rownames")
@@ -46,9 +42,7 @@
     if (!ind) {
         stop("obj is a list; it should contain pi and theta")
     }
-    parList <- obj
-
-    return(parList)
+    return(obj)
 }
 
 ## If obj is a TreeSummarizedExperiment, the estimated parameters pi and theta
@@ -115,6 +109,7 @@
 #' element per row in \code{obj}) and \code{theta} (a scalar).
 #'
 #' @importFrom methods is
+#' @importFrom SummarizedExperiment assayNames
 #'
 #' @examples
 #' suppressPackageStartupMessages({
