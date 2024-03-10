@@ -25,7 +25,7 @@ the assays is provided via the argument tree."><!-- mathjax --><script src="http
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">treeclimbR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.1</span>
       </span>
     </div>
 
@@ -223,6 +223,9 @@ should be printed.</p></dd>
 <span class="r-in"><span><span class="va">ds_se</span> <span class="op">&lt;-</span> <span class="fu"><a href="aggDS.html">aggDS</a></span><span class="op">(</span>TSE <span class="op">=</span> <span class="va">ds_tse</span>, assay <span class="op">=</span> <span class="st">"counts"</span>, sample_id <span class="op">=</span> <span class="st">"sample_id"</span>,</span></span>
 <span class="r-in"><span>               group_id <span class="op">=</span> <span class="st">"group"</span>, cluster_id <span class="op">=</span> <span class="st">"cluster_id"</span>, FUN <span class="op">=</span> <span class="va">sum</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Multiple nodes are found to have the same label.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Direct call of 'as.data.frame.integer()' is deprecated.  Use 'as.data.frame.vector()' or 'as.data.frame()' instead</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Direct call of 'as.data.frame.integer()' is deprecated.  Use 'as.data.frame.vector()' or 'as.data.frame()' instead</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Direct call of 'as.data.frame.integer()' is deprecated.  Use 'as.data.frame.vector()' or 'as.data.frame()' instead</span>
 <span class="r-in"><span><span class="co">## Information about the number of cells is provided in the metadata</span></span></span>
 <span class="r-in"><span><span class="fu">S4Vectors</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html" class="external-link">metadata</a></span><span class="op">(</span><span class="va">ds_se</span><span class="op">)</span><span class="op">$</span><span class="va">n_cells</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            4   1   2   3</span>
