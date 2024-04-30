@@ -19,7 +19,7 @@ tree."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathj
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">treeclimbR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -88,35 +88,35 @@ tree.</p>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>tree</dt>
+    <dl><dt id="arg-tree">tree<a class="anchor" aria-label="anchor" href="#arg-tree"></a></dt>
 <dd><p>A <code>phylo</code> object. Only used when <code>obj</code> is <code>NULL</code>.</p></dd>
 
 
-<dt>data</dt>
+<dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>A count matrix with entities corresponding to tree leaves
 in the rows and samples in the columns. Only used when <code>obj</code> is
 <code>NULL</code>.</p></dd>
 
 
-<dt>obj</dt>
+<dt id="arg-obj">obj<a class="anchor" aria-label="anchor" href="#arg-obj"></a></dt>
 <dd><p>A <code>TreeSummarizedExperiment</code> object with observed data to
 use as the input for the simulation. If <code>NULL</code>, <code>data</code> and \
 <code>tree</code> must be provided instead.</p></dd>
 
 
-<dt>assay</dt>
+<dt id="arg-assay">assay<a class="anchor" aria-label="anchor" href="#arg-assay"></a></dt>
 <dd><p>If <code>obj</code> is not <code>NULL</code>, a numeric index or
 character scalar indicating which assay of the object to use as the
 basis for simulation. If <code>assay</code> is <code>NULL</code>, the first
 assay in the object is used.</p></dd>
 
 
-<dt>scenario</dt>
+<dt id="arg-scenario">scenario<a class="anchor" aria-label="anchor" href="#arg-scenario"></a></dt>
 <dd><p>The simulation scenario, either “BS”, “US”,
 or “SS” (see <b>Details</b>).</p></dd>
 
 
-<dt>from.A, from.B</dt>
+<dt id="arg-from-a-from-b">from.A, from.B<a class="anchor" aria-label="anchor" href="#arg-from-a-from-b"></a></dt>
 <dd><p>The branch node labels of branches A and B for which the
 signal will be swapped. By default, both are <code>NULL</code>, in which case
 they will be chosen based on the restrictions provided (<code>minTip.A</code>,
@@ -125,40 +125,40 @@ they will be chosen based on the restrictions provided (<code>minTip.A</code>,
 <code>from.B</code> is also set to <code>NULL</code>.</p></dd>
 
 
-<dt>minTip.A</dt>
+<dt id="arg-mintip-a">minTip.A<a class="anchor" aria-label="anchor" href="#arg-mintip-a"></a></dt>
 <dd><p>The minimum number of leaves allowed in branch A.</p></dd>
 
 
-<dt>maxTip.A</dt>
+<dt id="arg-maxtip-a">maxTip.A<a class="anchor" aria-label="anchor" href="#arg-maxtip-a"></a></dt>
 <dd><p>The maximum number of leaves allowed in branch A.</p></dd>
 
 
-<dt>minTip.B</dt>
+<dt id="arg-mintip-b">minTip.B<a class="anchor" aria-label="anchor" href="#arg-mintip-b"></a></dt>
 <dd><p>The minimum number of leaves allowed in branch B.</p></dd>
 
 
-<dt>maxTip.B</dt>
+<dt id="arg-maxtip-b">maxTip.B<a class="anchor" aria-label="anchor" href="#arg-maxtip-b"></a></dt>
 <dd><p>The maximum number of leaves allowed in branch B.</p></dd>
 
 
-<dt>minPr.A</dt>
+<dt id="arg-minpr-a">minPr.A<a class="anchor" aria-label="anchor" href="#arg-minpr-a"></a></dt>
 <dd><p>A numeric value in [0, 1]. The minimum abundance
 proportion of leaves in branch A.</p></dd>
 
 
-<dt>maxPr.A</dt>
+<dt id="arg-maxpr-a">maxPr.A<a class="anchor" aria-label="anchor" href="#arg-maxpr-a"></a></dt>
 <dd><p>A numeric value  in [0, 1]. The maximum abundance
 proportion of leaves in branch A.</p></dd>
 
 
-<dt>ratio</dt>
+<dt id="arg-ratio">ratio<a class="anchor" aria-label="anchor" href="#arg-ratio"></a></dt>
 <dd><p>A numeric value. The proportion ratio of branch B to branch A.
 This value is used to select branches(see <b>Details</b>). If there are
 no branches having exactly this ratio, the pair with the value closest to
 <code>ratio</code> will be selected.</p></dd>
 
 
-<dt>adjB</dt>
+<dt id="arg-adjb">adjB<a class="anchor" aria-label="anchor" href="#arg-adjb"></a></dt>
 <dd><p>A numeric value in [0, 1] (only for <code>scenario</code>
 “SS”), or <code>NULL</code>. If <code>NULL</code>, branch A and the selected
 part of branch B swap their proportions. If a numeric value, e.g. 0.1,
@@ -170,17 +170,17 @@ a count of 10 and branch B has a count of 40 in C1. If adjB is set to
 so that the total count of the two branches stays the same.</p></dd>
 
 
-<dt>pct</dt>
+<dt id="arg-pct">pct<a class="anchor" aria-label="anchor" href="#arg-pct"></a></dt>
 <dd><p>The percentage of leaves in branch B that have differential
 abundance under different conditions (only for scenario “SS”).</p></dd>
 
 
-<dt>nSam</dt>
+<dt id="arg-nsam">nSam<a class="anchor" aria-label="anchor" href="#arg-nsam"></a></dt>
 <dd><p>A numeric vector of length 2, indicating the sample size for each
 of the two simulated conditions.</p></dd>
 
 
-<dt>mu, size</dt>
+<dt id="arg-mu-size">mu, size<a class="anchor" aria-label="anchor" href="#arg-mu-size"></a></dt>
 <dd><p>The parameters of the Negative Binomial distribution. (see mu
 and size in <code><a href="https://rdrr.io/r/stats/NegBinomial.html" class="external-link">rnbinom</a></code>). These parameters
 are used to generate the library size for each simulated sample. If
@@ -188,20 +188,20 @@ are used to generate the library size for each simulated sample. If
 from which the library size is sampled with replacement.</p></dd>
 
 
-<dt>n</dt>
+<dt id="arg-n">n<a class="anchor" aria-label="anchor" href="#arg-n"></a></dt>
 <dd><p>A numeric value to specify how many count tables would be generated
 with the same settings. The default is 1, i.e., one count table would be
 obtained at the end. If greater than 1, the output is a list of matrices.</p></dd>
 
 
-<dt>FUN</dt>
+<dt id="arg-fun">FUN<a class="anchor" aria-label="anchor" href="#arg-fun"></a></dt>
 <dd><p>A function to calculate the aggregated count at each internal
 node based on its descendant leaves (e.g., <code>sum</code>, <code>mean</code>).
 The argument of the function should be a numeric vector with the counts
 of an internal node's descendant leaves.</p></dd>
 
 
-<dt>message</dt>
+<dt id="arg-message">message<a class="anchor" aria-label="anchor" href="#arg-message"></a></dt>
 <dd><p>A logical scalar, indicating whether progress messages
 should be printed to the console.</p></dd>
 
@@ -273,7 +273,7 @@ should be printed to the console.</p></dd>
 <span class="r-in"><span><span class="fu">simData</span><span class="op">(</span>obj <span class="op">=</span> <span class="va">toy_lse</span>, ratio <span class="op">=</span> <span class="fl">2</span>, scenario <span class="op">=</span> <span class="st">"BS"</span>, pct <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 1: Log-likelihood value: -2142.56163506266</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 2: Log-likelihood value: -2140.22864492689</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 3: Log-likelihood value: -2139.95865725141</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 3: Log-likelihood value: -2139.9586572514</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 4: Log-likelihood value: -2139.95301764506</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 5: Log-likelihood value: -2139.95301439773</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> class: TreeSummarizedExperiment </span>
@@ -306,7 +306,7 @@ should be printed to the console.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
 
       </footer></div>

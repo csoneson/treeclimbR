@@ -19,7 +19,7 @@ are considered - no individual leaves will be returned."><!-- mathjax --><script
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">treeclimbR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -77,58 +77,58 @@ are considered - no individual leaves will be returned.</p>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>pr</dt>
+    <dl><dt id="arg-pr">pr<a class="anchor" aria-label="anchor" href="#arg-pr"></a></dt>
 <dd><p>A named numeric vector to provide proportions of entities. If
 this is provided, <code>obj</code> and <code>data</code> will be ignored.</p></dd>
 
 
-<dt>obj</dt>
+<dt id="arg-obj">obj<a class="anchor" aria-label="anchor" href="#arg-obj"></a></dt>
 <dd><p>A <code>TreeSummarizedExperiment</code> object. Only used if <code>pr</code>
 is <code>NULL</code>.</p></dd>
 
 
-<dt>assay</dt>
+<dt id="arg-assay">assay<a class="anchor" aria-label="anchor" href="#arg-assay"></a></dt>
 <dd><p>The index or name of the assay of <code>obj</code> to use for
 estimating node count proportions. Only used if <code>obj</code> is not
 <code>NULL</code>.</p></dd>
 
 
-<dt>data</dt>
+<dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>Either a count table with entities in rows and samples in
 columns, or a list with <code>pi</code> and <code>theta</code> estimates (the
 output of <code><a href="parEstimate.html">parEstimate</a></code>). Only used if <code>pr</code> and
 <code>obj</code> are <code>NULL</code>.</p></dd>
 
 
-<dt>tree</dt>
+<dt id="arg-tree">tree<a class="anchor" aria-label="anchor" href="#arg-tree"></a></dt>
 <dd><p>A <code>phylo</code> object. If <code>obj</code> is used as input, the tree
 will be extracted from the <code>rowTree</code> of <code>obj</code>.</p></dd>
 
 
-<dt>minTip</dt>
+<dt id="arg-mintip">minTip<a class="anchor" aria-label="anchor" href="#arg-mintip"></a></dt>
 <dd><p>the minimum number of leaves in the selected branch.</p></dd>
 
 
-<dt>maxTip</dt>
+<dt id="arg-maxtip">maxTip<a class="anchor" aria-label="anchor" href="#arg-maxtip"></a></dt>
 <dd><p>The maximum number of leaves in the selected branch.</p></dd>
 
 
-<dt>minPr</dt>
+<dt id="arg-minpr">minPr<a class="anchor" aria-label="anchor" href="#arg-minpr"></a></dt>
 <dd><p>The minimum count proportion of the selected branch in a sample.
 A value between 0 and 1.</p></dd>
 
 
-<dt>maxPr</dt>
+<dt id="arg-maxpr">maxPr<a class="anchor" aria-label="anchor" href="#arg-maxpr"></a></dt>
 <dd><p>The maximum count proportion of the selected branch in a sample.
 A value between 0 and 1.</p></dd>
 
 
-<dt>skip</dt>
+<dt id="arg-skip">skip<a class="anchor" aria-label="anchor" href="#arg-skip"></a></dt>
 <dd><p>A character vector of node labels. These nodes can not be
 descendants or the ancestors of the selected branch.</p></dd>
 
 
-<dt>all</dt>
+<dt id="arg-all">all<a class="anchor" aria-label="anchor" href="#arg-all"></a></dt>
 <dd><p>A logical scalar. If <code>FALSE</code> (default), the branch node of a
 single branch, which meets the requirements and has the minimum count
 proportion of branches meeting the requirements, is returned; otherwise
@@ -169,7 +169,7 @@ branch nodes of all branches meeting the requirements are returned.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 3: Log-likelihood value: -631.155358434505</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 4: Log-likelihood value: -631.132407245137</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 5: Log-likelihood value: -631.132252461193</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 6: Log-likelihood value: -631.132252452367</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 6: Log-likelihood value: -631.132252452366</span>
 <span class="r-in"><span><span class="fu">selNode</span><span class="op">(</span>tree <span class="op">=</span> <span class="va">tinyTree</span>, data <span class="op">=</span> <span class="va">dat</span>, all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          nodeNum nodeLab proportion numTip</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> alias_11      11 Node_11  1.0000000     10</span>
@@ -214,7 +214,7 @@ branch nodes of all branches meeting the requirements are returned.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 3: Log-likelihood value: -631.155358434505</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 4: Log-likelihood value: -631.132407245137</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 5: Log-likelihood value: -631.132252461193</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 6: Log-likelihood value: -631.132252452367</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 6: Log-likelihood value: -631.132252452366</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          nodeNum nodeLab proportion numTip</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> alias_11      11 Node_11  1.0000000     10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> alias_12      12 Node_12  0.8644560      9</span>
@@ -233,7 +233,7 @@ branch nodes of all branches meeting the requirements are returned.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 3: Log-likelihood value: -631.155358434505</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 4: Log-likelihood value: -631.132407245137</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 5: Log-likelihood value: -631.132252461193</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 6: Log-likelihood value: -631.132252452367</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 6: Log-likelihood value: -631.132252452366</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          nodeNum nodeLab proportion numTip</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> alias_14      14 Node_14  0.1488320      2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> alias_15      15 Node_15  0.6496181      6</span>
@@ -256,7 +256,7 @@ branch nodes of all branches meeting the requirements are returned.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
 
       </footer></div>

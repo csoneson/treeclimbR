@@ -22,7 +22,7 @@ pi and theta."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/li
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">treeclimbR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -71,12 +71,12 @@ the input <code>obj</code> to be either a <code>matrix</code> or a
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>obj</dt>
+    <dl><dt id="arg-obj">obj<a class="anchor" aria-label="anchor" href="#arg-obj"></a></dt>
 <dd><p>A matrix or <code>TreeSummarizedExperiment</code>, with samples in the
 columns and entities in the rows.</p></dd>
 
 
-<dt>assay</dt>
+<dt id="arg-assay">assay<a class="anchor" aria-label="anchor" href="#arg-assay"></a></dt>
 <dd><p>If <code>obj</code> is a <code>TreeSummarizedExperiment</code>, the name
 or index of the assay to use to estimate Dirichlet multinomial
 parameters. If <code>NULL</code>, the first assay will be used.</p></dd>
@@ -107,11 +107,11 @@ element per row in <code>obj</code>) and <code>theta</code> (a scalar).</p>
 <span class="r-in"><span><span class="va">toy_tse</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/TreeSummarizedExperiment/man/TreeSummarizedExperiment-constructor.html" class="external-link">TreeSummarizedExperiment</a></span><span class="op">(</span>rowTree <span class="op">=</span> <span class="va">tinyTree</span>,</span></span>
 <span class="r-in"><span>                                    assays <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">parEstimate</span><span class="op">(</span>obj <span class="op">=</span> <span class="va">toy_tse</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 1: Log-likelihood value: -3707.79061811114</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 1: Log-likelihood value: -3707.79061811115</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 2: Log-likelihood value: -3705.14216240896</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 3: Log-likelihood value: -3704.92754722943</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 4: Log-likelihood value: -3704.92506122156</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 5: Log-likelihood value: -3704.92506080307</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Iteration 5: Log-likelihood value: -3704.92506080308</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html" class="external-link">metadata</a></span><span class="op">(</span><span class="va">res</span><span class="op">)</span><span class="op">$</span><span class="va">assays.par</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $pi</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         t2         t7         t6         t9         t4         t8        t10 </span>
@@ -137,7 +137,7 @@ element per row in <code>obj</code>) and <code>theta</code> (a scalar).</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
 
       </footer></div>

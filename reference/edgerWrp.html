@@ -20,7 +20,7 @@ each entity."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/lib
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">treeclimbR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -76,17 +76,17 @@ each entity.</p>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>count</dt>
+    <dl><dt id="arg-count">count<a class="anchor" aria-label="anchor" href="#arg-count"></a></dt>
 <dd><p>A matrix with features (e.g., genes or microbes) in rows and
 samples in columns.</p></dd>
 
 
-<dt>lib_size</dt>
+<dt id="arg-lib-size">lib_size<a class="anchor" aria-label="anchor" href="#arg-lib-size"></a></dt>
 <dd><p>A numeric vector with library sizes for each sample. If
 <code>NULL</code> (default), the column sums of <code>count</code> are used.</p></dd>
 
 
-<dt>option</dt>
+<dt id="arg-option">option<a class="anchor" aria-label="anchor" href="#arg-option"></a></dt>
 <dd><p>Either <code>"glm"</code> or <code>"glmQL"</code>. If <code>"glm"</code>,
 <code><a href="https://rdrr.io/pkg/edgeR/man/glmfit.html" class="external-link">glmFit</a></code> and <code><a href="https://rdrr.io/pkg/edgeR/man/glmLRT.html" class="external-link">glmLRT</a></code> are used;
 otherwise, <code><a href="https://rdrr.io/pkg/edgeR/man/glmQLFit.html" class="external-link">glmQLFit</a></code> and
@@ -95,14 +95,14 @@ between the two options can be found in the help pages of
 <code><a href="https://rdrr.io/pkg/edgeR/man/glmQLFit.html" class="external-link">glmQLFit</a></code>.</p></dd>
 
 
-<dt>design</dt>
+<dt id="arg-design">design<a class="anchor" aria-label="anchor" href="#arg-design"></a></dt>
 <dd><p>A numeric design matrix, e.g. created by
 <code><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></code>. Please refer to <code>design</code> in
 <code><a href="https://rdrr.io/pkg/edgeR/man/glmQLFit.html" class="external-link">glmQLFit</a></code> and <code><a href="https://rdrr.io/pkg/edgeR/man/glmfit.html" class="external-link">glmFit</a></code> for
 more details.</p></dd>
 
 
-<dt>contrast</dt>
+<dt id="arg-contrast">contrast<a class="anchor" aria-label="anchor" href="#arg-contrast"></a></dt>
 <dd><p>A numeric vector specifying one contrast of
 the linear model coefficients to be tested. Its length
 must equal the number of columns of <code>design</code>. If <code>NULL</code>, the
@@ -111,17 +111,17 @@ in <code><a href="https://rdrr.io/pkg/edgeR/man/glmQLFTest.html" class="external
 more details.</p></dd>
 
 
-<dt>normalize</dt>
+<dt id="arg-normalize">normalize<a class="anchor" aria-label="anchor" href="#arg-normalize"></a></dt>
 <dd><p>A logical scalar, specifying whether normalization factors
 should be calculated (using <code><a href="https://rdrr.io/pkg/edgeR/man/calcNormFactors.html" class="external-link">calcNormFactors</a></code>).</p></dd>
 
 
-<dt>normalize_method</dt>
+<dt id="arg-normalize-method">normalize_method<a class="anchor" aria-label="anchor" href="#arg-normalize-method"></a></dt>
 <dd><p>Normalization method to be used. Please refer to
 <code>method</code> in <code><a href="https://rdrr.io/pkg/edgeR/man/calcNormFactors.html" class="external-link">calcNormFactors</a></code> for more details.</p></dd>
 
 
-<dt>...</dt>
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>More arguments to pass to <code><a href="https://rdrr.io/pkg/edgeR/man/glmfit.html" class="external-link">glmFit</a></code>
 (if <code>option = "glm"</code> or <code><a href="https://rdrr.io/pkg/edgeR/man/glmQLFit.html" class="external-link">glmQLFit</a></code>
 (if <code>option = "glmQL"</code>).</p></dd>
@@ -186,7 +186,7 @@ QLF edgeR workflows (i.e., either <code><a href="https://rdrr.io/pkg/edgeR/man/g
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
 
       </footer></div>

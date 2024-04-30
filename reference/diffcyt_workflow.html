@@ -23,7 +23,7 @@ columns."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">treeclimbR</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
 
@@ -79,21 +79,21 @@ columns.</p>
 
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt>d_se</dt>
+    <dl><dt id="arg-d-se">d_se<a class="anchor" aria-label="anchor" href="#arg-d-se"></a></dt>
 <dd><p>A <code>SummarizedExperiment</code> object, with cells as rows and
 features as columns. This should be the output
 from <code><a href="https://rdrr.io/pkg/diffcyt/man/generateClusters.html" class="external-link">generateClusters</a></code>. The <code>colData</code> is
 assumed to contain a factor named <code>marker_class</code>.</p></dd>
 
 
-<dt>dist_method</dt>
+<dt id="arg-dist-method">dist_method<a class="anchor" aria-label="anchor" href="#arg-dist-method"></a></dt>
 <dd><p>The distance measure to be used. This must be one of
 "euclidean", "maximum", "manhattan", "canberra", "binary" or "minkowski".
 Any unambiguous substring can be given. Please refer to <code>method</code> in
 <code><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></code> for more information.</p></dd>
 
 
-<dt>hclust_method</dt>
+<dt id="arg-hclust-method">hclust_method<a class="anchor" aria-label="anchor" href="#arg-hclust-method"></a></dt>
 <dd><p>The agglomeration method to be used. This should be (an
 unambiguous abbreviation of) one of "ward.D", "ward.D2", "single",
 "complete", "average" (= UPGMA), "mcquitty" (= WPGMA), "median" (= WPGMC)
@@ -101,11 +101,11 @@ or "centroid" (= UPGMC). Please refer to <code>method</code> in
 <code><a href="https://rdrr.io/r/stats/hclust.html" class="external-link">hclust</a></code> for more information.</p></dd>
 
 
-<dt>tree</dt>
+<dt id="arg-tree">tree<a class="anchor" aria-label="anchor" href="#arg-tree"></a></dt>
 <dd><p>A <code>phylo</code> object from <code>buildTree</code>.</p></dd>
 
 
-<dt>message</dt>
+<dt id="arg-message">message<a class="anchor" aria-label="anchor" href="#arg-message"></a></dt>
 <dd><p>A logical scalar indicating whether progress messages
 should be printed.</p></dd>
 
@@ -203,7 +203,7 @@ cluster-sample-marker combination. This is a tree version of
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Generate clusters</span></span></span>
 <span class="r-in"><span><span class="va">d_se</span> <span class="op">&lt;-</span> <span class="fu">diffcyt</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/diffcyt/man/generateClusters.html" class="external-link">generateClusters</a></span><span class="op">(</span><span class="va">d_se</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> FlowSOM clustering completed in 0.6 seconds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> FlowSOM clustering completed in 0.2 seconds</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Build a tree</span></span></span>
 <span class="r-in"><span><span class="va">tr</span> <span class="op">&lt;-</span> <span class="fu">buildTree</span><span class="op">(</span><span class="va">d_se</span><span class="op">)</span></span></span>
@@ -237,7 +237,7 @@ cluster-sample-marker combination. This is a tree version of
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
 
       </footer></div>
