@@ -8,8 +8,6 @@ pi and theta."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/li
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -25,7 +23,6 @@ pi and theta."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/li
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
-
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav"><li>
   <a href="../articles/treeclimbR.html">Get started</a>
@@ -39,15 +36,11 @@ pi and theta."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/li
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/csoneson/treeclimbR/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
-
-      
-
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
@@ -55,7 +48,6 @@ pi and theta."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/li
     <small class="dont-index">Source: <a href="https://github.com/csoneson/treeclimbR/blob/HEAD/R/parEstimate.R" class="external-link"><code>R/parEstimate.R</code></a></small>
     <div class="hidden name"><code>parEstimate.Rd</code></div>
     </div>
-
     <div class="ref-description">
     <p><code>parEstimate</code> is a wrapper of the function
 <code><a href="https://rdrr.io/pkg/dirmult/man/dirmult.html" class="external-link">dirmult</a></code> with default settings for <code>init</code>,
@@ -64,28 +56,21 @@ the input <code>obj</code> to be either a <code>matrix</code> or a
 <code>TreeSummarizedExperiment</code> and outputs the estimated values of
 <code>pi</code> and <code>theta</code>.</p>
     </div>
-
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">parEstimate</span><span class="op">(</span><span class="va">obj</span>, assay <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
-
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt id="arg-obj">obj<a class="anchor" aria-label="anchor" href="#arg-obj"></a></dt>
 <dd><p>A matrix or <code>TreeSummarizedExperiment</code>, with samples in the
 columns and entities in the rows.</p></dd>
-
-
 <dt id="arg-assay">assay<a class="anchor" aria-label="anchor" href="#arg-assay"></a></dt>
 <dd><p>If <code>obj</code> is a <code>TreeSummarizedExperiment</code>, the name
 or index of the assay to use to estimate Dirichlet multinomial
 parameters. If <code>NULL</code>, the first assay will be used.</p></dd>
-
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    
-
 <p>A list including the estimates of <code>pi</code> (a vector with one
 element per row in <code>obj</code>) and <code>theta</code> (a scalar).</p>
     </div>
@@ -93,7 +78,6 @@ element per row in <code>obj</code>) and <code>theta</code> (a scalar).</p>
     <h2>Author</h2>
     <p>Ruizhu Huang, Charlotte Soneson</p>
     </div>
-
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="op">{</span></span></span>
@@ -130,22 +114,12 @@ element per row in <code>obj</code>) and <code>theta</code> (a scalar).</p>
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
     </nav></div>
 </div>
-
-
       <footer><div class="copyright">
   <p></p><p>Developed by Ruizhu Huang, Charlotte Soneson.</p>
 </div>
-
 <div class="pkgdown">
   <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
-
       </footer></div>
-
-  
-
-
-  
-
   </body></html>
 

@@ -19,8 +19,6 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -36,7 +34,6 @@
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
-
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
@@ -53,7 +50,6 @@
 <li>
   <a href="https://github.com/csoneson/treeclimbR/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
   </a>
 </li>
       </ul>
@@ -63,9 +59,6 @@
 <!--/.container -->
 </div>
 <!--/.navbar -->
-
-      
-
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -73,17 +66,11 @@
 hypotheses with treeclimbR</h1>
                         <h4 data-toc-skip class="author">Charlotte
 Soneson and Ruizhu Huang</h4>
-            
-            <h4 data-toc-skip class="date">2024-04-30</h4>
-      
-      <small class="dont-index">Source: <a href="https://github.com/csoneson/treeclimbR/blob/HEAD/vignettes/treeclimbR.Rmd" class="external-link"><code>vignettes/treeclimbR.Rmd</code></a></small>
+                        <h4 data-toc-skip class="date">2024-05-17</h4>
+            <small class="dont-index">Source: <a href="https://github.com/csoneson/treeclimbR/blob/HEAD/vignettes/treeclimbR.Rmd" class="external-link"><code>vignettes/treeclimbR.Rmd</code></a></small>
       <div class="hidden name"><code>treeclimbR.Rmd</code></div>
-
     </div>
-
-    
-    
-<div class="section level2">
+        <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p><code>treeclimbR</code> is a method for analyzing hierarchical trees
@@ -189,8 +176,9 @@ data.</p>
 <span><span class="co">#&gt; rowLinks: a LinkDataFrame (100 rows)</span></span>
 <span><span class="co">#&gt; rowTree: 1 phylo tree(s) (100 leaves)</span></span>
 <span><span class="co">#&gt; colLinks: NULL</span></span>
-<span><span class="co">#&gt; colTree: NULL</span></span>
-<span></span>
+<span><span class="co">#&gt; colTree: NULL</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co">## Generate tree visualization where true signal leaves are colored orange</span></span>
 <span><span class="co">## ...Find internal nodes in the subtrees where all leaves are differentially </span></span>
 <span><span class="co">##    abundant. These will be colored orange.</span></span>
@@ -259,7 +247,7 @@ count for each internal node in the tree by summing the counts for all
 its descendant leaves. For other applications, other aggregation methods
 (e.g., averaging) may be more suitable. This can be controlled via the
 <code>rowFun</code> argument.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Get a list of all node IDs</span></span>
 <span><span class="va">all_node</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/TreeSummarizedExperiment/man/showNode.html" class="external-link">showNode</a></span><span class="op">(</span>tree <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/TreeSummarizedExperiment/man/TreeSummarizedExperiment-accessor.html" class="external-link">rowTree</a></span><span class="op">(</span><span class="va">da_lse</span><span class="op">)</span>, only.leaf <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
@@ -294,7 +282,7 @@ matrix). <code>treeclimbR</code> provides a convenience function to
 perform the differential abundance analysis using <code>edgeR</code>,
 which we will use here. We will ask the wrapper function to filter out
 lowly abundant features (with a total count below 15).</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Run differential analysis</span></span>
 <span><span class="va">da_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runDA.html">runDA</a></span><span class="op">(</span><span class="va">da_tse</span>, assay <span class="op">=</span> <span class="st">"counts"</span>, option <span class="op">=</span> <span class="st">"glmQL"</span>, </span>
 <span>                design <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></span><span class="op">(</span><span class="op">~</span> <span class="va">group</span>, data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">da_tse</span><span class="op">)</span><span class="op">)</span>, </span>
@@ -303,14 +291,16 @@ lowly abundant features (with a total count below 15).</p>
 <p>The output of <code>runDA</code> contains the <code>edgeR</code>
 results, a list of the nodes that were dropped due to a low total count,
 and the tree.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">da_res</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "edgeR_results" "nodes_drop"    "tree"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">da_res</span><span class="op">$</span><span class="va">edgeR_results</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "edgeR_results" "nodes_drop"    "tree"</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">da_res</span><span class="op">$</span><span class="va">edgeR_results</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "DGELRT"</span></span>
 <span><span class="co">#&gt; attr(,"package")</span></span>
-<span><span class="co">#&gt; [1] "edgeR"</span></span>
-<span></span>
+<span><span class="co">#&gt; [1] "edgeR"</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co">## Nodes with too low total count</span></span>
 <span><span class="va">da_res</span><span class="op">$</span><span class="va">nodes_drop</span></span>
 <span><span class="co">#&gt;  [1] "alias_32"  "alias_33"  "alias_40"  "alias_44"  "alias_51"  "alias_68" </span></span>
@@ -323,11 +313,12 @@ such a table with the <code><a href="../reference/nodeResult.html">nodeResult()<
 <code>PValue</code> column contains the p-value, and the
 <code>logFC</code> column provides information about the sign of the
 inferred change):</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">da_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nodeResult.html">nodeResult</a></span><span class="op">(</span><span class="va">da_res</span>, n <span class="op">=</span> <span class="cn">Inf</span>, type <span class="op">=</span> <span class="st">"DA"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">da_tbl</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 189   6</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">da_tbl</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 189   6</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">da_tbl</span><span class="op">)</span></span>
 <span><span class="co">#&gt;           node      logFC   logCPM         F       PValue          FDR</span></span>
 <span><span class="co">#&gt; alias_102  102 -0.6290963 18.47205 231.23012 2.541684e-23 4.803782e-21</span></span>
 <span><span class="co">#&gt; alias_114  114 -0.5748841 17.74475 121.59367 1.177692e-16 1.112919e-14</span></span>
@@ -345,7 +336,7 @@ parameter <span class="math inline">\(t\)</span> (see <span class="citation">(Hu
 set of nodes, representing a specific pattern of aggregation. In
 general, higher values of <span class="math inline">\(t\)</span> lead to
 aggregation further up in the tree (closer to the root).</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Get candidates</span></span>
 <span><span class="va">da_cand</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getCand.html">getCand</a></span><span class="op">(</span>tree <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/TreeSummarizedExperiment/man/TreeSummarizedExperiment-accessor.html" class="external-link">rowTree</a></span><span class="op">(</span><span class="va">da_tse</span><span class="op">)</span>, score_data <span class="op">=</span> <span class="va">da_tbl</span>, </span>
 <span>                   node_column <span class="op">=</span> <span class="st">"node"</span>, p_column <span class="op">=</span> <span class="st">"PValue"</span>,</span>
@@ -357,13 +348,14 @@ we making conclusions about which of the retained nodes show a
 significant difference between the conditions. The visualization thus
 simply illustrates which leaves would be aggregated together if this
 candidate were to be chosen.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## All candidates</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">da_cand</span><span class="op">$</span><span class="va">candidate_list</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "0"    "0.01" "0.02" "0.03" "0.04" "0.05" "0.1"  "0.15" "0.2"  "0.25"</span></span>
 <span><span class="co">#&gt; [11] "0.3"  "0.35" "0.4"  "0.45" "0.5"  "0.55" "0.6"  "0.65" "0.7"  "0.75"</span></span>
-<span><span class="co">#&gt; [21] "0.8"  "0.85" "0.9"  "0.95" "1"</span></span>
-<span></span>
+<span><span class="co">#&gt; [21] "0.8"  "0.85" "0.9"  "0.95" "1"</span></span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co">## Nodes contained in the candidate corresponding to t = 0.03</span></span>
 <span><span class="co">## This is a mix of leaves and internal nodes</span></span>
 <span><span class="op">(</span><span class="va">da_cand_0.03</span> <span class="op">&lt;-</span> <span class="va">da_cand</span><span class="op">$</span><span class="va">candidate_list</span><span class="op">[[</span><span class="st">"0.03"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
@@ -371,8 +363,9 @@ candidate were to be chosen.</p>
 <span><span class="co">#&gt; [20]  26  27  28  29  30  31  34  35  36  37  38  39  41  42  43  45  46  47  48</span></span>
 <span><span class="co">#&gt; [39]  49  50  52  53  54  55  56  57  58  59  60  61  62  63  64  65  66  67  69</span></span>
 <span><span class="co">#&gt; [58]  70  71  72  73  74  75  76  77  78  79  80  81  82  83  84  85  86  88  89</span></span>
-<span><span class="co">#&gt; [77]  90  91  92  93  94  95  96  99 100 108 122 117</span></span>
-<span></span>
+<span><span class="co">#&gt; [77]  90  91  92  93  94  95  96  99 100 108 122 117</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co">## Visualize candidate</span></span>
 <span><span class="va">da_fig_tree</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/ggtree/man/geom_point2.html" class="external-link">geom_point2</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>subset <span class="op">=</span> <span class="op">(</span><span class="va">node</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">da_cand_0.03</span><span class="op">)</span><span class="op">)</span>, </span>
@@ -389,7 +382,7 @@ candidate were to be chosen.</p>
 <p>Finally, given the set of candidates extracted above,
 <code>treeclimbR</code> can now extract the one providing the optimal
 aggregation level <span class="citation">(Huang et al. 2021)</span>.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Evaluate candidates</span></span>
 <span><span class="va">da_best</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalCand.html">evalCand</a></span><span class="op">(</span>tree <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/TreeSummarizedExperiment/man/TreeSummarizedExperiment-accessor.html" class="external-link">rowTree</a></span><span class="op">(</span><span class="va">da_tse</span><span class="op">)</span>, levels <span class="op">=</span> <span class="va">da_cand</span><span class="op">$</span><span class="va">candidate_list</span>, </span>
 <span>                    score_data <span class="op">=</span> <span class="va">da_tbl</span>, node_column <span class="op">=</span> <span class="st">"node"</span>,</span>
@@ -397,7 +390,7 @@ aggregation level <span class="citation">(Huang et al. 2021)</span>.</p>
 <p>We can get a summary of all the candidates, as well as an indication
 of which <code>treeclimbR</code> considers the optimal one, using the
 <code>infoCand</code> function:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/infoCand.html">infoCand</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">da_best</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       t    upper_t is_valid method limit_rej level_name  best rej_leaf rej_node</span></span>
 <span><span class="co">#&gt; 1  0.00 0.02142857     TRUE     BH      0.05          0 FALSE       17       17</span></span>
@@ -427,10 +420,10 @@ of which <code>treeclimbR</code> considers the optimal one, using the
 <span><span class="co">#&gt; 25 1.00 0.10000000    FALSE     BH      0.05          1 FALSE       22       11</span></span></code></pre></div>
 <p>We can also extract a vector of significant nodes from the optimal
 candidate.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">da_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/topNodes.html">topNodes</a></span><span class="op">(</span>object <span class="op">=</span> <span class="va">da_best</span>, n <span class="op">=</span> <span class="cn">Inf</span>, p_value <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
 <p>These nodes can then be indicated in the tree.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">da_fig_tree</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/ggtree/man/geom_point2.html" class="external-link">geom_point2</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>subset <span class="op">=</span> <span class="va">node</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">da_out</span><span class="op">$</span><span class="va">node</span><span class="op">)</span>,</span>
 <span>                color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
@@ -443,12 +436,13 @@ estimate the (leaf-level) false discovery rate and true positive rate
 for the significant nodes. <code>treeclimbR</code> will automatically
 extract the descendant leaves for each of the provided nodes, and
 perform the evaluation on the leaf level.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/fdr.html">fdr</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/TreeSummarizedExperiment/man/TreeSummarizedExperiment-accessor.html" class="external-link">rowTree</a></span><span class="op">(</span><span class="va">da_tse</span><span class="op">)</span>, truth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">da_lse</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">rowData</a></span><span class="op">(</span><span class="va">da_lse</span><span class="op">)</span><span class="op">$</span><span class="va">Signal</span><span class="op">]</span>, </span>
 <span>    found <span class="op">=</span> <span class="va">da_out</span><span class="op">$</span><span class="va">node</span>, only.leaf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        fdr </span></span>
-<span><span class="co">#&gt; 0.05882353</span></span>
-<span></span>
+<span><span class="co">#&gt; 0.05882353</span></span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/tpr.html">tpr</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/TreeSummarizedExperiment/man/TreeSummarizedExperiment-accessor.html" class="external-link">rowTree</a></span><span class="op">(</span><span class="va">da_tse</span><span class="op">)</span>, truth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">da_lse</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">rowData</a></span><span class="op">(</span><span class="va">da_lse</span><span class="op">)</span><span class="op">$</span><span class="va">Signal</span><span class="op">]</span>, </span>
 <span>    found <span class="op">=</span> <span class="va">da_out</span><span class="op">$</span><span class="va">node</span>, only.leaf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       tpr </span></span>
@@ -478,7 +472,7 @@ come from four different samples (two from condition ‘A’ and two from
 condition ‘B’). We are interested in finding genes that are
 differentially expressed between the conditions (so called ‘state
 markers’) at some level of the clustering tree.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ds_tse</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"ds_sim_20_500_8de.rds"</span>, </span>
 <span>                              package <span class="op">=</span> <span class="st">"treeclimbR"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">ds_tse</span></span>
@@ -496,8 +490,9 @@ markers’) at some level of the clustering tree.</p>
 <span><span class="co">#&gt; rowLinks: NULL</span></span>
 <span><span class="co">#&gt; rowTree: NULL</span></span>
 <span><span class="co">#&gt; colLinks: a LinkDataFrame (500 rows)</span></span>
-<span><span class="co">#&gt; colTree: 1 phylo tree(s) (10 leaves)</span></span>
-<span></span>
+<span><span class="co">#&gt; colTree: 1 phylo tree(s) (10 leaves)</span></span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co">## Assignment of cells to high-resolution clusters, samples and conditions</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">ds_tse</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; DataFrame with 6 rows and 3 columns</span></span>
@@ -508,8 +503,9 @@ markers’) at some level of the clustering tree.</p>
 <span><span class="co">#&gt; 3          t1         4           B</span></span>
 <span><span class="co">#&gt; 4          t4         1           A</span></span>
 <span><span class="co">#&gt; 5          t6         1           A</span></span>
-<span><span class="co">#&gt; 6          t1         1           A</span></span>
-<span></span>
+<span><span class="co">#&gt; 6          t1         1           A</span></span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="co">## Tree providing the successive aggregation of the high-resolution clusters</span></span>
 <span><span class="co">## into more coarse-grained ones</span></span>
 <span><span class="co">## Node numbers are indicated in blue, node labels in orange</span></span>
@@ -524,7 +520,7 @@ expressed between the two conditions. Four genes are differentially
 expressed in all the clusters, two in clusters <code>t2</code>,
 <code>t6</code> and <code>t7</code>, and two in clusters <code>t4</code>
 and <code>t5</code>.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">rowData</a></span><span class="op">(</span><span class="va">ds_tse</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">rowData</a></span><span class="op">(</span><span class="va">ds_tse</span><span class="op">)</span><span class="op">$</span><span class="va">Signal</span> <span class="op">!=</span> <span class="st">"no"</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span> </span>
 <span><span class="co">#&gt; DataFrame with 8 rows and 1 column</span></span>
 <span><span class="co">#&gt;        Signal</span></span>
@@ -545,13 +541,14 @@ and <code>t5</code>.</p>
 the internal nodes. In this use case, it effectively corresponds to
 generating pseudobulk samples for each original sample and each internal
 node in the tree.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ds_se</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/aggDS.html">aggDS</a></span><span class="op">(</span>TSE <span class="op">=</span> <span class="va">ds_tse</span>, assay <span class="op">=</span> <span class="st">"counts"</span>, sample_id <span class="op">=</span> <span class="st">"sample_id"</span>, </span>
 <span>               group_id <span class="op">=</span> <span class="st">"group"</span>, cluster_id <span class="op">=</span> <span class="st">"cluster_id"</span>, FUN <span class="op">=</span> <span class="va">sum</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in TreeSummarizedExperiment::convertNode(tree = tree, node =</span></span>
 <span><span class="co">#&gt; as.character(cell_info$cluster_id)): Multiple nodes are found to have the same</span></span>
-<span><span class="co">#&gt; label.</span></span>
-<span><span class="va">ds_se</span></span>
+<span><span class="co">#&gt; label.</span></span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ds_se</span></span>
 <span><span class="co">#&gt; class: SummarizedExperiment </span></span>
 <span><span class="co">#&gt; dim: 20 4 </span></span>
 <span><span class="co">#&gt; metadata(3): experiment_info agg_pars n_cells</span></span>
@@ -566,7 +563,7 @@ contains the aggregated counts for all genes in all cells belonging to
 the corresponding node, split by sample ID.</p>
 <p>This object also stores information about the number of cells
 contributing to each node and sample</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/Annotated-class.html" class="external-link">metadata</a></span><span class="op">(</span><span class="va">ds_se</span><span class="op">)</span><span class="op">$</span><span class="va">n_cells</span></span>
 <span><span class="co">#&gt;            4   1   2   3</span></span>
 <span><span class="co">#&gt; alias_1   10   8  14  12</span></span>
@@ -596,7 +593,7 @@ contributing to each node and sample</p>
 above, <code>treeclimbR</code> provides a convenience function for
 applying <code>edgeR</code> on the aggregated counts for each node.
 However, any suitable method can be used.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ds_res</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/runDS.html">runDS</a></span><span class="op">(</span>SE <span class="op">=</span> <span class="va">ds_se</span>, tree <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/TreeSummarizedExperiment/man/TreeSummarizedExperiment-accessor.html" class="external-link">colTree</a></span><span class="op">(</span><span class="va">ds_tse</span><span class="op">)</span>, option <span class="op">=</span> <span class="st">"glmQL"</span>, </span>
 <span>                design <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></span><span class="op">(</span><span class="op">~</span> <span class="va">group</span>, data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">ds_se</span><span class="op">)</span><span class="op">)</span>, </span>
 <span>                contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, filter_min_count <span class="op">=</span> <span class="fl">0</span>, </span>
@@ -606,21 +603,23 @@ However, any suitable method can be used.</p>
 <p>As before, the output contains the <code>edgeR</code> results for
 each node, the tree, and the list of nodes that were dropped because of
 a too low count.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">ds_res</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "edgeR_results" "tree"          "nodes_drop"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">ds_res</span><span class="op">$</span><span class="va">edgeR_results</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "edgeR_results" "tree"          "nodes_drop"</span></span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">ds_res</span><span class="op">$</span><span class="va">edgeR_results</span><span class="op">)</span></span>
 <span><span class="co">#&gt;  [1] "alias_1"  "alias_2"  "alias_3"  "alias_4"  "alias_5"  "alias_6" </span></span>
 <span><span class="co">#&gt;  [7] "alias_7"  "alias_8"  "alias_9"  "alias_10" "alias_11" "alias_12"</span></span>
 <span><span class="co">#&gt; [13] "alias_13" "alias_14" "alias_15" "alias_16" "alias_17" "alias_18"</span></span>
 <span><span class="co">#&gt; [19] "alias_19"</span></span></code></pre></div>
 <p>We can create a table with the node results as well. Note that this
 table contains the results from all genes (features) at all nodes.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ds_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nodeResult.html">nodeResult</a></span><span class="op">(</span><span class="va">ds_res</span>, type <span class="op">=</span> <span class="st">"DS"</span>, n <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">ds_tbl</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 380   7</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ds_tbl</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 380   7</span></span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ds_tbl</span><span class="op">)</span></span>
 <span><span class="co">#&gt;           logFC   logCPM        F       PValue          FDR node feature</span></span>
 <span><span class="co">#&gt; 3...1  1.646829 16.31850 2820.310 1.032871e-38 3.924909e-36   11       3</span></span>
 <span><span class="co">#&gt; 5...2 -1.577228 16.18364 2634.842 3.949546e-38 7.504137e-36   13       5</span></span>
@@ -636,7 +635,7 @@ table contains the results from all genes (features) at all nodes.</p>
 This is done separately for each gene - hence, we first split the result
 table above by the <code>feature</code> column, and then run
 <code><a href="../reference/getCand.html">getCand()</a></code> for each subtable.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Split result table by feature</span></span>
 <span><span class="va">ds_tbl_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/S4Vectors/man/splitAsList.html" class="external-link">split</a></span><span class="op">(</span><span class="va">ds_tbl</span>, f <span class="op">=</span> <span class="va">ds_tbl</span><span class="op">$</span><span class="va">feature</span><span class="op">)</span></span>
 <span></span>
@@ -659,7 +658,7 @@ table above by the <code>feature</code> column, and then run
 </h3>
 <p>We can then find the optimal candidate using the
 <code><a href="../reference/evalCand.html">evalCand()</a></code> function, and list the top hits.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ds_best</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/evalCand.html">evalCand</a></span><span class="op">(</span>tree <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/TreeSummarizedExperiment/man/TreeSummarizedExperiment-accessor.html" class="external-link">colTree</a></span><span class="op">(</span><span class="va">ds_tse</span><span class="op">)</span>, type <span class="op">=</span> <span class="st">"multiple"</span>, </span>
 <span>                    levels <span class="op">=</span> <span class="va">ds_cand_list</span>, score_data <span class="op">=</span> <span class="va">ds_tbl_list</span>, </span>
 <span>                    node_column <span class="op">=</span> <span class="st">"node"</span>, </span>
@@ -702,7 +701,7 @@ aggregated to different nodes in the tree. Features 1, 3, 5 and 6 are
 aggregated to node 11, features 2 and 4 to node 13, and features 7 and 8
 to nodes 5 and 9. Let’s see which leaves these internal nodes correspond
 to.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/TreeSummarizedExperiment/man/findDescendant.html" class="external-link">findDescendant</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/TreeSummarizedExperiment/man/TreeSummarizedExperiment-accessor.html" class="external-link">colTree</a></span><span class="op">(</span><span class="va">ds_tse</span><span class="op">)</span>, node <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11</span>, <span class="fl">13</span>, <span class="fl">5</span>, <span class="fl">9</span><span class="op">)</span>, </span>
 <span>                      self.include <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>                      use.alias <span class="op">=</span> <span class="cn">FALSE</span>, only.leaf <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, </span>
@@ -722,7 +721,7 @@ to.</p>
 that each gene has been aggregated to the lowest node level that
 contains all the original subpopulations where the gene was simulated to
 be differentially expressed between conditions A and B:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">rowData</a></span><span class="op">(</span><span class="va">ds_tse</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">rowData</a></span><span class="op">(</span><span class="va">ds_tse</span><span class="op">)</span><span class="op">$</span><span class="va">Signal</span> <span class="op">!=</span> <span class="st">"no"</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span> </span>
 <span><span class="co">#&gt; DataFrame with 8 rows and 1 column</span></span>
 <span><span class="co">#&gt;        Signal</span></span>
@@ -748,7 +747,7 @@ experimental data sets can be found on <a href="https://github.com/fionarhuang/t
 </h2>
 <details><summary><b> This document was executed with the following package versions
 (click to expand) </b>
-</summary><div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+</summary><div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.4.0 (2024-04-24)</span></span>
 <span><span class="co">#&gt; Platform: aarch64-apple-darwin20</span></span>
@@ -770,50 +769,50 @@ experimental data sets can be found on <a href="https://github.com/fionarhuang/t
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
 <span><span class="co">#&gt;  [1] ggplot2_3.5.1                   dplyr_1.1.4                    </span></span>
-<span><span class="co">#&gt;  [3] ggtree_3.11.2                   treeclimbR_1.1.0               </span></span>
-<span><span class="co">#&gt;  [5] TreeSummarizedExperiment_2.11.0 Biostrings_2.71.6              </span></span>
-<span><span class="co">#&gt;  [7] XVector_0.43.1                  SingleCellExperiment_1.25.1    </span></span>
-<span><span class="co">#&gt;  [9] SummarizedExperiment_1.33.3     Biobase_2.63.1                 </span></span>
-<span><span class="co">#&gt; [11] GenomicRanges_1.55.4            GenomeInfoDb_1.39.14           </span></span>
-<span><span class="co">#&gt; [13] IRanges_2.37.1                  S4Vectors_0.41.7               </span></span>
-<span><span class="co">#&gt; [15] BiocGenerics_0.49.1             MatrixGenerics_1.15.1          </span></span>
-<span><span class="co">#&gt; [17] matrixStats_1.3.0               BiocStyle_2.31.0               </span></span>
+<span><span class="co">#&gt;  [3] ggtree_3.12.0                   treeclimbR_1.1.0               </span></span>
+<span><span class="co">#&gt;  [5] TreeSummarizedExperiment_2.12.0 Biostrings_2.72.0              </span></span>
+<span><span class="co">#&gt;  [7] XVector_0.44.0                  SingleCellExperiment_1.26.0    </span></span>
+<span><span class="co">#&gt;  [9] SummarizedExperiment_1.34.0     Biobase_2.64.0                 </span></span>
+<span><span class="co">#&gt; [11] GenomicRanges_1.56.0            GenomeInfoDb_1.40.0            </span></span>
+<span><span class="co">#&gt; [13] IRanges_2.38.0                  S4Vectors_0.42.0               </span></span>
+<span><span class="co">#&gt; [15] BiocGenerics_0.50.0             MatrixGenerics_1.16.0          </span></span>
+<span><span class="co">#&gt; [17] matrixStats_1.3.0               BiocStyle_2.32.0               </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
 <span><span class="co">#&gt;   [1] RColorBrewer_1.1-3          jsonlite_1.8.8             </span></span>
 <span><span class="co">#&gt;   [3] shape_1.4.6.1               magrittr_2.0.3             </span></span>
-<span><span class="co">#&gt;   [5] TH.data_1.1-2               farver_2.1.1               </span></span>
-<span><span class="co">#&gt;   [7] nloptr_2.0.3                rmarkdown_2.26             </span></span>
+<span><span class="co">#&gt;   [5] TH.data_1.1-2               farver_2.1.2               </span></span>
+<span><span class="co">#&gt;   [7] nloptr_2.0.3                rmarkdown_2.26.2           </span></span>
 <span><span class="co">#&gt;   [9] GlobalOptions_0.1.2         fs_1.6.4                   </span></span>
-<span><span class="co">#&gt;  [11] zlibbioc_1.49.3             ragg_1.3.0                 </span></span>
+<span><span class="co">#&gt;  [11] zlibbioc_1.50.0             ragg_1.3.2                 </span></span>
 <span><span class="co">#&gt;  [13] vctrs_0.6.5                 memoise_2.0.1              </span></span>
 <span><span class="co">#&gt;  [15] minqa_1.2.6                 rstatix_0.7.2              </span></span>
-<span><span class="co">#&gt;  [17] htmltools_0.5.8.1           S4Arrays_1.3.7             </span></span>
+<span><span class="co">#&gt;  [17] htmltools_0.5.8.1           S4Arrays_1.4.0             </span></span>
 <span><span class="co">#&gt;  [19] broom_1.0.5                 gridGraphics_0.5-1         </span></span>
-<span><span class="co">#&gt;  [21] SparseArray_1.3.7           sass_0.4.9                 </span></span>
+<span><span class="co">#&gt;  [21] SparseArray_1.4.3           sass_0.4.9                 </span></span>
 <span><span class="co">#&gt;  [23] bslib_0.7.0                 desc_1.4.3                 </span></span>
 <span><span class="co">#&gt;  [25] plyr_1.8.9                  sandwich_3.1-0             </span></span>
-<span><span class="co">#&gt;  [27] zoo_1.8-12                  cachem_1.0.8               </span></span>
+<span><span class="co">#&gt;  [27] zoo_1.8-12                  cachem_1.1.0               </span></span>
 <span><span class="co">#&gt;  [29] igraph_2.0.3                lifecycle_1.0.4            </span></span>
 <span><span class="co">#&gt;  [31] iterators_1.0.14            pkgconfig_2.0.3            </span></span>
 <span><span class="co">#&gt;  [33] Matrix_1.7-0                R6_2.5.1                   </span></span>
-<span><span class="co">#&gt;  [35] fastmap_1.1.1               GenomeInfoDbData_1.2.12    </span></span>
+<span><span class="co">#&gt;  [35] fastmap_1.2.0               GenomeInfoDbData_1.2.12    </span></span>
 <span><span class="co">#&gt;  [37] clue_0.3-65                 aplot_0.2.2                </span></span>
 <span><span class="co">#&gt;  [39] digest_0.6.35               colorspace_2.1-0           </span></span>
 <span><span class="co">#&gt;  [41] ggnewscale_0.4.10           patchwork_1.2.0            </span></span>
 <span><span class="co">#&gt;  [43] textshaping_0.3.7           ggpubr_0.6.0               </span></span>
-<span><span class="co">#&gt;  [45] labeling_0.4.3              cytolib_2.15.3             </span></span>
+<span><span class="co">#&gt;  [45] labeling_0.4.3              cytolib_2.16.0             </span></span>
 <span><span class="co">#&gt;  [47] fansi_1.0.6                 colorRamps_2.3.4           </span></span>
 <span><span class="co">#&gt;  [49] httr_1.4.7                  polyclip_1.10-6            </span></span>
 <span><span class="co">#&gt;  [51] abind_1.4-5                 compiler_4.4.0             </span></span>
 <span><span class="co">#&gt;  [53] withr_3.0.0                 doParallel_1.0.17          </span></span>
-<span><span class="co">#&gt;  [55] ConsensusClusterPlus_1.67.0 backports_1.4.1            </span></span>
-<span><span class="co">#&gt;  [57] BiocParallel_1.37.1         viridis_0.6.5              </span></span>
+<span><span class="co">#&gt;  [55] ConsensusClusterPlus_1.68.0 backports_1.4.1            </span></span>
+<span><span class="co">#&gt;  [57] BiocParallel_1.38.0         viridis_0.6.5              </span></span>
 <span><span class="co">#&gt;  [59] carData_3.0-5               highr_0.10                 </span></span>
 <span><span class="co">#&gt;  [61] ggforce_0.4.2               ggsignif_0.6.4             </span></span>
-<span><span class="co">#&gt;  [63] MASS_7.3-60.2               DelayedArray_0.29.9        </span></span>
-<span><span class="co">#&gt;  [65] rjson_0.2.21                FlowSOM_2.11.0             </span></span>
-<span><span class="co">#&gt;  [67] diffcyt_1.23.1              tools_4.4.0                </span></span>
+<span><span class="co">#&gt;  [63] MASS_7.3-60.2               DelayedArray_0.30.1        </span></span>
+<span><span class="co">#&gt;  [65] rjson_0.2.21                FlowSOM_2.12.0             </span></span>
+<span><span class="co">#&gt;  [67] diffcyt_1.24.0              tools_4.4.0                </span></span>
 <span><span class="co">#&gt;  [69] ape_5.8                     glue_1.7.0                 </span></span>
 <span><span class="co">#&gt;  [71] nlme_3.1-164                grid_4.4.0                 </span></span>
 <span><span class="co">#&gt;  [73] Rtsne_0.17                  reshape2_1.4.4             </span></span>
@@ -822,22 +821,22 @@ experimental data sets can be found on <a href="https://github.com/fionarhuang/t
 <span><span class="co">#&gt;  [79] car_3.1-2                   utf8_1.2.4                 </span></span>
 <span><span class="co">#&gt;  [81] stringr_1.5.1               foreach_1.5.2              </span></span>
 <span><span class="co">#&gt;  [83] pillar_1.9.0                yulab.utils_0.1.4          </span></span>
-<span><span class="co">#&gt;  [85] limma_3.59.10               circlize_0.4.16            </span></span>
-<span><span class="co">#&gt;  [87] splines_4.4.0               flowCore_2.15.3            </span></span>
-<span><span class="co">#&gt;  [89] tweenr_2.0.3                treeio_1.27.1              </span></span>
+<span><span class="co">#&gt;  [85] limma_3.60.0                circlize_0.4.16            </span></span>
+<span><span class="co">#&gt;  [87] splines_4.4.0               flowCore_2.16.0            </span></span>
+<span><span class="co">#&gt;  [89] tweenr_2.0.3                treeio_1.28.0              </span></span>
 <span><span class="co">#&gt;  [91] lattice_0.22-6              survival_3.6-4             </span></span>
-<span><span class="co">#&gt;  [93] dirmult_0.1.3-5             RProtoBufLib_2.15.1        </span></span>
-<span><span class="co">#&gt;  [95] tidyselect_1.2.1            ComplexHeatmap_2.19.0      </span></span>
+<span><span class="co">#&gt;  [93] dirmult_0.1.3-5             RProtoBufLib_2.16.0        </span></span>
+<span><span class="co">#&gt;  [95] tidyselect_1.2.1            ComplexHeatmap_2.20.0      </span></span>
 <span><span class="co">#&gt;  [97] locfit_1.5-9.9              knitr_1.46                 </span></span>
 <span><span class="co">#&gt;  [99] gridExtra_2.3               bookdown_0.39              </span></span>
-<span><span class="co">#&gt; [101] edgeR_4.1.31                xfun_0.43                  </span></span>
-<span><span class="co">#&gt; [103] statmod_1.5.0               stringi_1.8.3              </span></span>
-<span><span class="co">#&gt; [105] UCSC.utils_0.99.7           ggfun_0.1.4                </span></span>
+<span><span class="co">#&gt; [101] edgeR_4.2.0                 xfun_0.44                  </span></span>
+<span><span class="co">#&gt; [103] statmod_1.5.0               stringi_1.8.4              </span></span>
+<span><span class="co">#&gt; [105] UCSC.utils_1.0.0            ggfun_0.1.4                </span></span>
 <span><span class="co">#&gt; [107] lazyeval_0.2.2              yaml_2.3.8                 </span></span>
 <span><span class="co">#&gt; [109] boot_1.3-30                 evaluate_0.23              </span></span>
 <span><span class="co">#&gt; [111] codetools_0.2-20            tibble_3.2.1               </span></span>
-<span><span class="co">#&gt; [113] BiocManager_1.30.22         ggplotify_0.1.2            </span></span>
-<span><span class="co">#&gt; [115] cli_3.6.2                   systemfonts_1.0.6          </span></span>
+<span><span class="co">#&gt; [113] BiocManager_1.30.23         ggplotify_0.1.2            </span></span>
+<span><span class="co">#&gt; [115] cli_3.6.2                   systemfonts_1.1.0          </span></span>
 <span><span class="co">#&gt; [117] munsell_0.5.1               jquerylib_0.1.4            </span></span>
 <span><span class="co">#&gt; [119] Rcpp_1.0.12                 png_0.1-8                  </span></span>
 <span><span class="co">#&gt; [121] XML_3.99-0.16.1             parallel_4.4.0             </span></span>
@@ -862,34 +861,20 @@ Hierarchical Hypotheses.”</span> <em>Genome Biology</em> 22 (1): 157.
 </div>
 </div>
   </div>
-
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
         <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
     </nav>
 </div>
-
 </div>
-
-
-
       <footer><div class="copyright">
   <p></p>
 <p>Developed by Ruizhu Huang, Charlotte Soneson.</p>
 </div>
-
 <div class="pkgdown">
   <p></p>
 <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
 </div>
-
       </footer>
 </div>
-
-  
-
-
-  
-
   </body>
 </html>
