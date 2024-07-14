@@ -6,6 +6,8 @@ each entity."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/lib
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
+
+
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -21,6 +23,7 @@ each entity."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/lib
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav"><li>
   <a href="../articles/treeclimbR.html">Get started</a>
@@ -34,24 +37,30 @@ each entity."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/lib
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/csoneson/treeclimbR/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
+
+
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Wrapper applying an edgeR differential analysis workflow</h1>
-    <small class="dont-index">Source: <a href="https://github.com/csoneson/treeclimbR/blob/HEAD/R/edgerWrp.R" class="external-link"><code>R/edgerWrp.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/csoneson/treeclimbR/blob/devel/R/edgerWrp.R" class="external-link"><code>R/edgerWrp.R</code></a></small>
     <div class="hidden name"><code>edgerWrp.Rd</code></div>
     </div>
+
     <div class="ref-description">
     <p><code>edgerWrp</code> is a wrapper using functions from the <code>edgeR</code>
 package (Robinson et al. 2010, <em>Bioinformatics</em>; McCarthy et al. 2012,
 <em>Nucleic Acids Research</em>) to fit models and perform a moderated test for
 each entity.</p>
     </div>
+
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">edgerWrp</span><span class="op">(</span></span>
 <span>  <span class="va">count</span>,</span>
@@ -64,14 +73,21 @@ each entity.</p>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt id="arg-count">count<a class="anchor" aria-label="anchor" href="#arg-count"></a></dt>
+
+
+<dl><dt id="arg-count">count<a class="anchor" aria-label="anchor" href="#arg-count"></a></dt>
 <dd><p>A matrix with features (e.g., genes or microbes) in rows and
 samples in columns.</p></dd>
+
+
 <dt id="arg-lib-size">lib_size<a class="anchor" aria-label="anchor" href="#arg-lib-size"></a></dt>
 <dd><p>A numeric vector with library sizes for each sample. If
 <code>NULL</code> (default), the column sums of <code>count</code> are used.</p></dd>
+
+
 <dt id="arg-option">option<a class="anchor" aria-label="anchor" href="#arg-option"></a></dt>
 <dd><p>Either <code>"glm"</code> or <code>"glmQL"</code>. If <code>"glm"</code>,
 <code><a href="https://rdrr.io/pkg/edgeR/man/glmfit.html" class="external-link">glmFit</a></code> and <code><a href="https://rdrr.io/pkg/edgeR/man/glmLRT.html" class="external-link">glmLRT</a></code> are used;
@@ -79,11 +95,15 @@ otherwise, <code><a href="https://rdrr.io/pkg/edgeR/man/glmQLFit.html" class="ex
 <code><a href="https://rdrr.io/pkg/edgeR/man/glmQLFTest.html" class="external-link">glmQLFTest</a></code> are used. Details about the difference
 between the two options can be found in the help pages of
 <code><a href="https://rdrr.io/pkg/edgeR/man/glmQLFit.html" class="external-link">glmQLFit</a></code>.</p></dd>
+
+
 <dt id="arg-design">design<a class="anchor" aria-label="anchor" href="#arg-design"></a></dt>
 <dd><p>A numeric design matrix, e.g. created by
 <code><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></code>. Please refer to <code>design</code> in
 <code><a href="https://rdrr.io/pkg/edgeR/man/glmQLFit.html" class="external-link">glmQLFit</a></code> and <code><a href="https://rdrr.io/pkg/edgeR/man/glmfit.html" class="external-link">glmFit</a></code> for
 more details.</p></dd>
+
+
 <dt id="arg-contrast">contrast<a class="anchor" aria-label="anchor" href="#arg-contrast"></a></dt>
 <dd><p>A numeric vector specifying one contrast of
 the linear model coefficients to be tested. Its length
@@ -91,20 +111,27 @@ must equal the number of columns of <code>design</code>. If <code>NULL</code>, t
 last coefficient will be tested. Please refer to <code>contrast</code>
 in <code><a href="https://rdrr.io/pkg/edgeR/man/glmQLFTest.html" class="external-link">glmQLFTest</a></code> and <code><a href="https://rdrr.io/pkg/edgeR/man/glmLRT.html" class="external-link">glmLRT</a></code> for
 more details.</p></dd>
+
+
 <dt id="arg-normalize">normalize<a class="anchor" aria-label="anchor" href="#arg-normalize"></a></dt>
 <dd><p>A logical scalar, specifying whether normalization factors
 should be calculated (using <code><a href="https://rdrr.io/pkg/edgeR/man/calcNormFactors.html" class="external-link">calcNormFactors</a></code>).</p></dd>
+
+
 <dt id="arg-normalize-method">normalize_method<a class="anchor" aria-label="anchor" href="#arg-normalize-method"></a></dt>
 <dd><p>Normalization method to be used. Please refer to
 <code>method</code> in <code><a href="https://rdrr.io/pkg/edgeR/man/calcNormFactors.html" class="external-link">calcNormFactors</a></code> for more details.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>More arguments to pass to <code><a href="https://rdrr.io/pkg/edgeR/man/glmfit.html" class="external-link">glmFit</a></code>
 (if <code>option = "glm"</code> or <code><a href="https://rdrr.io/pkg/edgeR/man/glmQLFit.html" class="external-link">glmQLFit</a></code>
 (if <code>option = "glmQL"</code>).</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-<p>The output of <code><a href="https://rdrr.io/pkg/edgeR/man/glmQLFTest.html" class="external-link">glmQLFTest</a></code> or
+    <p>The output of <code><a href="https://rdrr.io/pkg/edgeR/man/glmQLFTest.html" class="external-link">glmQLFTest</a></code> or
 <code><a href="https://rdrr.io/pkg/edgeR/man/glmLRT.html" class="external-link">glmLRT</a></code> depending on the specified <code>option</code>.</p>
     </div>
     <div id="details">
@@ -124,6 +151,7 @@ QLF edgeR workflows (i.e., either <code><a href="https://rdrr.io/pkg/edgeR/man/g
     <h2>Author</h2>
     <p>Ruizhu Huang</p>
     </div>
+
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="op">{</span></span></span>
@@ -151,12 +179,22 @@ QLF edgeR workflows (i.e., either <code><a href="https://rdrr.io/pkg/edgeR/man/g
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
     </nav></div>
 </div>
+
+
       <footer><div class="copyright">
   <p></p><p>Developed by Ruizhu Huang, Charlotte Soneson.</p>
 </div>
+
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.9000.</p>
 </div>
+
       </footer></div>
+
+
+
+
+
+
   </body></html>
 

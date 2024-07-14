@@ -11,6 +11,8 @@ to update those in higher level of the tree until the root is reached."><!-- mat
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
+
+
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -26,6 +28,7 @@ to update those in higher level of the tree until the root is reached."><!-- mat
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.0</span>
       </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav"><li>
   <a href="../articles/treeclimbR.html">Get started</a>
@@ -39,18 +42,23 @@ to update those in higher level of the tree until the root is reached."><!-- mat
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/csoneson/treeclimbR/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
+
+
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Generate weighted tree score accounting for the family effect</h1>
-    <small class="dont-index">Source: <a href="https://github.com/csoneson/treeclimbR/blob/HEAD/R/treeScore.R" class="external-link"><code>R/treeScore.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/csoneson/treeclimbR/blob/devel/R/treeScore.R" class="external-link"><code>R/treeScore.R</code></a></small>
     <div class="hidden name"><code>treeScore.Rd</code></div>
     </div>
+
     <div class="ref-description">
     <p><code>treeScore</code> takes the tree structure into account when calculating the
 score for an internal node. If an internal node A has two children B and C,
@@ -62,35 +70,49 @@ calculation would be \((Score\_A * 5 + Score\_B * 2 +Score\_C * 3)/10\).
 The generation starts from the leaves and the new generated scores are used
 to update those in higher level of the tree until the root is reached.</p>
     </div>
+
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">treeScore</span><span class="op">(</span><span class="va">tree</span>, <span class="va">score_data</span>, <span class="va">node_column</span>, <span class="va">score_column</span>, <span class="va">new_score</span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt id="arg-tree">tree<a class="anchor" aria-label="anchor" href="#arg-tree"></a></dt>
+
+
+<dl><dt id="arg-tree">tree<a class="anchor" aria-label="anchor" href="#arg-tree"></a></dt>
 <dd><p>A <code>phylo</code> object.</p></dd>
+
+
 <dt id="arg-score-data">score_data<a class="anchor" aria-label="anchor" href="#arg-score-data"></a></dt>
 <dd><p>A data frame that includes at least two columns. One column
 stores the number of the node, and the other stores the original score of
 the corresponding node.</p></dd>
+
+
 <dt id="arg-node-column">node_column<a class="anchor" aria-label="anchor" href="#arg-node-column"></a></dt>
 <dd><p>The name of the column of <code>score_data</code> that contains
 the numbers of the nodes.</p></dd>
+
+
 <dt id="arg-score-column">score_column<a class="anchor" aria-label="anchor" href="#arg-score-column"></a></dt>
 <dd><p>The name of the column of <code>score_data</code> that
 contains the original scores of the nodes.</p></dd>
+
+
 <dt id="arg-new-score">new_score<a class="anchor" aria-label="anchor" href="#arg-new-score"></a></dt>
 <dd><p>The name of the column that stores the generated score.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-<p>A <code>data.frame</code> similar to <code>score_data</code>, but with an
+    <p>A <code>data.frame</code> similar to <code>score_data</code>, but with an
 extra column (named <code>new_score</code>) containing the weighted scores.</p>
     </div>
     <div id="author">
     <h2>Author</h2>
     <p>Ruizhu Huang</p>
     </div>
+
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="op">{</span></span></span>
@@ -134,12 +156,22 @@ extra column (named <code>new_score</code>) containing the weighted scores.</p>
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
     </nav></div>
 </div>
+
+
       <footer><div class="copyright">
   <p></p><p>Developed by Ruizhu Huang, Charlotte Soneson.</p>
 </div>
+
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.9000.</p>
 </div>
+
       </footer></div>
+
+
+
+
+
+
   </body></html>
 
