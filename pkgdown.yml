@@ -1,6 +1,9 @@
 pandoc: 3.1.11
-pkgdown: 2.1.0.9000
-pkgdown_sha: 502c3e2ce0df6c7236d87098637073eaba61c5f4
+pkgdown: 2.1.1.9000
+pkgdown_sha: 71fd32ce95f17b379e57e7e33f2294bc034727fd
 articles:
   treeclimbR: treeclimbR.html
-last_built: 2024-08-04T08:16Z
+last_built: 2024-10-11T06:35Z
+urls:
+  reference: https://csoneson.github.io/treeclimbR/reference
+  article: https://csoneson.github.io/treeclimbR/articles
