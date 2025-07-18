@@ -129,8 +129,10 @@ runDS <- function(SE, tree, option = c("glm", "glmQL"),
     ind_cell <- apply(ncell, 1, FUN = function(x) {
         sum(x >= min_cells) >= 0.5 * length(x)
     })
-    message(sum(!ind_cell), " nodes are ignored, as they don't contain ",
-            "at least ", min_cells, " cells in at least half of the samples.")
+    if (message) {
+        message(sum(!ind_cell), " nodes are ignored, as they don't contain ",
+                "at least ", min_cells, " cells in at least half of the samples.")
+    }
     rem_nodes <- alias[!ind_cell]
     alias <- alias[ind_cell]
 
