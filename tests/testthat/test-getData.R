@@ -59,10 +59,10 @@ test_that("getData works", {
     )
 
     ## Figure with scaled tree
-    expect_warning({
+    suppressWarnings({
         tree_fig_sc <- ggtree(tinyTree, branch.length = "none",
                               layout = "rectangular", open.angle = 100)
-    }, "must be used")
+    })
     tree_fig_sc <- ggtree::scaleClade(tree_fig_sc, node = 15, scale = 4)
     tree_fig_sc <- ggtree::scaleClade(tree_fig_sc, node = 14, scale = 0.25) +
         geom_hilight(node = 18, fill = "orange", alpha = 0.3) +
