@@ -1,6 +1,6 @@
 test_that("Dirichlet multinomial parameter estimation works", {
-    library(TreeSummarizedExperiment)
-    library(dirmult)
+    suppressPackageStartupMessages(library(TreeSummarizedExperiment))
+    suppressPackageStartupMessages(library(dirmult))
     set.seed(1)
     y <- matrix(rnbinom(200, size = 1, mu = 10), nrow = 10)
     colnames(y) <- paste("S", seq_len(20), sep = "")
@@ -32,9 +32,9 @@ test_that("Dirichlet multinomial parameter estimation works", {
     ## Test that function works with correct input
     ## -------------------------------------------------------------------------
     set.seed(1L)
-    res <- parEstimate(obj = toy_tse, assay = 1)
+    suppressMessages(res <- parEstimate(obj = toy_tse, assay = 1))
     set.seed(1L)
-    res2 <- parEstimate(obj = toy_tse, assay = NULL)
+    suppressMessages(res2 <- parEstimate(obj = toy_tse, assay = NULL))
     expect_equal(res, res2)
     expect_s4_class(res, "TreeSummarizedExperiment")
     expect_equal(dim(res), dim(toy_tse))
@@ -60,7 +60,7 @@ test_that("Dirichlet multinomial parameter estimation works", {
                                pi = c(0.05, 0.1, 0.15, 0.2, 0.5), theta = 0.25)
     simdat <- simdatL$data
     colnames(simdat) <- paste0("X", seq_len(ncol(simdat)))
-    res <- parEstimate(t(simdat))
+    suppressMessages(res <- parEstimate(t(simdat)))
     expect_type(res, "list")
     expect_named(res, c("pi", "theta"))
     expect_length(res$pi, 5)

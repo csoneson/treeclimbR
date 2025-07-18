@@ -1,12 +1,14 @@
 test_that("getData works", {
     ## Generate some data
     ## -------------------------------------------------------------------------
-    library(TreeSummarizedExperiment)
-    library(ggtree)
-    library(ggplot2)
-    library(ggnewscale)
-    library(viridis)
-    library(dplyr)
+    suppressPackageStartupMessages({
+        library(TreeSummarizedExperiment)
+        library(ggtree)
+        library(ggplot2)
+        library(ggnewscale)
+        library(viridis)
+        library(dplyr)
+    })
 
     data(tinyTree)
 
@@ -28,10 +30,12 @@ test_that("getData works", {
     names(col_split) <- colnames(ct)
 
     ## Prepare the heatmaps
-    tree_fig <- ggtree(tinyTree, branch.length = "none",
-                       layout = "rectangular", open.angle = 100) +
-        geom_hilight(node = 18, fill = "orange", alpha = 0.3) +
-        geom_hilight(node = 13, fill = "blue", alpha = 0.3)
+    suppressWarnings({
+        tree_fig <- ggtree(tinyTree, branch.length = "none",
+                           layout = "rectangular", open.angle = 100) +
+            geom_hilight(node = 18, fill = "orange", alpha = 0.3) +
+            geom_hilight(node = 13, fill = "blue", alpha = 0.3)
+    })
     fig <- TreeHeatmap(
         tree = tinyTree, tree_fig = tree_fig, hm_data = ct,
         cluster_column = TRUE, column_split = col_split,
@@ -55,8 +59,10 @@ test_that("getData works", {
     )
 
     ## Figure with scaled tree
-    tree_fig_sc <- ggtree(tinyTree, branch.length = "none",
-           layout = "rectangular", open.angle = 100)
+    expect_warning({
+        tree_fig_sc <- ggtree(tinyTree, branch.length = "none",
+                              layout = "rectangular", open.angle = 100)
+    }, "must be used")
     tree_fig_sc <- ggtree::scaleClade(tree_fig_sc, node = 15, scale = 4)
     tree_fig_sc <- ggtree::scaleClade(tree_fig_sc, node = 14, scale = 0.25) +
         geom_hilight(node = 18, fill = "orange", alpha = 0.3) +

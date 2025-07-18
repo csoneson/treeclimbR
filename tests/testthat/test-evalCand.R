@@ -1,6 +1,6 @@
 test_that(".pseudoLeaf works", {
-    library(TreeSummarizedExperiment)
-    library(ggtree)
+    suppressPackageStartupMessages(library(TreeSummarizedExperiment))
+    suppressPackageStartupMessages(library(ggtree))
     data(tinyTree)
     set.seed(1)
     pv <- runif(19, 0, 1)
@@ -41,7 +41,7 @@ test_that(".pseudoLeaf works", {
 
 test_that("evalCand works", {
     ## Generate some data
-    library(TreeSummarizedExperiment)
+    suppressPackageStartupMessages(library(TreeSummarizedExperiment))
     data(tinyTree)
     set.seed(1)
     pv <- runif(19, 0, 1)
@@ -445,16 +445,18 @@ test_that("evalCand works", {
                  ignore_attr = TRUE)
 
     ## Multiple - use pseudo leaf
-    out <- evalCand(tree = tinyTree, type = "multiple",
-                    levels = list(gene1 = ll$candidate_list,
-                                  gene2 = llna$candidate_list),
-                    score_data = list(gene1 = ll$score_data,
-                                      gene2 = llna$score_data),
-                    node_column = "node", p_column = "pvalue",
-                    sign_column = "foldChange",
-                    feature_column = "feature", method = "BH",
-                    limit_rej = 0.05, use_pseudo_leaf = TRUE,
-                    message = TRUE)
+    suppressMessages({
+        out <- evalCand(tree = tinyTree, type = "multiple",
+                        levels = list(gene1 = ll$candidate_list,
+                                      gene2 = llna$candidate_list),
+                        score_data = list(gene1 = ll$score_data,
+                                          gene2 = llna$score_data),
+                        node_column = "node", p_column = "pvalue",
+                        sign_column = "foldChange",
+                        feature_column = "feature", method = "BH",
+                        limit_rej = 0.05, use_pseudo_leaf = TRUE,
+                        message = TRUE)
+    })
     expect_type(out, "list")
     expect_named(out, c("candidate_best", "output", "candidate_list",
                         "level_info", "FDR", "method", "column_info"))

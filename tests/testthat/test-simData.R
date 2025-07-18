@@ -1,6 +1,8 @@
 test_that("simData works", {
     ## Generate data to use as the starting point
+    suppressPackageStartupMessages(library(TreeSummarizedExperiment))
     set.seed(1L)
+    data(tinyTree)
     y <- matrix(rnbinom(120, size = 1, mu = 10), nrow = 10)
     colnames(y) <- paste("S", seq_len(12), sep = "")
     rownames(y) <- tinyTree$tip.label
@@ -57,27 +59,27 @@ test_that("simData works", {
 
     args <- args0
     args$from.A <- "missing"
-    expect_error(do.call(simData, args),
-                 "The provided from.A is not a node in the tree")
+    suppressMessages(expect_error(do.call(simData, args),
+                                  "The provided from.A is not a node in the tree"))
     args <- args0
     args$from.A <- 100
-    expect_error(do.call(simData, args),
-                 "The provided from.A is not a node in the tree")
+    suppressMessages(expect_error(do.call(simData, args),
+                                  "The provided from.A is not a node in the tree"))
     args$from.A <- TRUE
-    expect_error(do.call(simData, args),
-                 "from.A must be a character or numeric value")
+    suppressMessages(expect_error(do.call(simData, args),
+                                  "from.A must be a character or numeric value"))
 
     args <- args0
     args$from.A <- 14
     args$from.B <- "missing"
-    expect_error(do.call(simData, args),
-                 "The provided from.B is not a node in the tree")
+    suppressMessages(expect_error(do.call(simData, args),
+                                  "The provided from.B is not a node in the tree"))
     args$from.B <- 100
-    expect_error(do.call(simData, args),
-                 "The provided from.B is not a node in the tree")
+    suppressMessages(expect_error(do.call(simData, args),
+                                  "The provided from.B is not a node in the tree"))
     args$from.B <- TRUE
-    expect_error(do.call(simData, args),
-                 "from.B must be a character or numeric value")
+    suppressMessages(expect_error(do.call(simData, args),
+                                  "from.B must be a character or numeric value"))
 
     args <- args0
     args$minTip.A <- "x"
@@ -88,8 +90,8 @@ test_that("simData works", {
                  "'minTip.A' must have length 1")
     args$minTip.A <- 5
     args$maxTip.A <- 3
-    expect_error(do.call(simData, args),
-                 "No nodes fulfill the requirements")
+    suppressMessages(expect_error(do.call(simData, args),
+                                  "No nodes fulfill the requirements"))
 
     args <- args0
     args$minTip.B <- "x"
@@ -121,8 +123,8 @@ test_that("simData works", {
     expect_error(do.call(simData, args),
                  "'maxPr.A' must be within [0,1]", fixed = TRUE)
     args$maxPr.A <- 0
-    expect_error(do.call(simData, args),
-                 "maxPr.A is lower than the minimum", fixed = TRUE)
+    suppressMessages(expect_error(do.call(simData, args),
+                                  "maxPr.A is lower than the minimum", fixed = TRUE))
 
     args <- args0
     args$ratio <- "x"
@@ -132,15 +134,18 @@ test_that("simData works", {
     expect_error(do.call(simData, args),
                  "'ratio' must have length 1")
     args$ratio <- 100
-    expect_error(do.call(simData, args),
-                 "Could not find two branches which fulfill the requirement")
+    suppressMessages(expect_error(
+        do.call(simData, args),
+        "Could not find two branches which fulfill the requirement"))
     args$ratio <- 0.0001
-    expect_error(do.call(simData, args),
-                 "Could not find two branches which fulfill the requirement")
+    suppressMessages(expect_error(
+        do.call(simData, args),
+        "Could not find two branches which fulfill the requirement"))
     args$ratio <- 4
     args$minPr.A <- 0.8
-    expect_error(do.call(simData, args),
-                 "minPr.A*ratio is above the maximum value of", fixed = TRUE)
+    suppressMessages(expect_error(
+        do.call(simData, args),
+        "minPr.A*ratio is above the maximum value of", fixed = TRUE))
 
     args <- args0
     args$adjB <- "x"
@@ -204,12 +209,13 @@ test_that("simData works", {
     ## -------------------------------------------------------------------------
     ## Let function choose branches
     set.seed(1)
-    out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
-                   scenario = "BS", from.A = NULL, from.B = NULL,
-                   minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
-                   minPr.A = 0, maxPr.A = 1, ratio = 4, adjB = NULL,
-                   pct = 0.6, nSam = c(50, 50), mu = 10000, size = NULL,
-                   n = 1, FUN = sum, message = FALSE)
+    suppressMessages(
+        out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
+                       scenario = "BS", from.A = NULL, from.B = NULL,
+                       minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
+                       minPr.A = 0, maxPr.A = 1, ratio = 4, adjB = NULL,
+                       pct = 0.6, nSam = c(50, 50), mu = 10000, size = NULL,
+                       n = 1, FUN = sum, message = FALSE))
     expect_s4_class(out, "TreeSummarizedExperiment")
     expect_equal(nrow(out), nrow(toy_lse))
     expect_equal(ncol(out), 100)
@@ -236,12 +242,13 @@ test_that("simData works", {
 
     ## Let function choose branches - with restrictions
     set.seed(1)
-    out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
-                   scenario = "BS", from.A = NULL, from.B = NULL,
-                   minTip.A = 1, maxTip.A = 5, minTip.B = 2, maxTip.B = 6,
-                   minPr.A = 0.1, maxPr.A = 0.9, ratio = 2, adjB = NULL,
-                   pct = 0.6, nSam = c(50, 50), mu = c(9900, 10000),
-                   size = NULL, n = 1, FUN = sum, message = FALSE)
+    suppressMessages(
+        out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
+                       scenario = "BS", from.A = NULL, from.B = NULL,
+                       minTip.A = 1, maxTip.A = 5, minTip.B = 2, maxTip.B = 6,
+                       minPr.A = 0.1, maxPr.A = 0.9, ratio = 2, adjB = NULL,
+                       pct = 0.6, nSam = c(50, 50), mu = c(9900, 10000),
+                       size = NULL, n = 1, FUN = sum, message = FALSE))
     expect_s4_class(out, "TreeSummarizedExperiment")
     expect_equal(nrow(out), nrow(toy_lse))
     expect_equal(ncol(out), 100)
@@ -265,12 +272,13 @@ test_that("simData works", {
 
     ## Fix branches - numbers
     set.seed(1)
-    out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
-                   scenario = "BS", from.A = 18, from.B = 19,
-                   minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
-                   minPr.A = 0, maxPr.A = 1, ratio = 4, adjB = NULL,
-                   pct = 0.6, nSam = c(50, 50), mu = 10000, size = 100,
-                   n = 1, FUN = sum, message = FALSE)
+    suppressMessages(
+        out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
+                       scenario = "BS", from.A = 18, from.B = 19,
+                       minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
+                       minPr.A = 0, maxPr.A = 1, ratio = 4, adjB = NULL,
+                       pct = 0.6, nSam = c(50, 50), mu = 10000, size = 100,
+                       n = 1, FUN = sum, message = FALSE))
     expect_s4_class(out, "TreeSummarizedExperiment")
     expect_equal(nrow(out), nrow(toy_lse))
     expect_equal(ncol(out), 100)
@@ -292,12 +300,13 @@ test_that("simData works", {
 
     ## Fix branch A - numbers
     set.seed(1)
-    out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
-                   scenario = "BS", from.A = 18, from.B = NULL,
-                   minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
-                   minPr.A = 0, maxPr.A = 1, ratio = 4, adjB = NULL,
-                   pct = 0.6, nSam = c(50, 50), mu = 10000, size = NULL,
-                   n = 1, FUN = sum, message = FALSE)
+    suppressMessages(
+        out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
+                       scenario = "BS", from.A = 18, from.B = NULL,
+                       minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
+                       minPr.A = 0, maxPr.A = 1, ratio = 4, adjB = NULL,
+                       pct = 0.6, nSam = c(50, 50), mu = 10000, size = NULL,
+                       n = 1, FUN = sum, message = FALSE))
     expect_s4_class(out, "TreeSummarizedExperiment")
     expect_equal(nrow(out), nrow(toy_lse))
     expect_equal(ncol(out), 100)
@@ -323,12 +332,13 @@ test_that("simData works", {
 
     ## Fix branches - node labels
     set.seed(1)
-    out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
-                   scenario = "BS", from.A = "Node_18", from.B = "Node_19",
-                   minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
-                   minPr.A = 0, maxPr.A = 1, ratio = 4, adjB = NULL,
-                   pct = 0.6, nSam = c(50, 50), mu = 10000, size = NULL,
-                   n = 1, FUN = sum, message = FALSE)
+    suppressMessages(
+        out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
+                       scenario = "BS", from.A = "Node_18", from.B = "Node_19",
+                       minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
+                       minPr.A = 0, maxPr.A = 1, ratio = 4, adjB = NULL,
+                       pct = 0.6, nSam = c(50, 50), mu = 10000, size = NULL,
+                       n = 1, FUN = sum, message = FALSE))
     expect_s4_class(out, "TreeSummarizedExperiment")
     expect_equal(nrow(out), nrow(toy_lse))
     expect_equal(ncol(out), 100)
@@ -347,12 +357,13 @@ test_that("simData works", {
 
     ## Fix branches - aliases
     set.seed(1)
-    out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
-                   scenario = "BS", from.A = "alias_18", from.B = "alias_19",
-                   minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
-                   minPr.A = 0, maxPr.A = 1, ratio = 4, adjB = NULL,
-                   pct = 0.6, nSam = c(50, 50), mu = 10000, size = NULL,
-                   n = 1, FUN = sum, message = FALSE)
+    suppressMessages(
+        out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
+                       scenario = "BS", from.A = "alias_18", from.B = "alias_19",
+                       minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
+                       minPr.A = 0, maxPr.A = 1, ratio = 4, adjB = NULL,
+                       pct = 0.6, nSam = c(50, 50), mu = 10000, size = NULL,
+                       n = 1, FUN = sum, message = FALSE))
     expect_s4_class(out, "TreeSummarizedExperiment")
     expect_equal(nrow(out), nrow(toy_lse))
     expect_equal(ncol(out), 100)
@@ -371,12 +382,13 @@ test_that("simData works", {
 
     ## Multiple matrices
     set.seed(1)
-    out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
-                   scenario = "BS", from.A = "alias_18", from.B = "alias_19",
-                   minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
-                   minPr.A = 0, maxPr.A = 1, ratio = 4, adjB = NULL,
-                   pct = 0.6, nSam = c(50, 50), mu = 10000, size = NULL,
-                   n = 2, FUN = sum, message = FALSE)
+    suppressMessages(
+        out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
+                       scenario = "BS", from.A = "alias_18", from.B = "alias_19",
+                       minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
+                       minPr.A = 0, maxPr.A = 1, ratio = 4, adjB = NULL,
+                       pct = 0.6, nSam = c(50, 50), mu = 10000, size = NULL,
+                       n = 2, FUN = sum, message = FALSE))
     expect_s4_class(out, "TreeSummarizedExperiment")
     expect_equal(nrow(out), nrow(toy_lse))
     expect_equal(ncol(out), 100)
@@ -396,12 +408,13 @@ test_that("simData works", {
 
     ## Scenario US; fix branches - node labels
     set.seed(1)
-    out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
-                   scenario = "US", from.A = "Node_18", from.B = "Node_19",
-                   minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
-                   minPr.A = 0, maxPr.A = 1, ratio = 4, adjB = NULL,
-                   pct = 0.6, nSam = c(50, 50), mu = 10000, size = NULL,
-                   n = 1, FUN = sum, message = FALSE)
+    suppressMessages(
+        out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
+                       scenario = "US", from.A = "Node_18", from.B = "Node_19",
+                       minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
+                       minPr.A = 0, maxPr.A = 1, ratio = 4, adjB = NULL,
+                       pct = 0.6, nSam = c(50, 50), mu = 10000, size = NULL,
+                       n = 1, FUN = sum, message = FALSE))
     expect_s4_class(out, "TreeSummarizedExperiment")
     expect_equal(nrow(out), nrow(toy_lse))
     expect_equal(ncol(out), 100)
@@ -428,12 +441,13 @@ test_that("simData works", {
 
     ## Scenario US; switch branches
     set.seed(1)
-    out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
-                   scenario = "US", from.A = "Node_19", from.B = "Node_18",
-                   minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
-                   minPr.A = 0, maxPr.A = 1, ratio = 4, adjB = NULL,
-                   pct = 0.6, nSam = c(50, 50), mu = 10000, size = NULL,
-                   n = 1, FUN = sum, message = FALSE)
+    suppressMessages(
+        out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
+                       scenario = "US", from.A = "Node_19", from.B = "Node_18",
+                       minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
+                       minPr.A = 0, maxPr.A = 1, ratio = 4, adjB = NULL,
+                       pct = 0.6, nSam = c(50, 50), mu = 10000, size = NULL,
+                       n = 1, FUN = sum, message = FALSE))
     expect_s4_class(out, "TreeSummarizedExperiment")
     expect_equal(nrow(out), nrow(toy_lse))
     expect_equal(ncol(out), 100)
@@ -460,12 +474,13 @@ test_that("simData works", {
 
     ## Scenario SS; switch branches
     set.seed(1)
-    out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
-                   scenario = "SS", from.A = "Node_19", from.B = "Node_18",
-                   minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
-                   minPr.A = 0, maxPr.A = 1, ratio = 4, adjB = NULL,
-                   pct = 0.6, nSam = c(50, 50), mu = 10000, size = NULL,
-                   n = 1, FUN = sum, message = FALSE)
+    suppressMessages(
+        out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
+                       scenario = "SS", from.A = "Node_19", from.B = "Node_18",
+                       minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
+                       minPr.A = 0, maxPr.A = 1, ratio = 4, adjB = NULL,
+                       pct = 0.6, nSam = c(50, 50), mu = 10000, size = NULL,
+                       n = 1, FUN = sum, message = FALSE))
     expect_s4_class(out, "TreeSummarizedExperiment")
     expect_equal(nrow(out), nrow(toy_lse))
     expect_equal(ncol(out), 100)
@@ -483,12 +498,13 @@ test_that("simData works", {
 
     ## Scenario SS; switch branches - specify size
     set.seed(1)
-    out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
-                   scenario = "SS", from.A = "Node_19", from.B = "Node_18",
-                   minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
-                   minPr.A = 0, maxPr.A = 1, ratio = 4, adjB = NULL,
-                   pct = 0.6, nSam = c(50, 50), mu = 10000, size = 0.5,
-                   n = 1, FUN = sum, message = FALSE)
+    suppressMessages(
+        out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
+                       scenario = "SS", from.A = "Node_19", from.B = "Node_18",
+                       minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
+                       minPr.A = 0, maxPr.A = 1, ratio = 4, adjB = NULL,
+                       pct = 0.6, nSam = c(50, 50), mu = 10000, size = 0.5,
+                       n = 1, FUN = sum, message = FALSE))
     expect_s4_class(out, "TreeSummarizedExperiment")
     expect_equal(nrow(out), nrow(toy_lse))
     expect_equal(ncol(out), 100)
@@ -504,12 +520,13 @@ test_that("simData works", {
 
     ## Scenario SS; different branches - specify size
     set.seed(1)
-    out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
-                   scenario = "SS", from.A = "Node_13", from.B = "Node_15",
-                   minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
-                   minPr.A = 0, maxPr.A = 1, ratio = 4, adjB = NULL,
-                   pct = 0.6, nSam = c(50, 50), mu = 10000, size = 0.5,
-                   n = 1, FUN = sum, message = FALSE)
+    suppressMessages(
+        out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
+                       scenario = "SS", from.A = "Node_13", from.B = "Node_15",
+                       minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
+                       minPr.A = 0, maxPr.A = 1, ratio = 4, adjB = NULL,
+                       pct = 0.6, nSam = c(50, 50), mu = 10000, size = 0.5,
+                       n = 1, FUN = sum, message = FALSE))
     expect_s4_class(out, "TreeSummarizedExperiment")
     expect_equal(nrow(out), nrow(toy_lse))
     expect_equal(ncol(out), 100)
@@ -525,12 +542,13 @@ test_that("simData works", {
 
     ## Scenario SS; set adjB
     set.seed(1)
-    out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
-                   scenario = "SS", from.A = NULL, from.B = NULL,
-                   minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
-                   minPr.A = 0, maxPr.A = 1, ratio = 4, adjB = 0.8,
-                   pct = 0.6, nSam = c(50, 50), mu = 10000, size = 0.5,
-                   n = 1, FUN = sum, message = FALSE)
+    suppressMessages(
+        out <- simData(tree = NULL, data = NULL, obj = toy_lse, assay = "counts",
+                       scenario = "SS", from.A = NULL, from.B = NULL,
+                       minTip.A = 0, maxTip.A = Inf, minTip.B = 0, maxTip.B = Inf,
+                       minPr.A = 0, maxPr.A = 1, ratio = 4, adjB = 0.8,
+                       pct = 0.6, nSam = c(50, 50), mu = 10000, size = 0.5,
+                       n = 1, FUN = sum, message = FALSE))
     expect_s4_class(out, "TreeSummarizedExperiment")
     expect_equal(nrow(out), nrow(toy_lse))
     expect_equal(ncol(out), 100)
@@ -546,7 +564,7 @@ test_that("simData works", {
 
     ## Test helper functions
     ## -------------------------------------------------------------------------
-    pars <- S4Vectors::metadata(parEstimate(toy_lse))$assays.par
+    suppressMessages(pars <- S4Vectors::metadata(parEstimate(toy_lse))$assays.par)
     pk <- .pickLoc(tree = rowTree(toy_lse), data = pars,
                    from.A  = "alias_18", minTip.A = 0,
                    maxTip.A = Inf, minTip.B = 0,

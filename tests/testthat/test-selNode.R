@@ -1,6 +1,6 @@
 test_that("selNode works", {
     ## Generate example data
-    library(TreeSummarizedExperiment)
+    suppressPackageStartupMessages(library(TreeSummarizedExperiment))
     set.seed(1)
     data(tinyTree)
     toyTable <- matrix(rnbinom(40, size = 1, mu = 10), nrow = 10)
@@ -149,7 +149,7 @@ test_that("selNode works", {
 
     ## Check that function works as expected with valid input - pr
     ## -------------------------------------------------------------------------
-    dat <- parEstimate(obj = toyTable)
+    suppressMessages(dat <- parEstimate(obj = toyTable))
     pr <- dat$pi
 
     ## No restrictions
@@ -279,15 +279,15 @@ test_that("selNode works", {
 
     ## Check that function works as expected with valid input - TSE
     ## -------------------------------------------------------------------------
-    dat <- parEstimate(obj = toyTable)
+    suppressMessages(dat <- parEstimate(obj = toyTable))
     pr <- dat$pi
 
     ## No restrictions
-    expect_message({
+    suppressMessages(expect_message({
         out <- selNode(pr = NULL, obj = lse, assay = 1, data = NULL,
                        tree = tinyTree, minTip = 0, maxTip = Inf, minPr = 0,
                        maxPr = 1, skip = NULL, all = TRUE)
-    }, "Ignoring tree when input is a TSE")
+    }, "Ignoring tree when input is a TSE"))
     expect_s3_class(out, "data.frame")
     expect_equal(nrow(out), 9)
     expect_named(out, c("nodeNum", "nodeLab", "proportion", "numTip"))
@@ -303,11 +303,11 @@ test_that("selNode works", {
                  c(10, 9, 3, 2, 6, 5, 3, 2, 2))
 
     ## Restrict proportion
-    expect_message({
+    suppressMessages(expect_message({
         out <- selNode(pr = NULL, obj = lse, assay = "counts", data = dat,
                        tree = NULL, minTip = 0, maxTip = Inf, minPr = 0.2,
                        maxPr = 0.5, skip = NULL, all = TRUE)
-    }, "Ignoring data when input is a TSE")
+    }, "Ignoring data when input is a TSE"))
     expect_s3_class(out, "data.frame")
     expect_equal(nrow(out), 2)
     expect_named(out, c("nodeNum", "nodeLab", "proportion", "numTip"))
@@ -320,7 +320,7 @@ test_that("selNode works", {
 
     ## Check that function works as expected with valid input - data + tree
     ## -------------------------------------------------------------------------
-    dat <- parEstimate(obj = toyTable)
+    suppressMessages(dat <- parEstimate(obj = toyTable))
     pr <- dat$pi
 
     ## No restrictions

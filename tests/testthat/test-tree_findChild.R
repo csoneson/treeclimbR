@@ -1,5 +1,6 @@
 test_that("findChild works", {
-    library(ggtree)
+    suppressPackageStartupMessages(library(TreeSummarizedExperiment))
+    suppressPackageStartupMessages(library(ggtree))
     data(tinyTree)
 
     ## Check that the function fails with wrongly formatted input

@@ -1,6 +1,6 @@
 test_that("getCand works", {
     ## Generate some data
-    library(TreeSummarizedExperiment)
+    suppressPackageStartupMessages(library(TreeSummarizedExperiment))
     data(tinyTree)
     set.seed(1)
     pv <- runif(19, 0, 1)
@@ -265,11 +265,13 @@ test_that("getCand works", {
     ## children have valid p-values.
     df2 <- df
     df2$pvalue[df2$node %in% c(1, 2, 4, 13)] <- NA
-    ll <- getCand(tree = tinyTree, score_data = df2,
-                  t = c(0.01, 0.05, 0.1, 0.25, 0.75),
-                  node_column = "node", p_column = "pvalue",
-                  sign_column = "foldChange", threshold = 0.05,
-                  pct_na = 0.75, message = TRUE)
+    suppressMessages({
+        ll <- getCand(tree = tinyTree, score_data = df2,
+                      t = c(0.01, 0.05, 0.1, 0.25, 0.75),
+                      node_column = "node", p_column = "pvalue",
+                      sign_column = "foldChange", threshold = 0.05,
+                      pct_na = 0.75, message = TRUE)
+    })
     expect_type(ll, "list")
     expect_named(ll, c("candidate_list", "score_data"))
     expect_type(ll$candidate_list, "list")

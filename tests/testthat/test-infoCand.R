@@ -1,5 +1,5 @@
 test_that("infoCand works", {
-    library(TreeSummarizedExperiment)
+    suppressPackageStartupMessages(library(TreeSummarizedExperiment))
     ## Generate example data
     data(tinyTree)
     set.seed(2L)

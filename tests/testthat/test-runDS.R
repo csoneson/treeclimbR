@@ -1,5 +1,6 @@
 test_that("runDS works", {
     ## Load example data
+    suppressPackageStartupMessages(library(GenomeInfoDb))
     ds_tse <- readRDS(system.file("extdata", "ds_sim_20_500_8de.rds",
                                   package = "treeclimbR"))
     expect_warning({
@@ -30,11 +31,15 @@ test_that("runDS works", {
 
     args <- .args
     args$option <- 1
-    expect_error(do.call(runDS, args),
-                 "'arg' must be NULL or a character vector")
+    expect_message(
+        expect_message(expect_error(do.call(runDS, args),
+                                    "'arg' must be NULL or a character vector"),
+                       "0 nodes are ignored"), "1 out of 19")
     args$option <- "missing"
-    expect_error(do.call(runDS, args),
-                 "'arg' should be one of")
+    expect_message(
+        expect_message(expect_error(do.call(runDS, args),
+                                    "'arg' should be one of"),
+                       "0 nodes are ignored"), "1 out of 19")
 
     args <- .args
     args$design <- "x"
@@ -123,12 +128,14 @@ test_that("runDS works", {
     ## Check that function works as expected for valid input
     ## -------------------------------------------------------------------------
     ## glmQL
-    ds_res <- runDS(SE = ds_se, tree = colTree(ds_tse), option = "glmQL",
-                    group_column = "group", contrast = c(0, 1),
-                    filter_min_count = 0, filter_min_total_count = 1,
-                    design = model.matrix(~ group, data = colData(ds_se)),
-                    filter_min_prop = 0, min_cells = 5, message = FALSE,
-                    legacy = FALSE)
+    suppressMessages(expect_message(
+        ds_res <- runDS(SE = ds_se, tree = colTree(ds_tse), option = "glmQL",
+                        group_column = "group", contrast = c(0, 1),
+                        filter_min_count = 0, filter_min_total_count = 1,
+                        design = model.matrix(~ group, data = colData(ds_se)),
+                        filter_min_prop = 0, min_cells = 5, message = TRUE,
+                        legacy = FALSE),
+        "0 nodes are ignored"))
     expect_type(ds_res, "list")
     expect_named(ds_res, c("edgeR_results", "tree", "nodes_drop"))
     expect_equal(ds_res$nodes_drop, character(0))

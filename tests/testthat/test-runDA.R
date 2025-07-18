@@ -1,4 +1,5 @@
 test_that("runDA works", {
+    suppressPackageStartupMessages(library(GenomeInfoDb))
     x <- readRDS(system.file("extdata/da_sim_100_30_18de.rds",
                              package = "treeclimbR"))
     des <- model.matrix(~ group, data = SummarizedExperiment::colData(x))

@@ -1,6 +1,6 @@
 test_that("medianByClusterMarker works", {
     ## Generate some data
-    library(SummarizedExperiment)
+    suppressPackageStartupMessages(library(SummarizedExperiment))
     set.seed(1)
     count <- matrix(rpois(n = 1000, lambda = 10), nrow = 100)
     colnames(count) <- paste0("mk", 1:10)

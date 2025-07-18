@@ -1,7 +1,7 @@
 test_that("diffcyt workflow works", {
     ## Generate some data and run through diffcyt workflow
     ## -------------------------------------------------------------------------
-    library(diffcyt)
+    suppressPackageStartupMessages(library(diffcyt))
     ## Helper function to create random data (one sample)
     d_random <- function(n = 20000, mean = 0, sd = 1, ncol = 20, cofactor = 5) {
         d <- sinh(matrix(rnorm(n, mean, sd), ncol = ncol)) * cofactor
@@ -26,7 +26,7 @@ test_that("diffcyt workflow works", {
     )
     d_se <- diffcyt::prepareData(d_input, experiment_info, marker_info)
     d_se <- diffcyt::transformData(d_se)
-    d_se <- diffcyt::generateClusters(d_se)
+    suppressMessages({d_se <- diffcyt::generateClusters(d_se)})
 
     ## buildTree - check that function errors if provided wrong input
     ## -------------------------------------------------------------------------
@@ -128,13 +128,15 @@ test_that("diffcyt workflow works", {
     }
 
     ## Run with message = TRUE
-    expect_warning({
+    suppressMessages({
         expect_warning({
             expect_warning({
-                out2 <- calcTreeMedians(d_se = d_se, tree = tr, message = TRUE)
+                expect_warning({
+                    out2 <- calcTreeMedians(d_se = d_se, tree = tr, message = TRUE)
+                }, "Multiple nodes are found to have the same label")
             }, "Multiple nodes are found to have the same label")
         }, "Multiple nodes are found to have the same label")
-    }, "Multiple nodes are found to have the same label")
+    })
     expect_identical(out, out2)
 
     ## With missing data (subset cells; some clusters will not have cells from

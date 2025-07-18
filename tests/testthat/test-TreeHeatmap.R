@@ -1,20 +1,25 @@
 test_that("TreeHeatmap works", {
     ## Get some data
     ## -------------------------------------------------------------------------
-    library(TreeSummarizedExperiment)
-    library(ggtree)
-    library(ggplot2)
-    library(scales)
+    suppressPackageStartupMessages({
+        library(TreeSummarizedExperiment)
+        library(ggtree)
+        library(ggplot2)
+        library(scales)
+        library(GenomeInfoDb)
+    })
 
     ## Load example data (tiny tree with corresponding count matrix)
     tse <- readRDS(system.file("extdata", "tinytree_counts.rds",
                                package = "treeclimbR"))
 
     ## Prepare the tree figure
-    tree_fig <- ggtree(rowTree(tse), branch.length = "none",
-                       layout = "rectangular", open.angle = 100) +
-        geom_hilight(node = 18, fill = "orange", alpha = 0.3) +
-        geom_hilight(node = 13, fill = "blue", alpha = 0.3)
+    suppressWarnings({
+        tree_fig <- ggtree(rowTree(tse), branch.length = "none",
+                           layout = "rectangular", open.angle = 100) +
+            geom_hilight(node = 18, fill = "orange", alpha = 0.3) +
+            geom_hilight(node = 13, fill = "blue", alpha = 0.3)
+    })
 
     ## Aggregate counts for each of the highlighted subtrees
     tseagg <- aggTSE(
@@ -202,19 +207,21 @@ test_that("TreeHeatmap works", {
     expect_s3_class(hm, "ggtree")
 
     ## Change colors
-    hm <- TreeHeatmap(tree = rowTree(tseagg), tree_fig = tree_fig,
-                      hm_data = SummarizedExperiment::assay(tseagg, "counts"),
-                      cluster_column = TRUE, column_split = col_split,
-                      column_anno = col_anno, column_anno_gap = 1,
-                      column_anno_color = c(A = "red", B = "blue"),
-                      show_colnames = TRUE, colnames_position = "bottom",
-                      colnames_angle = 90, colnames_size = 2,
-                      colnames_offset_y = -0.4,
-                      show_title = TRUE, title_offset_y = 2,
-                      title_color = "blue") +
-        scale_fill_gradientn(
-            colours = c("blue", "yellow", "red"),
-            values = scales::rescale(c(5, 8, 10)),
-            guide = "colorbar", limits = c(5, 10))
+    expect_message({
+        hm <- TreeHeatmap(tree = rowTree(tseagg), tree_fig = tree_fig,
+                          hm_data = SummarizedExperiment::assay(tseagg, "counts"),
+                          cluster_column = TRUE, column_split = col_split,
+                          column_anno = col_anno, column_anno_gap = 1,
+                          column_anno_color = c(A = "red", B = "blue"),
+                          show_colnames = TRUE, colnames_position = "bottom",
+                          colnames_angle = 90, colnames_size = 2,
+                          colnames_offset_y = -0.4,
+                          show_title = TRUE, title_offset_y = 2,
+                          title_color = "blue") +
+            scale_fill_gradientn(
+                colours = c("blue", "yellow", "red"),
+                values = scales::rescale(c(5, 8, 10)),
+                guide = "colorbar", limits = c(5, 10))
+    }, "already present")
     expect_s3_class(hm, "ggtree")
 })

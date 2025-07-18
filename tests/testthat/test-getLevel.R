@@ -1,7 +1,7 @@
 test_that("getLevel works", {
     ## Generate some data
-    library(TreeSummarizedExperiment)
-    library(ggtree)
+    suppressPackageStartupMessages(library(TreeSummarizedExperiment))
+    suppressPackageStartupMessages(library(ggtree))
     data(tinyTree)
     set.seed(1)
     pv <- runif(19, min = 0.09, max = 0.11)
@@ -107,12 +107,14 @@ test_that("getLevel works", {
                           message = TRUE),
                  "The result will be output in the 'keep' column")
 
-    expect_error(getLevel(tree = tinyTree, score_data = out,
-                          drop = "pvalue > 0.05",
-                          score_column = "pvalue", node_column = "node",
-                          get_max = FALSE, parent_first = TRUE,
-                          message = TRUE),
-                 "'drop' must be or evaluate to logical")
+    expect_message(expect_message(
+        expect_error(getLevel(tree = tinyTree, score_data = out,
+                              drop = "pvalue > 0.05",
+                              score_column = "pvalue", node_column = "node",
+                              get_max = FALSE, parent_first = TRUE,
+                              message = TRUE),
+                     "'drop' must be or evaluate to logical"),
+        "Preparing"), "Dropping")
 
     ## Check that function works as expected for valid input
     ## -------------------------------------------------------------------------
@@ -186,10 +188,12 @@ test_that("getLevel works", {
     expect_equal(final$node[final$keep], c(1, 2, 3, 6, 7, 8, 9, 10, 18))
 
     ## Search for the highest value, don't filter, parent_first = FALSE
-    final <- getLevel(tree = tinyTree, score_data = out,
-                      drop =  pvalue > 1, score_column = "pvalue",
-                      node_column = "node", get_max = TRUE,
-                      parent_first = FALSE, message = TRUE)
+    suppressMessages({
+        final <- getLevel(tree = tinyTree, score_data = out,
+                          drop =  pvalue > 1, score_column = "pvalue",
+                          node_column = "node", get_max = TRUE,
+                          parent_first = FALSE, message = TRUE)
+    })
     expect_s3_class(final, "data.frame")
     expect_equal(nrow(final), nrow(out))
     expect_equal(final$node, out$node)
@@ -197,10 +201,12 @@ test_that("getLevel works", {
     expect_equal(final$node[final$keep], c(1, 2, 3, 6, 7, 8, 9, 10, 18))
 
     ## Search for the highest value, don't filter, parent_first = FALSE
-    final <- getLevel(tree = tinyTree, score_data = out,
-                      score_column = "pvalue",
-                      node_column = "node", get_max = TRUE,
-                      parent_first = FALSE, message = TRUE)
+    suppressMessages({
+        final <- getLevel(tree = tinyTree, score_data = out,
+                          score_column = "pvalue",
+                          node_column = "node", get_max = TRUE,
+                          parent_first = FALSE, message = TRUE)
+    })
     expect_s3_class(final, "data.frame")
     expect_equal(nrow(final), nrow(out))
     expect_equal(final$node, out$node)

@@ -1,6 +1,6 @@
 test_that("aggDS works", {
     ## Generate example data
-    library(ape)
+    suppressPackageStartupMessages(library(ape))
     tr <- rtree(3, tip.label = LETTERS[seq_len(3)])
     set.seed(1L)
     cc <- matrix(rpois(60, 10), nrow = 6)
@@ -204,12 +204,14 @@ test_that("aggDS works", {
 
     ## Test that aggregation works - mean
     ## -------------------------------------------------------------------------
-    expect_warning({
-        out <- aggDS(TSE = tse, assay = "counts", sample_id = "sid",
-                     group_id = "gid", cluster_id = "cid", FUN = mean,
-                     message = TRUE)},
-        "Multiple nodes are found to have the same label"
-    )
+    suppressMessages({
+        expect_warning({
+            out <- aggDS(TSE = tse, assay = "counts", sample_id = "sid",
+                         group_id = "gid", cluster_id = "cid", FUN = mean,
+                         message = TRUE)},
+            "Multiple nodes are found to have the same label"
+        )
+    })
     expect_s4_class(out, "SummarizedExperiment")
     expect_equal(nrow(out), nrow(tse))
     expect_equal(ncol(out), length(unique(tse$sid)))

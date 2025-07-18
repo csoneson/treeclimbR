@@ -1,8 +1,10 @@
 test_that("treeScore works", {
     ## Generate some data
-    library(TreeSummarizedExperiment)
-    library(ggtree)
-    library(dplyr)
+    suppressPackageStartupMessages({
+        library(TreeSummarizedExperiment)
+        library(ggtree)
+        library(dplyr)
+    })
     data(tinyTree)
     exScore <- data.frame(nodeNum = seq_len(19), score = (seq_len(19))/10)
 
