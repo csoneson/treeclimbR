@@ -47,7 +47,8 @@ Suggests:
     rmarkdown,
     scales,
     testthat (>= 3.0.0),
-    BiocStyle
+    BiocStyle,
+    GenomeInfoDb
 RoxygenNote: 7.3.2
 VignetteBuilder: knitr
 URL: https://github.com/csoneson/treeclimbR
