@@ -1,3 +1,7 @@
+# treeclimbR 1.5.1
+
+* Add GenomeInfoDb to Suggests
+
 # treeclimbR 1.1.1
 
 * Adapt unit tests to limma updates
