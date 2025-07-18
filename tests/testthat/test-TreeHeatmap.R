@@ -92,7 +92,7 @@ test_that("TreeHeatmap works", {
     hm <- TreeHeatmap(tree = rowTree(tse), tree_fig = tree_fig,
                       hm_data = SummarizedExperiment::assay(tse, "counts"),
                       show_row_tree = FALSE)
-    expect_s3_class(hm, "ggplot")
+    expect_true(ggplot2::is_ggplot(hm))
 
     ## Character matrix
     mat <- SummarizedExperiment::assay(tse, "counts")
