@@ -31,7 +31,7 @@ are mapped to leaf nodes."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">treeclimbR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -231,6 +231,7 @@ normalization factor could be found from
 <span class="r-in"><span>             assay <span class="op">=</span> <span class="fl">1</span>, option <span class="op">=</span> <span class="st">"glmQL"</span>,</span></span>
 <span class="r-in"><span>             design <span class="op">=</span> <span class="va">dd</span>, contrast <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
 <span class="r-in"><span>             normalize <span class="op">=</span> <span class="cn">TRUE</span>, filter_min_count <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> calcNormFactors has been renamed to normLibSizes</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "edgeR_results" "nodes_drop"    "tree"         </span>
 <span class="r-in"><span><span class="va">out</span><span class="op">$</span><span class="va">nodes_drop</span></span></span>
@@ -238,16 +239,16 @@ normalization factor could be found from
 <span class="r-in"><span><span class="fu">edgeR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/edgeR/man/topTags.html" class="external-link">topTags</a></span><span class="op">(</span><span class="va">out</span><span class="op">$</span><span class="va">edgeR_results</span>, sort.by <span class="op">=</span> <span class="st">"PValue"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Coefficient:  groupB </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>               logFC   logCPM          F       PValue          FDR</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> alias_16  1.0468351 16.09379 25.4239062 1.541511e-06 2.312267e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> alias_5   0.7600070 15.55706  8.4473672 4.308004e-03 3.231003e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> alias_6   0.6596231 15.67131  7.3778576 7.517163e-03 3.758582e-02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> alias_9  -0.1652670 16.97145  0.8615460 3.550504e-01 6.088225e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> alias_10 -0.1684029 16.75636  0.8066779 3.707893e-01 6.088225e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> alias_15 -0.1539229 16.64917  0.7248203 3.961568e-01 6.088225e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> alias_17 -0.1598991 16.60601  0.6872196 4.086549e-01 6.088225e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> alias_7  -0.1492673 16.69156  0.6354511 4.268383e-01 6.088225e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> alias_4  -0.1490846 16.41854  0.5726784 4.505882e-01 6.088225e-01</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> alias_19 -0.1549905 16.43653  0.5647012 4.537526e-01 6.088225e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alias_16  1.0465856 16.09379 25.4242776 1.552057e-06 2.328085e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alias_5   0.7599008 15.55706  8.4414625 4.325592e-03 3.244194e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alias_6   0.6596795 15.67131  7.3818991 7.507354e-03 3.753677e-02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alias_9  -0.1659047 16.97145  0.8703796 3.526151e-01 6.079871e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alias_10 -0.1693171 16.75636  0.8173532 3.676633e-01 6.079871e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alias_15 -0.1540461 16.64917  0.7279468 3.951532e-01 6.079871e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alias_17 -0.1601577 16.60601  0.6906133 4.075134e-01 6.079871e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alias_7  -0.1489379 16.69156  0.6334974 4.275578e-01 6.079871e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alias_4  -0.1488372 16.41854  0.5717246 4.509738e-01 6.079871e-01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alias_19 -0.1549683 16.43653  0.5652093 4.535590e-01 6.079871e-01</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -260,7 +261,7 @@ normalization factor could be found from
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.9000.</p>
 </div>
 
     </footer></div>

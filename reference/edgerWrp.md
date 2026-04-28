@@ -130,6 +130,7 @@ x <- readRDS(system.file("extdata/da_sim_100_30_18de.rds",
 out <- edgerWrp(count = assay(x), option = "glm",
                 design = model.matrix(~ group, data = colData(x)),
                 contrast = c(0, 1))
+#> calcNormFactors has been renamed to normLibSizes
 
 ## The output is an edgeR DGELRT object
 class(out)

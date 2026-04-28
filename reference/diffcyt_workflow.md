@@ -157,7 +157,7 @@ d_se <- diffcyt::transformData(d_se)
 
 # Generate clusters
 d_se <- diffcyt::generateClusters(d_se)
-#> FlowSOM clustering completed in 0.2 seconds
+#> FlowSOM clustering completed in 0.3 seconds
 
 # Build a tree
 tr <- buildTree(d_se)

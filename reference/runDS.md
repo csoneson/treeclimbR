@@ -196,17 +196,36 @@ ds_res <- runDS(SE = ds_se, tree = colTree(ds_tse), option = "glmQL",
                 filter_min_count = 0, filter_min_total_count = 1,
                 design = model.matrix(~ group, data = colData(ds_se)),
                 filter_min_prop = 0, min_cells = 5, message = FALSE)
+#> calcNormFactors has been renamed to normLibSizes
+#> calcNormFactors has been renamed to normLibSizes
+#> calcNormFactors has been renamed to normLibSizes
+#> calcNormFactors has been renamed to normLibSizes
+#> calcNormFactors has been renamed to normLibSizes
+#> calcNormFactors has been renamed to normLibSizes
+#> calcNormFactors has been renamed to normLibSizes
+#> calcNormFactors has been renamed to normLibSizes
+#> calcNormFactors has been renamed to normLibSizes
+#> calcNormFactors has been renamed to normLibSizes
+#> calcNormFactors has been renamed to normLibSizes
+#> calcNormFactors has been renamed to normLibSizes
+#> calcNormFactors has been renamed to normLibSizes
+#> calcNormFactors has been renamed to normLibSizes
+#> calcNormFactors has been renamed to normLibSizes
+#> calcNormFactors has been renamed to normLibSizes
+#> calcNormFactors has been renamed to normLibSizes
+#> calcNormFactors has been renamed to normLibSizes
+#> calcNormFactors has been renamed to normLibSizes
 ## Top differential features (across nodes)
 nodeResult(ds_res, type = "DS")
 #>            logFC   logCPM        F       PValue          FDR node feature
-#> 3       1.647224 16.31850 2702.109 2.402920e-38 9.131097e-36   11       3
-#> 1...2   1.623036 16.28457 2411.255 2.264792e-37 4.303105e-35   11       1
-#> 6...3  -1.566550 16.27571 2177.354 1.684458e-36 2.133646e-34   11       6
-#> 5...4  -1.528560 16.26806 2042.835 5.892588e-36 5.597959e-34   11       5
-#> 6...5  -1.633382 16.19005 1671.077 3.012255e-34 2.289314e-32   13       6
-#> 5...6  -1.577632 16.18364 1610.875 6.168542e-34 3.906743e-32   13       5
-#> 2       1.535873 16.20796 1350.855 1.904533e-32 1.033890e-30   13       2
-#> 4      -1.613073 16.25077 1258.532 7.530189e-32 3.576840e-30   13       4
-#> 1...9   1.535774 16.23117 1224.192 1.287592e-31 5.436501e-30   13       1
-#> 1...10  1.581489 16.32083 1147.625 4.496677e-31 1.708737e-29   17       1
+#> 3       1.647098 16.31850 2677.028 2.887894e-38 1.097400e-35   11       3
+#> 1...2   1.622992 16.28457 2388.370 2.732334e-37 5.191435e-35   11       1
+#> 6...3  -1.566583 16.27571 2153.582 2.089877e-36 2.647178e-34   11       6
+#> 5...4  -1.528818 16.26806 2021.788 7.220469e-36 6.859445e-34   11       5
+#> 6...5  -1.633337 16.19005 1681.307 2.673565e-34 2.031910e-32   13       6
+#> 5...6  -1.577305 16.18364 1620.250 5.507687e-34 3.488202e-32   13       5
+#> 2       1.536983 16.20796 1360.190 1.665882e-32 9.043359e-31   13       2
+#> 4      -1.612374 16.25077 1272.349 6.092605e-32 2.893987e-30   13       4
+#> 1...9   1.534806 16.23117 1231.901 1.140078e-31 4.813662e-30   13       1
+#> 1...10  1.581804 16.32083 1121.463 7.023168e-31 2.478695e-29   17       1
 ```

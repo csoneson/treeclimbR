@@ -23,7 +23,7 @@ the assays is provided via the argument tree."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">treeclimbR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -243,19 +243,38 @@ should be printed.</p></dd>
 <span class="r-in"><span>                filter_min_count <span class="op">=</span> <span class="fl">0</span>, filter_min_total_count <span class="op">=</span> <span class="fl">1</span>,</span></span>
 <span class="r-in"><span>                design <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix</a></span><span class="op">(</span><span class="op">~</span> <span class="va">group</span>, data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html" class="external-link">colData</a></span><span class="op">(</span><span class="va">ds_se</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                filter_min_prop <span class="op">=</span> <span class="fl">0</span>, min_cells <span class="op">=</span> <span class="fl">5</span>, message <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> calcNormFactors has been renamed to normLibSizes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> calcNormFactors has been renamed to normLibSizes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> calcNormFactors has been renamed to normLibSizes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> calcNormFactors has been renamed to normLibSizes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> calcNormFactors has been renamed to normLibSizes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> calcNormFactors has been renamed to normLibSizes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> calcNormFactors has been renamed to normLibSizes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> calcNormFactors has been renamed to normLibSizes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> calcNormFactors has been renamed to normLibSizes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> calcNormFactors has been renamed to normLibSizes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> calcNormFactors has been renamed to normLibSizes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> calcNormFactors has been renamed to normLibSizes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> calcNormFactors has been renamed to normLibSizes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> calcNormFactors has been renamed to normLibSizes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> calcNormFactors has been renamed to normLibSizes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> calcNormFactors has been renamed to normLibSizes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> calcNormFactors has been renamed to normLibSizes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> calcNormFactors has been renamed to normLibSizes</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> calcNormFactors has been renamed to normLibSizes</span>
 <span class="r-in"><span><span class="co">## Top differential features (across nodes)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="nodeResult.html">nodeResult</a></span><span class="op">(</span><span class="va">ds_res</span>, type <span class="op">=</span> <span class="st">"DS"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            logFC   logCPM        F       PValue          FDR node feature</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3       1.647224 16.31850 2702.109 2.402920e-38 9.131097e-36   11       3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1...2   1.623036 16.28457 2411.255 2.264792e-37 4.303105e-35   11       1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6...3  -1.566550 16.27571 2177.354 1.684458e-36 2.133646e-34   11       6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5...4  -1.528560 16.26806 2042.835 5.892588e-36 5.597959e-34   11       5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6...5  -1.633382 16.19005 1671.077 3.012255e-34 2.289314e-32   13       6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5...6  -1.577632 16.18364 1610.875 6.168542e-34 3.906743e-32   13       5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2       1.535873 16.20796 1350.855 1.904533e-32 1.033890e-30   13       2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4      -1.613073 16.25077 1258.532 7.530189e-32 3.576840e-30   13       4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1...9   1.535774 16.23117 1224.192 1.287592e-31 5.436501e-30   13       1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1...10  1.581489 16.32083 1147.625 4.496677e-31 1.708737e-29   17       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3       1.647098 16.31850 2677.028 2.887894e-38 1.097400e-35   11       3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1...2   1.622992 16.28457 2388.370 2.732334e-37 5.191435e-35   11       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6...3  -1.566583 16.27571 2153.582 2.089877e-36 2.647178e-34   11       6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5...4  -1.528818 16.26806 2021.788 7.220469e-36 6.859445e-34   11       5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6...5  -1.633337 16.19005 1681.307 2.673565e-34 2.031910e-32   13       6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5...6  -1.577305 16.18364 1620.250 5.507687e-34 3.488202e-32   13       5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2       1.536983 16.20796 1360.190 1.665882e-32 9.043359e-31   13       2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      -1.612374 16.25077 1272.349 6.092605e-32 2.893987e-30   13       4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1...9   1.534806 16.23117 1231.901 1.140078e-31 4.813662e-30   13       1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1...10  1.581804 16.32083 1121.463 7.023168e-31 2.478695e-29   17       1</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -268,7 +287,7 @@ should be printed.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.9000.</p>
 </div>
 
     </footer></div>
