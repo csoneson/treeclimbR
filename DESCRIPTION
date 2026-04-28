@@ -1,7 +1,7 @@
 Package: treeclimbR
 Type: Package
 Title: An algorithm to find optimal signal levels in a tree
-Version: 1.7.0
+Version: 1.8.0
 Date: 2025-07-18
 Authors@R: c(person("Ruizhu", "Huang", email = "ruizhuRH@gmail.com",
                     role = c("aut"), 
