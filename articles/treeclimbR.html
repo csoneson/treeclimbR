@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Finding optimal resolution of hierarchical hypotheses with treeclimbR • treeclimbR</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Finding optimal resolution of hierarchical hypotheses with treeclimbR">
 </head>
@@ -55,7 +55,7 @@
                         <h4 data-toc-skip class="author">Charlotte
 Soneson and Ruizhu Huang</h4>
             
-            <h4 data-toc-skip class="date">2026-04-28</h4>
+            <h4 data-toc-skip class="date">2026-11-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/csoneson/treeclimbR/blob/devel/vignettes/treeclimbR.Rmd" class="external-link"><code>vignettes/treeclimbR.Rmd</code></a></small>
       <div class="d-none name"><code>treeclimbR.Rmd</code></div>
@@ -310,12 +310,12 @@ inferred change):</p>
 <span><span class="co">#&gt; [1] 189   6</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">da_tbl</span><span class="op">)</span></span>
 <span><span class="co">#&gt;           node      logFC   logCPM         F       PValue          FDR</span></span>
-<span><span class="co">#&gt; alias_102  102 -0.6290963 18.47205 221.59295 1.512620e-22 2.858853e-20</span></span>
-<span><span class="co">#&gt; alias_114  114 -0.5748841 17.74475 120.75237 2.018037e-16 1.907045e-14</span></span>
-<span><span class="co">#&gt; alias_103  103 -0.7103916 17.17136 108.00467 2.052473e-15 1.293058e-13</span></span>
-<span><span class="co">#&gt; alias_115  115 -0.5948225 17.40516 103.92357 4.473457e-15 2.113709e-13</span></span>
-<span><span class="co">#&gt; alias_116  116 -0.6789849 16.78855  75.27564 1.954102e-12 7.386507e-11</span></span>
-<span><span class="co">#&gt; alias_110  110 -0.8245494 16.18132  65.21454 2.248758e-11 6.439055e-10</span></span></code></pre></div>
+<span><span class="co">#&gt; alias_102  102 -0.6290963 18.47205 221.59306 1.512592e-22 2.858798e-20</span></span>
+<span><span class="co">#&gt; alias_114  114 -0.5748841 17.74475 120.75236 2.018032e-16 1.907040e-14</span></span>
+<span><span class="co">#&gt; alias_103  103 -0.7103916 17.17136 108.00464 2.052476e-15 1.293060e-13</span></span>
+<span><span class="co">#&gt; alias_115  115 -0.5948226 17.40516 103.92355 4.473464e-15 2.113712e-13</span></span>
+<span><span class="co">#&gt; alias_116  116 -0.6789849 16.78855  75.27562 1.954106e-12 7.386519e-11</span></span>
+<span><span class="co">#&gt; alias_110  110 -0.8245494 16.18132  65.21453 2.248760e-11 6.439067e-10</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="find-candidates">Find candidates<a class="anchor" aria-label="anchor" href="#find-candidates"></a>
@@ -629,8 +629,8 @@ table contains the results from all genes (features) at all nodes.</p>
 <span><span class="co">#&gt; 1...2  1.622992 16.28457 2388.370 2.732334e-37 5.191435e-35   11       1</span></span>
 <span><span class="co">#&gt; 6...3 -1.566583 16.27571 2153.582 2.089877e-36 2.647178e-34   11       6</span></span>
 <span><span class="co">#&gt; 5...4 -1.528818 16.26806 2021.788 7.220469e-36 6.859445e-34   11       5</span></span>
-<span><span class="co">#&gt; 6...5 -1.633337 16.19005 1681.307 2.673565e-34 2.031910e-32   13       6</span></span>
-<span><span class="co">#&gt; 5...6 -1.577305 16.18364 1620.250 5.507687e-34 3.488202e-32   13       5</span></span></code></pre></div>
+<span><span class="co">#&gt; 6...5 -1.633337 16.19005 1681.263 2.674927e-34 2.032944e-32   13       6</span></span>
+<span><span class="co">#&gt; 5...6 -1.577305 16.18364 1620.215 5.509963e-34 3.489643e-32   13       5</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="find-candidates-1">Find candidates<a class="anchor" aria-label="anchor" href="#find-candidates-1"></a>
@@ -677,26 +677,26 @@ table above by the <code>feature</code> column, and then run
 <span><span class="va">ds_out</span></span>
 <span><span class="co">#&gt;            logFC   logCPM         F       PValue          FDR node feature</span></span>
 <span><span class="co">#&gt; 1       1.622992 16.28457 2388.3696 2.732334e-37 5.191435e-35   11       1</span></span>
-<span><span class="co">#&gt; 2       1.536983 16.20796 1360.1904 1.665882e-32 9.043359e-31   13       2</span></span>
+<span><span class="co">#&gt; 2       1.536983 16.20796 1360.2260 1.665035e-32 9.038760e-31   13       2</span></span>
 <span><span class="co">#&gt; 3       1.647098 16.31850 2677.0275 2.887894e-38 1.097400e-35   11       3</span></span>
-<span><span class="co">#&gt; 4      -1.612374 16.25077 1272.3495 6.092605e-32 2.893987e-30   13       4</span></span>
+<span><span class="co">#&gt; 4      -1.612374 16.25077 1272.3264 6.094749e-32 2.895006e-30   13       4</span></span>
 <span><span class="co">#&gt; 5      -1.528818 16.26806 2021.7880 7.220469e-36 6.859445e-34   11       5</span></span>
 <span><span class="co">#&gt; 6      -1.566583 16.27571 2153.5825 2.089877e-36 2.647178e-34   11       6</span></span>
-<span><span class="co">#&gt; 7...7   1.322218 16.11680  503.2039 2.857126e-24 4.523782e-23    5       7</span></span>
-<span><span class="co">#&gt; 7...8   1.656965 16.10320  615.9473 8.979128e-10 4.374447e-09    9       7</span></span>
-<span><span class="co">#&gt; 8...9  -1.523769 16.26492  722.7455 3.183677e-27 5.760939e-26    5       8</span></span>
-<span><span class="co">#&gt; 8...10 -1.687730 16.34385  243.9754 5.899432e-08 2.518859e-07    9       8</span></span>
+<span><span class="co">#&gt; 7...7   1.322218 16.11680  503.2046 2.857055e-24 4.523671e-23    5       7</span></span>
+<span><span class="co">#&gt; 7...8   1.656965 16.10320  615.9473 8.979132e-10 4.374449e-09    9       7</span></span>
+<span><span class="co">#&gt; 8...9  -1.523769 16.26492  722.7466 3.183591e-27 5.760783e-26    5       8</span></span>
+<span><span class="co">#&gt; 8...10 -1.687730 16.34385  243.9754 5.899433e-08 2.518859e-07    9       8</span></span>
 <span><span class="co">#&gt;               adj.p signal.node</span></span>
 <span><span class="co">#&gt; 1      2.185867e-35        TRUE</span></span>
-<span><span class="co">#&gt; 2      5.330822e-31        TRUE</span></span>
+<span><span class="co">#&gt; 2      5.328111e-31        TRUE</span></span>
 <span><span class="co">#&gt; 3      4.620631e-36        TRUE</span></span>
-<span><span class="co">#&gt; 4      1.624695e-30        TRUE</span></span>
+<span><span class="co">#&gt; 4      1.625266e-30        TRUE</span></span>
 <span><span class="co">#&gt; 5      2.888187e-34        TRUE</span></span>
 <span><span class="co">#&gt; 6      1.114601e-34        TRUE</span></span>
-<span><span class="co">#&gt; 7...7  5.714251e-23        TRUE</span></span>
-<span><span class="co">#&gt; 7...8  1.596289e-08        TRUE</span></span>
-<span><span class="co">#&gt; 8...9  7.276976e-26        TRUE</span></span>
-<span><span class="co">#&gt; 8...10 9.439092e-07        TRUE</span></span></code></pre></div>
+<span><span class="co">#&gt; 7...7  5.714110e-23        TRUE</span></span>
+<span><span class="co">#&gt; 7...8  1.596290e-08        TRUE</span></span>
+<span><span class="co">#&gt; 8...9  7.276779e-26        TRUE</span></span>
+<span><span class="co">#&gt; 8...10 9.439093e-07        TRUE</span></span></code></pre></div>
 <p>As expected, we detect the eight truly differentially expressed
 features (feature 1-8). Furthermore, we see that they have been
 aggregated to different nodes in the tree. Features 1, 3, 5 and 6 are
@@ -751,9 +751,9 @@ experimental data sets can be found on <a href="https://github.com/fionarhuang/t
 (click to expand) </b>
 </summary><div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; R version 4.6.0 Patched (2026-04-27 r89967)</span></span>
+<span><span class="co">#&gt; R version 4.6.2 (2026-10-29)</span></span>
 <span><span class="co">#&gt; Platform: aarch64-apple-darwin23</span></span>
-<span><span class="co">#&gt; Running under: macOS Sequoia 15.7.4</span></span>
+<span><span class="co">#&gt; Running under: macOS Tahoe 26.6.2</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Matrix products: default</span></span>
 <span><span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRblas.0.dylib </span></span>
@@ -771,91 +771,91 @@ experimental data sets can be found on <a href="https://github.com/fionarhuang/t
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
 <span><span class="co">#&gt;  [1] ggplot2_4.0.3                   dplyr_1.2.1                    </span></span>
-<span><span class="co">#&gt;  [3] ggtree_4.1.2                    treeclimbR_1.9.0               </span></span>
-<span><span class="co">#&gt;  [5] TreeSummarizedExperiment_2.19.0 Biostrings_2.79.5              </span></span>
-<span><span class="co">#&gt;  [7] XVector_0.51.0                  SingleCellExperiment_1.33.2    </span></span>
-<span><span class="co">#&gt;  [9] SummarizedExperiment_1.41.1     Biobase_2.71.0                 </span></span>
-<span><span class="co">#&gt; [11] GenomicRanges_1.63.2            Seqinfo_1.1.0                  </span></span>
-<span><span class="co">#&gt; [13] IRanges_2.45.0                  S4Vectors_0.49.2               </span></span>
-<span><span class="co">#&gt; [15] BiocGenerics_0.57.1             generics_0.1.4                 </span></span>
-<span><span class="co">#&gt; [17] MatrixGenerics_1.23.0           matrixStats_1.5.0              </span></span>
-<span><span class="co">#&gt; [19] BiocStyle_2.39.0               </span></span>
+<span><span class="co">#&gt;  [3] ggtree_4.3.0                    treeclimbR_1.9.0               </span></span>
+<span><span class="co">#&gt;  [5] TreeSummarizedExperiment_2.21.0 Biostrings_2.81.9              </span></span>
+<span><span class="co">#&gt;  [7] XVector_0.53.0                  SingleCellExperiment_1.35.2    </span></span>
+<span><span class="co">#&gt;  [9] SummarizedExperiment_1.43.0     Biobase_2.73.2                 </span></span>
+<span><span class="co">#&gt; [11] GenomicRanges_1.65.4            Seqinfo_1.3.2                  </span></span>
+<span><span class="co">#&gt; [13] IRanges_2.47.5                  S4Vectors_0.51.10              </span></span>
+<span><span class="co">#&gt; [15] BiocGenerics_0.59.12            generics_0.1.4                 </span></span>
+<span><span class="co">#&gt; [17] MatrixGenerics_1.25.0           matrixStats_1.5.0              </span></span>
+<span><span class="co">#&gt; [19] BiocStyle_2.41.0               </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
 <span><span class="co">#&gt;   [1] RColorBrewer_1.1-3          jsonlite_2.0.0             </span></span>
 <span><span class="co">#&gt;   [3] shape_1.4.6.1               magrittr_2.0.5             </span></span>
 <span><span class="co">#&gt;   [5] TH.data_1.1-5               farver_2.1.2               </span></span>
-<span><span class="co">#&gt;   [7] nloptr_2.2.1                rmarkdown_2.31             </span></span>
+<span><span class="co">#&gt;   [7] nloptr_2.2.1                rmarkdown_2.32             </span></span>
 <span><span class="co">#&gt;   [9] GlobalOptions_0.1.4         fs_2.1.0                   </span></span>
 <span><span class="co">#&gt;  [11] ragg_1.5.2                  vctrs_0.7.3                </span></span>
-<span><span class="co">#&gt;  [13] minqa_1.2.8                 rstatix_0.7.3              </span></span>
-<span><span class="co">#&gt;  [15] htmltools_0.5.9             S4Arrays_1.11.1            </span></span>
-<span><span class="co">#&gt;  [17] broom_1.0.12                gridGraphics_0.5-1         </span></span>
-<span><span class="co">#&gt;  [19] SparseArray_1.11.13         Formula_1.2-5              </span></span>
-<span><span class="co">#&gt;  [21] sass_0.4.10                 bslib_0.10.0               </span></span>
+<span><span class="co">#&gt;  [13] minqa_1.2.8                 rstatix_1.1.0              </span></span>
+<span><span class="co">#&gt;  [15] htmltools_0.5.9             S4Arrays_1.13.2            </span></span>
+<span><span class="co">#&gt;  [17] broom_1.0.13                gridGraphics_0.5-1         </span></span>
+<span><span class="co">#&gt;  [19] SparseArray_1.13.4          Formula_1.2-6              </span></span>
+<span><span class="co">#&gt;  [21] sass_0.4.10                 bslib_0.12.0               </span></span>
 <span><span class="co">#&gt;  [23] htmlwidgets_1.6.4           desc_1.4.3                 </span></span>
-<span><span class="co">#&gt;  [25] plyr_1.8.9                  sandwich_3.1-1             </span></span>
-<span><span class="co">#&gt;  [27] zoo_1.8-15                  cachem_1.1.0               </span></span>
-<span><span class="co">#&gt;  [29] igraph_2.3.0                lifecycle_1.0.5            </span></span>
+<span><span class="co">#&gt;  [25] plyr_1.8.9                  sandwich_3.1-3             </span></span>
+<span><span class="co">#&gt;  [27] zoo_1.9-1                   cachem_1.1.0               </span></span>
+<span><span class="co">#&gt;  [29] igraph_2.3.4                lifecycle_1.0.5            </span></span>
 <span><span class="co">#&gt;  [31] iterators_1.0.14            pkgconfig_2.0.3            </span></span>
-<span><span class="co">#&gt;  [33] Matrix_1.7-5                R6_2.6.1                   </span></span>
+<span><span class="co">#&gt;  [33] Matrix_1.7-6                R6_2.6.1                   </span></span>
 <span><span class="co">#&gt;  [35] fastmap_1.2.0               rbibutils_2.4.1            </span></span>
-<span><span class="co">#&gt;  [37] clue_0.3-68                 aplot_0.2.9                </span></span>
-<span><span class="co">#&gt;  [39] digest_0.6.39               colorspace_2.1-2           </span></span>
+<span><span class="co">#&gt;  [37] clue_0.3-68                 aplot_0.3.2                </span></span>
+<span><span class="co">#&gt;  [39] digest_0.6.39               colorspace_2.1-4           </span></span>
 <span><span class="co">#&gt;  [41] ggnewscale_0.5.2            patchwork_1.3.2            </span></span>
-<span><span class="co">#&gt;  [43] textshaping_1.0.5           ggpubr_0.6.3               </span></span>
-<span><span class="co">#&gt;  [45] labeling_0.4.3              cytolib_2.23.0             </span></span>
+<span><span class="co">#&gt;  [43] textshaping_1.0.5           ggpubr_1.0.0               </span></span>
+<span><span class="co">#&gt;  [45] labeling_0.4.3              cytolib_2.25.0             </span></span>
 <span><span class="co">#&gt;  [47] colorRamps_2.3.4            polyclip_1.10-7            </span></span>
-<span><span class="co">#&gt;  [49] abind_1.4-8                 compiler_4.6.0             </span></span>
-<span><span class="co">#&gt;  [51] fontquiver_0.2.1            withr_3.0.2                </span></span>
-<span><span class="co">#&gt;  [53] doParallel_1.0.17           ConsensusClusterPlus_1.75.0</span></span>
+<span><span class="co">#&gt;  [49] abind_1.4-8                 compiler_4.6.2             </span></span>
+<span><span class="co">#&gt;  [51] fontquiver_0.2.1            withr_3.0.3                </span></span>
+<span><span class="co">#&gt;  [53] doParallel_1.0.17           ConsensusClusterPlus_1.77.0</span></span>
 <span><span class="co">#&gt;  [55] S7_0.2.2                    backports_1.5.1            </span></span>
-<span><span class="co">#&gt;  [57] BiocParallel_1.45.0         viridis_0.6.5              </span></span>
+<span><span class="co">#&gt;  [57] BiocParallel_1.47.0         viridis_0.6.5              </span></span>
 <span><span class="co">#&gt;  [59] carData_3.0-6               ggforce_0.5.0              </span></span>
-<span><span class="co">#&gt;  [61] ggsignif_0.6.4              MASS_7.3-65                </span></span>
-<span><span class="co">#&gt;  [63] rappdirs_0.3.4              DelayedArray_0.37.1        </span></span>
-<span><span class="co">#&gt;  [65] rjson_0.2.23                FlowSOM_2.19.4             </span></span>
-<span><span class="co">#&gt;  [67] diffcyt_1.31.0              tools_4.6.0                </span></span>
-<span><span class="co">#&gt;  [69] ape_5.8-1                   glue_1.8.1                 </span></span>
-<span><span class="co">#&gt;  [71] nlme_3.1-169                grid_4.6.0                 </span></span>
-<span><span class="co">#&gt;  [73] Rtsne_0.17                  cluster_2.1.8.2            </span></span>
-<span><span class="co">#&gt;  [75] reshape2_1.4.5              gtable_0.3.6               </span></span>
-<span><span class="co">#&gt;  [77] tidyr_1.3.2                 car_3.1-5                  </span></span>
-<span><span class="co">#&gt;  [79] foreach_1.5.2               pillar_1.11.1              </span></span>
-<span><span class="co">#&gt;  [81] stringr_1.6.0               yulab.utils_0.2.4          </span></span>
-<span><span class="co">#&gt;  [83] limma_3.67.3                circlize_0.4.18            </span></span>
-<span><span class="co">#&gt;  [85] splines_4.6.0               flowCore_2.23.4            </span></span>
-<span><span class="co">#&gt;  [87] tweenr_2.0.3                treeio_1.35.0              </span></span>
-<span><span class="co">#&gt;  [89] lattice_0.22-9              survival_3.8-6             </span></span>
-<span><span class="co">#&gt;  [91] dirmult_0.1.3-5             RProtoBufLib_2.23.0        </span></span>
-<span><span class="co">#&gt;  [93] tidyselect_1.2.1            fontLiberation_0.1.0       </span></span>
-<span><span class="co">#&gt;  [95] ComplexHeatmap_2.27.1       locfit_1.5-9.12            </span></span>
-<span><span class="co">#&gt;  [97] knitr_1.51                  gridExtra_2.3              </span></span>
-<span><span class="co">#&gt;  [99] fontBitstreamVera_0.1.1     reformulas_0.4.4           </span></span>
-<span><span class="co">#&gt; [101] bookdown_0.46               edgeR_4.9.9                </span></span>
-<span><span class="co">#&gt; [103] xfun_0.57                   statmod_1.5.1              </span></span>
-<span><span class="co">#&gt; [105] stringi_1.8.7               ggfun_0.2.0                </span></span>
-<span><span class="co">#&gt; [107] lazyeval_0.2.3              yaml_2.3.12                </span></span>
-<span><span class="co">#&gt; [109] boot_1.3-32                 evaluate_1.0.5             </span></span>
-<span><span class="co">#&gt; [111] codetools_0.2-20            gdtools_0.5.0              </span></span>
-<span><span class="co">#&gt; [113] tibble_3.3.1                BiocManager_1.30.27        </span></span>
-<span><span class="co">#&gt; [115] ggplotify_0.1.3             cli_3.6.6                  </span></span>
-<span><span class="co">#&gt; [117] systemfonts_1.3.2           Rdpack_2.6.6               </span></span>
-<span><span class="co">#&gt; [119] jquerylib_0.1.4             Rcpp_1.1.1-1.1             </span></span>
-<span><span class="co">#&gt; [121] png_0.1-9                   XML_3.99-0.23              </span></span>
-<span><span class="co">#&gt; [123] parallel_4.6.0              pkgdown_2.2.0.9000         </span></span>
-<span><span class="co">#&gt; [125] lme4_2.0-1                  viridisLite_0.4.3          </span></span>
-<span><span class="co">#&gt; [127] mvtnorm_1.3-7               tidytree_0.4.7             </span></span>
-<span><span class="co">#&gt; [129] ggiraph_0.9.6               scales_1.4.0               </span></span>
-<span><span class="co">#&gt; [131] purrr_1.2.2                 crayon_1.5.3               </span></span>
-<span><span class="co">#&gt; [133] GetoptLong_1.1.1            rlang_1.2.0                </span></span>
-<span><span class="co">#&gt; [135] multcomp_1.4-30</span></span></code></pre></div>
+<span><span class="co">#&gt;  [61] ggsignif_0.6.4              MASS_7.3-66                </span></span>
+<span><span class="co">#&gt;  [63] rappdirs_0.3.4              DelayedArray_0.39.8        </span></span>
+<span><span class="co">#&gt;  [65] rjson_0.2.23                FlowSOM_2.21.0             </span></span>
+<span><span class="co">#&gt;  [67] diffcyt_1.33.1              tools_4.6.2                </span></span>
+<span><span class="co">#&gt;  [69] otel_0.2.0                  ape_5.8-1                  </span></span>
+<span><span class="co">#&gt;  [71] glue_1.8.1                  nlme_3.1-172               </span></span>
+<span><span class="co">#&gt;  [73] grid_4.6.2                  Rtsne_0.17                 </span></span>
+<span><span class="co">#&gt;  [75] reshape2_1.4.5              cluster_2.1.8.3            </span></span>
+<span><span class="co">#&gt;  [77] gtable_0.3.6                tidyr_1.3.2                </span></span>
+<span><span class="co">#&gt;  [79] car_3.1-5                   stringr_1.6.0              </span></span>
+<span><span class="co">#&gt;  [81] foreach_1.5.2               pillar_1.11.1              </span></span>
+<span><span class="co">#&gt;  [83] yulab.utils_0.2.5           limma_3.99.3               </span></span>
+<span><span class="co">#&gt;  [85] circlize_0.4.18             splines_4.6.2              </span></span>
+<span><span class="co">#&gt;  [87] flowCore_2.25.1             tweenr_2.0.3               </span></span>
+<span><span class="co">#&gt;  [89] treeio_1.37.1               lattice_0.23-1             </span></span>
+<span><span class="co">#&gt;  [91] survival_3.8-12             dirmult_0.1.3-5            </span></span>
+<span><span class="co">#&gt;  [93] RProtoBufLib_2.25.0         tidyselect_1.2.1           </span></span>
+<span><span class="co">#&gt;  [95] fontLiberation_0.1.0        ComplexHeatmap_2.29.0      </span></span>
+<span><span class="co">#&gt;  [97] locfit_1.5-9.12             knitr_1.52                 </span></span>
+<span><span class="co">#&gt;  [99] gridExtra_2.3.1             fontBitstreamVera_0.1.1    </span></span>
+<span><span class="co">#&gt; [101] reformulas_0.4.4            bookdown_0.48              </span></span>
+<span><span class="co">#&gt; [103] edgeR_4.99.10               xfun_0.62                  </span></span>
+<span><span class="co">#&gt; [105] statmod_1.5.2               stringi_1.8.9              </span></span>
+<span><span class="co">#&gt; [107] ggfun_0.2.2                 lazyeval_0.2.3             </span></span>
+<span><span class="co">#&gt; [109] yaml_2.3.12                 boot_1.3-32                </span></span>
+<span><span class="co">#&gt; [111] evaluate_1.0.5              codetools_0.2-20           </span></span>
+<span><span class="co">#&gt; [113] gdtools_0.5.2               tibble_3.3.1               </span></span>
+<span><span class="co">#&gt; [115] BiocManager_1.30.27         ggplotify_0.1.4            </span></span>
+<span><span class="co">#&gt; [117] cli_3.6.6                   systemfonts_1.3.2          </span></span>
+<span><span class="co">#&gt; [119] Rdpack_2.6.6                jquerylib_0.1.4            </span></span>
+<span><span class="co">#&gt; [121] Rcpp_1.1.2                  png_0.1-9                  </span></span>
+<span><span class="co">#&gt; [123] XML_3.99-0.25               parallel_4.6.2             </span></span>
+<span><span class="co">#&gt; [125] pkgdown_2.2.1.9000          lme4_2.1-0                 </span></span>
+<span><span class="co">#&gt; [127] viridisLite_0.4.3           mvtnorm_1.4-2              </span></span>
+<span><span class="co">#&gt; [129] tidytree_0.4.8              ggiraph_0.9.6              </span></span>
+<span><span class="co">#&gt; [131] scales_1.4.0                purrr_1.2.2                </span></span>
+<span><span class="co">#&gt; [133] crayon_1.5.3                GetoptLong_1.1.1           </span></span>
+<span><span class="co">#&gt; [135] rlang_1.3.0                 multcomp_1.4-32</span></span></code></pre></div>
 </details>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-huang2021" class="csl-entry">
 Huang, Ruizhu, Charlotte Soneson, Pierre-Luc Germain, Thomas S B
 Schmidt, Christian Von Mering, and Mark D Robinson. 2021.
@@ -875,7 +875,7 @@ Hierarchical Hypotheses.”</span> <em>Genome Biology</em> 22 (1): 157.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.9000.</p>
 </div>
 
     </footer>

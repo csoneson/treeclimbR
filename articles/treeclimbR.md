@@ -30,6 +30,7 @@ method.
 code:
 
 ``` r
+
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
@@ -48,6 +49,7 @@ simulated example data provided with the package. We start by loading
 the packages that will be needed in the analyses below.
 
 ``` r
+
 suppressPackageStartupMessages({
     library(TreeSummarizedExperiment)
     library(treeclimbR)
@@ -88,6 +90,7 @@ represent leaves in a tree, and the data is stored in a
 visualize the tree and the corresponding data.
 
 ``` r
+
 ## Read data
 da_lse <- readRDS(system.file("extdata", "da_sim_100_30_18de.rds", 
                               package = "treeclimbR"))
@@ -178,6 +181,7 @@ applications, other aggregation methods (e.g., averaging) may be more
 suitable. This can be controlled via the `rowFun` argument.
 
 ``` r
+
 ## Get a list of all node IDs
 all_node <- showNode(tree = rowTree(da_lse), only.leaf = FALSE)
 
@@ -215,6 +219,7 @@ We will ask the wrapper function to filter out lowly abundant features
 (with a total count below 15).
 
 ``` r
+
 ## Run differential analysis
 da_res <- runDA(da_tse, assay = "counts", option = "glmQL", 
                 design = model.matrix(~ group, data = colData(da_tse)), 
@@ -227,6 +232,7 @@ The output of `runDA` contains the `edgeR` results, a list of the nodes
 that were dropped due to a low total count, and the tree.
 
 ``` r
+
 names(da_res)
 #> [1] "edgeR_results" "nodes_drop"    "tree"
 class(da_res$edgeR_results)
@@ -251,36 +257,38 @@ function (where the `PValue` column contains the p-value, and the
 change):
 
 ``` r
+
 da_tbl <- nodeResult(da_res, n = Inf, type = "DA")
 dim(da_tbl)
 #> [1] 189   6
 head(da_tbl)
 #>           node      logFC   logCPM         F       PValue          FDR
-#> alias_102  102 -0.6290963 18.47205 221.59295 1.512620e-22 2.858853e-20
-#> alias_114  114 -0.5748841 17.74475 120.75237 2.018037e-16 1.907045e-14
-#> alias_103  103 -0.7103916 17.17136 108.00467 2.052473e-15 1.293058e-13
-#> alias_115  115 -0.5948225 17.40516 103.92357 4.473457e-15 2.113709e-13
-#> alias_116  116 -0.6789849 16.78855  75.27564 1.954102e-12 7.386507e-11
-#> alias_110  110 -0.8245494 16.18132  65.21454 2.248758e-11 6.439055e-10
+#> alias_102  102 -0.6290963 18.47205 221.59306 1.512592e-22 2.858798e-20
+#> alias_114  114 -0.5748841 17.74475 120.75236 2.018032e-16 1.907040e-14
+#> alias_103  103 -0.7103916 17.17136 108.00464 2.052476e-15 1.293060e-13
+#> alias_115  115 -0.5948226 17.40516 103.92355 4.473464e-15 2.113712e-13
+#> alias_116  116 -0.6789849 16.78855  75.27562 1.954106e-12 7.386519e-11
+#> alias_110  110 -0.8245494 16.18132  65.21453 2.248760e-11 6.439067e-10
 ```
 
 ### Find candidates
 
 Next, `treeclimbR` proposes a set of aggregation *candidates*,
-corresponding to a range of values for a threshold parameter $t$ (see
+corresponding to a range of values for a threshold parameter $`t`$ (see
 (Huang et al. 2021)). A candidate consists of a set of nodes,
 representing a specific pattern of aggregation. In general, higher
-values of $t$ lead to aggregation further up in the tree (closer to the
-root).
+values of $`t`$ lead to aggregation further up in the tree (closer to
+the root).
 
 ``` r
+
 ## Get candidates
 da_cand <- getCand(tree = rowTree(da_tse), score_data = da_tbl, 
                    node_column = "node", p_column = "PValue",
                    threshold = 0.05, sign_column = "logFC", message = FALSE)
 ```
 
-For a given $t$-value, we can indicate the corresponding candidate in
+For a given $`t`$-value, we can indicate the corresponding candidate in
 the tree. Note that at this point, we have not yet selected the optimal
 aggregation level, nor are we making conclusions about which of the
 retained nodes show a significant difference between the conditions. The
@@ -288,6 +296,7 @@ visualization thus simply illustrates which leaves would be aggregated
 together if this candidate were to be chosen.
 
 ``` r
+
 ## All candidates
 names(da_cand$candidate_list)
 #>  [1] "0"    "0.01" "0.02" "0.03" "0.04" "0.05" "0.1"  "0.15" "0.2"  "0.25"
@@ -322,6 +331,7 @@ now extract the one providing the optimal aggregation level (Huang et
 al. 2021).
 
 ``` r
+
 ## Evaluate candidates
 da_best <- evalCand(tree = rowTree(da_tse), levels = da_cand$candidate_list, 
                     score_data = da_tbl, node_column = "node",
@@ -333,6 +343,7 @@ which `treeclimbR` considers the optimal one, using the `infoCand`
 function:
 
 ``` r
+
 infoCand(object = da_best)
 #>       t    upper_t is_valid method limit_rej level_name  best rej_leaf rej_node
 #> 1  0.00 0.02142857     TRUE     BH      0.05          0 FALSE       17       17
@@ -366,12 +377,14 @@ We can also extract a vector of significant nodes from the optimal
 candidate.
 
 ``` r
+
 da_out <- topNodes(object = da_best, n = Inf, p_value = 0.05)
 ```
 
 These nodes can then be indicated in the tree.
 
 ``` r
+
 da_fig_tree +
     geom_point2(aes(subset = node %in% da_out$node),
                 color = "red")
@@ -390,6 +403,7 @@ descendant leaves for each of the provided nodes, and perform the
 evaluation on the leaf level.
 
 ``` r
+
 fdr(rowTree(da_tse), truth = rownames(da_lse)[rowData(da_lse)$Signal], 
     found = da_out$node, only.leaf = TRUE)
 #>        fdr 
@@ -425,6 +439,7 @@ expressed between the conditions (so called ‘state markers’) at some
 level of the clustering tree.
 
 ``` r
+
 ds_tse <- readRDS(system.file("extdata", "ds_sim_20_500_8de.rds", 
                               package = "treeclimbR"))
 ds_tse
@@ -474,6 +489,7 @@ expressed in all the clusters, two in clusters `t2`, `t6` and `t7`, and
 two in clusters `t4` and `t5`.
 
 ``` r
+
 rowData(ds_tse)[rowData(ds_tse)$Signal != "no", , drop = FALSE] 
 #> DataFrame with 8 rows and 1 column
 #>        Signal
@@ -496,6 +512,7 @@ generating pseudobulk samples for each original sample and each internal
 node in the tree.
 
 ``` r
+
 ds_se <- aggDS(TSE = ds_tse, assay = "counts", sample_id = "sample_id", 
                group_id = "group", cluster_id = "cluster_id", FUN = sum)
 #> Warning in TreeSummarizedExperiment::convertNode(tree = tree, node =
@@ -521,6 +538,7 @@ This object also stores information about the number of cells
 contributing to each node and sample
 
 ``` r
+
 metadata(ds_se)$n_cells
 #>            4   1   2   3
 #> alias_1   10   8  14  12
@@ -552,6 +570,7 @@ on the aggregated counts for each node. However, any suitable method can
 be used.
 
 ``` r
+
 ds_res <- runDS(SE = ds_se, tree = colTree(ds_tse), option = "glmQL", 
                 design = model.matrix(~ group, data = colData(ds_se)), 
                 contrast = c(0, 1), filter_min_count = 0, 
@@ -583,6 +602,7 @@ tree, and the list of nodes that were dropped because of a too low
 count.
 
 ``` r
+
 names(ds_res)
 #> [1] "edgeR_results" "tree"          "nodes_drop"
 names(ds_res$edgeR_results)
@@ -596,6 +616,7 @@ We can create a table with the node results as well. Note that this
 table contains the results from all genes (features) at all nodes.
 
 ``` r
+
 ds_tbl <- nodeResult(ds_res, type = "DS", n = Inf)
 dim(ds_tbl)
 #> [1] 380   7
@@ -605,8 +626,8 @@ head(ds_tbl)
 #> 1...2  1.622992 16.28457 2388.370 2.732334e-37 5.191435e-35   11       1
 #> 6...3 -1.566583 16.27571 2153.582 2.089877e-36 2.647178e-34   11       6
 #> 5...4 -1.528818 16.26806 2021.788 7.220469e-36 6.859445e-34   11       5
-#> 6...5 -1.633337 16.19005 1681.307 2.673565e-34 2.031910e-32   13       6
-#> 5...6 -1.577305 16.18364 1620.250 5.507687e-34 3.488202e-32   13       5
+#> 6...5 -1.633337 16.19005 1681.263 2.674927e-34 2.032944e-32   13       6
+#> 5...6 -1.577305 16.18364 1620.215 5.509963e-34 3.489643e-32   13       5
 ```
 
 ### Find candidates
@@ -618,6 +639,7 @@ table above by the `feature` column, and then run
 for each subtable.
 
 ``` r
+
 ## Split result table by feature
 ds_tbl_list <- split(ds_tbl, f = ds_tbl$feature)
 
@@ -643,6 +665,7 @@ We can then find the optimal candidate using the
 function, and list the top hits.
 
 ``` r
+
 ds_best <- evalCand(tree = colTree(ds_tse), type = "multiple", 
                     levels = ds_cand_list, score_data = ds_tbl_list, 
                     node_column = "node", 
@@ -657,26 +680,26 @@ ds_out <- topNodes(object = ds_best, n = Inf, p_value = 0.05)
 ds_out
 #>            logFC   logCPM         F       PValue          FDR node feature
 #> 1       1.622992 16.28457 2388.3696 2.732334e-37 5.191435e-35   11       1
-#> 2       1.536983 16.20796 1360.1904 1.665882e-32 9.043359e-31   13       2
+#> 2       1.536983 16.20796 1360.2260 1.665035e-32 9.038760e-31   13       2
 #> 3       1.647098 16.31850 2677.0275 2.887894e-38 1.097400e-35   11       3
-#> 4      -1.612374 16.25077 1272.3495 6.092605e-32 2.893987e-30   13       4
+#> 4      -1.612374 16.25077 1272.3264 6.094749e-32 2.895006e-30   13       4
 #> 5      -1.528818 16.26806 2021.7880 7.220469e-36 6.859445e-34   11       5
 #> 6      -1.566583 16.27571 2153.5825 2.089877e-36 2.647178e-34   11       6
-#> 7...7   1.322218 16.11680  503.2039 2.857126e-24 4.523782e-23    5       7
-#> 7...8   1.656965 16.10320  615.9473 8.979128e-10 4.374447e-09    9       7
-#> 8...9  -1.523769 16.26492  722.7455 3.183677e-27 5.760939e-26    5       8
-#> 8...10 -1.687730 16.34385  243.9754 5.899432e-08 2.518859e-07    9       8
+#> 7...7   1.322218 16.11680  503.2046 2.857055e-24 4.523671e-23    5       7
+#> 7...8   1.656965 16.10320  615.9473 8.979132e-10 4.374449e-09    9       7
+#> 8...9  -1.523769 16.26492  722.7466 3.183591e-27 5.760783e-26    5       8
+#> 8...10 -1.687730 16.34385  243.9754 5.899433e-08 2.518859e-07    9       8
 #>               adj.p signal.node
 #> 1      2.185867e-35        TRUE
-#> 2      5.330822e-31        TRUE
+#> 2      5.328111e-31        TRUE
 #> 3      4.620631e-36        TRUE
-#> 4      1.624695e-30        TRUE
+#> 4      1.625266e-30        TRUE
 #> 5      2.888187e-34        TRUE
 #> 6      1.114601e-34        TRUE
-#> 7...7  5.714251e-23        TRUE
-#> 7...8  1.596289e-08        TRUE
-#> 8...9  7.276976e-26        TRUE
-#> 8...10 9.439092e-07        TRUE
+#> 7...7  5.714110e-23        TRUE
+#> 7...8  1.596290e-08        TRUE
+#> 8...9  7.276779e-26        TRUE
+#> 8...10 9.439093e-07        TRUE
 ```
 
 As expected, we detect the eight truly differentially expressed features
@@ -686,6 +709,7 @@ node 11, features 2 and 4 to node 13, and features 7 and 8 to nodes 5
 and 9. Let’s see which leaves these internal nodes correspond to.
 
 ``` r
+
 lapply(findDescendant(colTree(ds_tse), node = c(11, 13, 5, 9), 
                       self.include = TRUE, 
                       use.alias = FALSE, only.leaf = TRUE), 
@@ -709,6 +733,7 @@ the original subpopulations where the gene was simulated to be
 differentially expressed between conditions A and B:
 
 ``` r
+
 rowData(ds_tse)[rowData(ds_tse)$Signal != "no", , drop = FALSE] 
 #> DataFrame with 8 rows and 1 column
 #>        Signal
@@ -735,10 +760,11 @@ can be found on
 to expand)**
 
 ``` r
+
 sessionInfo()
-#> R version 4.6.0 Patched (2026-04-27 r89967)
+#> R version 4.6.2 (2026-10-29)
 #> Platform: aarch64-apple-darwin23
-#> Running under: macOS Sequoia 15.7.4
+#> Running under: macOS Tahoe 26.6.2
 #> 
 #> Matrix products: default
 #> BLAS:   /Library/Frameworks/R.framework/Versions/4.6/Resources/lib/libRblas.0.dylib 
@@ -756,85 +782,85 @@ sessionInfo()
 #> 
 #> other attached packages:
 #>  [1] ggplot2_4.0.3                   dplyr_1.2.1                    
-#>  [3] ggtree_4.1.2                    treeclimbR_1.9.0               
-#>  [5] TreeSummarizedExperiment_2.19.0 Biostrings_2.79.5              
-#>  [7] XVector_0.51.0                  SingleCellExperiment_1.33.2    
-#>  [9] SummarizedExperiment_1.41.1     Biobase_2.71.0                 
-#> [11] GenomicRanges_1.63.2            Seqinfo_1.1.0                  
-#> [13] IRanges_2.45.0                  S4Vectors_0.49.2               
-#> [15] BiocGenerics_0.57.1             generics_0.1.4                 
-#> [17] MatrixGenerics_1.23.0           matrixStats_1.5.0              
-#> [19] BiocStyle_2.39.0               
+#>  [3] ggtree_4.3.0                    treeclimbR_1.9.0               
+#>  [5] TreeSummarizedExperiment_2.21.0 Biostrings_2.81.9              
+#>  [7] XVector_0.53.0                  SingleCellExperiment_1.35.2    
+#>  [9] SummarizedExperiment_1.43.0     Biobase_2.73.2                 
+#> [11] GenomicRanges_1.65.4            Seqinfo_1.3.2                  
+#> [13] IRanges_2.47.5                  S4Vectors_0.51.10              
+#> [15] BiocGenerics_0.59.12            generics_0.1.4                 
+#> [17] MatrixGenerics_1.25.0           matrixStats_1.5.0              
+#> [19] BiocStyle_2.41.0               
 #> 
 #> loaded via a namespace (and not attached):
 #>   [1] RColorBrewer_1.1-3          jsonlite_2.0.0             
 #>   [3] shape_1.4.6.1               magrittr_2.0.5             
 #>   [5] TH.data_1.1-5               farver_2.1.2               
-#>   [7] nloptr_2.2.1                rmarkdown_2.31             
+#>   [7] nloptr_2.2.1                rmarkdown_2.32             
 #>   [9] GlobalOptions_0.1.4         fs_2.1.0                   
 #>  [11] ragg_1.5.2                  vctrs_0.7.3                
-#>  [13] minqa_1.2.8                 rstatix_0.7.3              
-#>  [15] htmltools_0.5.9             S4Arrays_1.11.1            
-#>  [17] broom_1.0.12                gridGraphics_0.5-1         
-#>  [19] SparseArray_1.11.13         Formula_1.2-5              
-#>  [21] sass_0.4.10                 bslib_0.10.0               
+#>  [13] minqa_1.2.8                 rstatix_1.1.0              
+#>  [15] htmltools_0.5.9             S4Arrays_1.13.2            
+#>  [17] broom_1.0.13                gridGraphics_0.5-1         
+#>  [19] SparseArray_1.13.4          Formula_1.2-6              
+#>  [21] sass_0.4.10                 bslib_0.12.0               
 #>  [23] htmlwidgets_1.6.4           desc_1.4.3                 
-#>  [25] plyr_1.8.9                  sandwich_3.1-1             
-#>  [27] zoo_1.8-15                  cachem_1.1.0               
-#>  [29] igraph_2.3.0                lifecycle_1.0.5            
+#>  [25] plyr_1.8.9                  sandwich_3.1-3             
+#>  [27] zoo_1.9-1                   cachem_1.1.0               
+#>  [29] igraph_2.3.4                lifecycle_1.0.5            
 #>  [31] iterators_1.0.14            pkgconfig_2.0.3            
-#>  [33] Matrix_1.7-5                R6_2.6.1                   
+#>  [33] Matrix_1.7-6                R6_2.6.1                   
 #>  [35] fastmap_1.2.0               rbibutils_2.4.1            
-#>  [37] clue_0.3-68                 aplot_0.2.9                
-#>  [39] digest_0.6.39               colorspace_2.1-2           
+#>  [37] clue_0.3-68                 aplot_0.3.2                
+#>  [39] digest_0.6.39               colorspace_2.1-4           
 #>  [41] ggnewscale_0.5.2            patchwork_1.3.2            
-#>  [43] textshaping_1.0.5           ggpubr_0.6.3               
-#>  [45] labeling_0.4.3              cytolib_2.23.0             
+#>  [43] textshaping_1.0.5           ggpubr_1.0.0               
+#>  [45] labeling_0.4.3              cytolib_2.25.0             
 #>  [47] colorRamps_2.3.4            polyclip_1.10-7            
-#>  [49] abind_1.4-8                 compiler_4.6.0             
-#>  [51] fontquiver_0.2.1            withr_3.0.2                
-#>  [53] doParallel_1.0.17           ConsensusClusterPlus_1.75.0
+#>  [49] abind_1.4-8                 compiler_4.6.2             
+#>  [51] fontquiver_0.2.1            withr_3.0.3                
+#>  [53] doParallel_1.0.17           ConsensusClusterPlus_1.77.0
 #>  [55] S7_0.2.2                    backports_1.5.1            
-#>  [57] BiocParallel_1.45.0         viridis_0.6.5              
+#>  [57] BiocParallel_1.47.0         viridis_0.6.5              
 #>  [59] carData_3.0-6               ggforce_0.5.0              
-#>  [61] ggsignif_0.6.4              MASS_7.3-65                
-#>  [63] rappdirs_0.3.4              DelayedArray_0.37.1        
-#>  [65] rjson_0.2.23                FlowSOM_2.19.4             
-#>  [67] diffcyt_1.31.0              tools_4.6.0                
-#>  [69] ape_5.8-1                   glue_1.8.1                 
-#>  [71] nlme_3.1-169                grid_4.6.0                 
-#>  [73] Rtsne_0.17                  cluster_2.1.8.2            
-#>  [75] reshape2_1.4.5              gtable_0.3.6               
-#>  [77] tidyr_1.3.2                 car_3.1-5                  
-#>  [79] foreach_1.5.2               pillar_1.11.1              
-#>  [81] stringr_1.6.0               yulab.utils_0.2.4          
-#>  [83] limma_3.67.3                circlize_0.4.18            
-#>  [85] splines_4.6.0               flowCore_2.23.4            
-#>  [87] tweenr_2.0.3                treeio_1.35.0              
-#>  [89] lattice_0.22-9              survival_3.8-6             
-#>  [91] dirmult_0.1.3-5             RProtoBufLib_2.23.0        
-#>  [93] tidyselect_1.2.1            fontLiberation_0.1.0       
-#>  [95] ComplexHeatmap_2.27.1       locfit_1.5-9.12            
-#>  [97] knitr_1.51                  gridExtra_2.3              
-#>  [99] fontBitstreamVera_0.1.1     reformulas_0.4.4           
-#> [101] bookdown_0.46               edgeR_4.9.9                
-#> [103] xfun_0.57                   statmod_1.5.1              
-#> [105] stringi_1.8.7               ggfun_0.2.0                
-#> [107] lazyeval_0.2.3              yaml_2.3.12                
-#> [109] boot_1.3-32                 evaluate_1.0.5             
-#> [111] codetools_0.2-20            gdtools_0.5.0              
-#> [113] tibble_3.3.1                BiocManager_1.30.27        
-#> [115] ggplotify_0.1.3             cli_3.6.6                  
-#> [117] systemfonts_1.3.2           Rdpack_2.6.6               
-#> [119] jquerylib_0.1.4             Rcpp_1.1.1-1.1             
-#> [121] png_0.1-9                   XML_3.99-0.23              
-#> [123] parallel_4.6.0              pkgdown_2.2.0.9000         
-#> [125] lme4_2.0-1                  viridisLite_0.4.3          
-#> [127] mvtnorm_1.3-7               tidytree_0.4.7             
-#> [129] ggiraph_0.9.6               scales_1.4.0               
-#> [131] purrr_1.2.2                 crayon_1.5.3               
-#> [133] GetoptLong_1.1.1            rlang_1.2.0                
-#> [135] multcomp_1.4-30
+#>  [61] ggsignif_0.6.4              MASS_7.3-66                
+#>  [63] rappdirs_0.3.4              DelayedArray_0.39.8        
+#>  [65] rjson_0.2.23                FlowSOM_2.21.0             
+#>  [67] diffcyt_1.33.1              tools_4.6.2                
+#>  [69] otel_0.2.0                  ape_5.8-1                  
+#>  [71] glue_1.8.1                  nlme_3.1-172               
+#>  [73] grid_4.6.2                  Rtsne_0.17                 
+#>  [75] reshape2_1.4.5              cluster_2.1.8.3            
+#>  [77] gtable_0.3.6                tidyr_1.3.2                
+#>  [79] car_3.1-5                   stringr_1.6.0              
+#>  [81] foreach_1.5.2               pillar_1.11.1              
+#>  [83] yulab.utils_0.2.5           limma_3.99.3               
+#>  [85] circlize_0.4.18             splines_4.6.2              
+#>  [87] flowCore_2.25.1             tweenr_2.0.3               
+#>  [89] treeio_1.37.1               lattice_0.23-1             
+#>  [91] survival_3.8-12             dirmult_0.1.3-5            
+#>  [93] RProtoBufLib_2.25.0         tidyselect_1.2.1           
+#>  [95] fontLiberation_0.1.0        ComplexHeatmap_2.29.0      
+#>  [97] locfit_1.5-9.12             knitr_1.52                 
+#>  [99] gridExtra_2.3.1             fontBitstreamVera_0.1.1    
+#> [101] reformulas_0.4.4            bookdown_0.48              
+#> [103] edgeR_4.99.10               xfun_0.62                  
+#> [105] statmod_1.5.2               stringi_1.8.9              
+#> [107] ggfun_0.2.2                 lazyeval_0.2.3             
+#> [109] yaml_2.3.12                 boot_1.3-32                
+#> [111] evaluate_1.0.5              codetools_0.2-20           
+#> [113] gdtools_0.5.2               tibble_3.3.1               
+#> [115] BiocManager_1.30.27         ggplotify_0.1.4            
+#> [117] cli_3.6.6                   systemfonts_1.3.2          
+#> [119] Rdpack_2.6.6                jquerylib_0.1.4            
+#> [121] Rcpp_1.1.2                  png_0.1-9                  
+#> [123] XML_3.99-0.25               parallel_4.6.2             
+#> [125] pkgdown_2.2.1.9000          lme4_2.1-0                 
+#> [127] viridisLite_0.4.3           mvtnorm_1.4-2              
+#> [129] tidytree_0.4.8              ggiraph_0.9.6              
+#> [131] scales_1.4.0                purrr_1.2.2                
+#> [133] crayon_1.5.3                GetoptLong_1.1.1           
+#> [135] rlang_1.3.0                 multcomp_1.4-32
 ```
 
 ## References
