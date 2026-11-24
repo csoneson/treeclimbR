@@ -782,7 +782,7 @@ sessionInfo()
 #> 
 #> other attached packages:
 #>  [1] ggplot2_4.0.4                   dplyr_1.2.1                    
-#>  [3] ggtree_4.3.2                    treeclimbR_1.9.0               
+#>  [3] ggtree_4.3.2                    treeclimbR_1.11.0              
 #>  [5] TreeSummarizedExperiment_2.21.0 Biostrings_2.81.9              
 #>  [7] XVector_0.53.0                  SingleCellExperiment_1.35.2    
 #>  [9] SummarizedExperiment_1.43.0     Biobase_2.73.2                 
@@ -838,13 +838,13 @@ sessionInfo()
 #>  [85] limma_3.99.5                circlize_0.4.18            
 #>  [87] splines_4.6.2               flowCore_2.25.1            
 #>  [89] tweenr_2.0.3                treeio_1.37.1              
-#>  [91] lattice_0.23-1              survival_3.8-12            
+#>  [91] lattice_0.23-1              survival_3.8-13            
 #>  [93] dirmult_0.1.3-5             RProtoBufLib_2.25.0        
 #>  [95] tidyselect_1.2.1            fontLiberation_0.1.0       
 #>  [97] ComplexHeatmap_2.29.0       knitr_1.52                 
 #>  [99] gridExtra_2.3.1             fontBitstreamVera_0.1.1    
 #> [101] reformulas_0.4.4            bookdown_0.48              
-#> [103] edgeR_4.99.15               xfun_0.62                  
+#> [103] edgeR_4.99.13               xfun_0.62                  
 #> [105] statmod_1.5.2               stringi_1.8.9              
 #> [107] ggfun_0.2.2                 lazyeval_0.2.3             
 #> [109] yaml_2.3.12                 boot_1.3-32                
